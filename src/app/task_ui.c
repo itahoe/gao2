@@ -64,7 +64,6 @@ void    task_ui(                        const   void *          argument )
         TickType_t              polling_cycle_tcks      =   CONF_SER_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
         app_stream_t            stream;
 
-        //while( true ) { osDelay( 100 ); }
 
         GUI_Init();
         GUI_SetBkColor( GUI_GRAY );
@@ -82,10 +81,8 @@ void    task_ui(                        const   void *          argument )
         {
                 GUI_Exec();
                 received        =   xQueueReceive( que_ui_hndl, &stream, polling_cycle_tcks );
-                //ui_dspl_loop();
                 if( received )
                 {
-                        //taskENTER_CRITICAL();
                         if( stream.size < /*CONF_SER4_RECV_BLCK_SIZE_OCT*/ 1024 )
                         {
                                 ui_dspl_scr0_update( stream.data, stream.size );
@@ -95,6 +92,7 @@ void    task_ui(                        const   void *          argument )
                                 APP_TRACE( "<task_ui> stream.size: %d\n", stream.size );
                         }
 
+                        //taskENTER_CRITICAL();
                         //taskEXIT_CRITICAL();
                 }
 

@@ -147,6 +147,6 @@ WM_HWIN ui_dspl_scr0_init(                      WM_CALLBACK *           cb );
 void    ui_dspl_scrn_slide(                     int                     dir );
 
 void    ui_dspl_init( void );
-void    ui_dspl_loop( void );
+//void    ui_dspl_loop( void );
 
 #endif	//UI_DSPL_H

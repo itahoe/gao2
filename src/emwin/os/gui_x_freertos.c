@@ -4,18 +4,16 @@
   * @author  Igor T. <research.tahoe@gmail.com>
   */
 
+
 #include "cmsis_os.h"
 #include "GUI.h"
 #include "app_trace.h"
 
 
-//volatile GUI_TIMER_TIME OS_TimeMS;
-
-
-
 int     GUI_X_GetTime( void )
 {
-        return( (int) osKernelSysTick() );
+        //return( (int) osKernelSysTick() );
+        return( xTaskGetTickCount() * portTICK_PERIOD_MS );
 }
 
 

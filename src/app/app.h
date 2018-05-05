@@ -20,6 +20,13 @@
 
 void    app_config_clock( void );
 void    app_config_mpu( void );
+
+void    app_rtc_init( void );
+void    app_rtc_date_read(              RTC_DateTypeDef *       date );
+void    app_rtc_date_write(             RTC_DateTypeDef *       date );
+void    app_rtc_time_read(              RTC_TimeTypeDef *       time );
+void    app_rtc_time_write(             RTC_TimeTypeDef *       time );
+
 void    task_ui(                        const   void *          argument );
 void    task_recv(                      const   void *          argument );
 void    task_xmit(                      const   void *          argument );

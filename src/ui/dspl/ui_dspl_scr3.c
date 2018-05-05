@@ -5,12 +5,17 @@
   */
 
 
+#include <time.h>
 #include "app.h"
 #include "DIALOG.h"
 #include "ui_dspl.h"
 
 
-extern GUI_CONST_STORAGE GUI_FONT GUI_FontSegoePrint49;
+extern  GUI_CONST_STORAGE       GUI_FONT        GUI_FontSegoePrint49;
+
+
+//        WM_HTIMER       hTmr;
+
 
 /*
 static const GUI_WIDGET_CREATE_INFO _aDialogSelect[] = {
@@ -140,41 +145,18 @@ static void _cbDialogSelect(            WM_MESSAGE *            pMsg )
 
 void    ui_dspl_scr3_cb(                        WM_MESSAGE *            pMsg )
 {
-        //int             NCode;
-        int             Id;
-        WM_HWIN         hItem;
-        WM_HWIN         hWin    =   pMsg->hWin;
-        //WM_HWIN         hDlg;
+                //int             NCode;
+                int             Id;
+                WM_HWIN         hItem;
+                WM_HWIN         hWin    =   pMsg->hWin;
+                //WM_HWIN         hDlg;
+                time_t          time_raw;
+	struct  tm *            t;
+                char            str[16];
 
 
         switch( pMsg->MsgId )
         {
-/*
-                case WM_NOTIFY_PARENT:
-                        Id      =   WM_GetId( pMsg->hWinSrc );                  // Id of widget
-                        NCode   =   pMsg->Data.v;                               // Notification code
-                        switch( NCode )
-                        {
-                                case WM_NOTIFICATION_CLICKED:
-                                //case WM_NOTIFICATION_RELEASED:                  // React only if released
-                                        if( Id == GUI_ID_SCR3_LSTWHL_YEAR )
-                                        {
-                                                BSP_LED_Toggle( LED1 );
-                                                //hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR2_TEXT_TEMP );
-                                                //TEXT_SetText( hItem, "*** бвРав ***" );
-                                        }
-
-                                        break;
-
-                                default:
-                                        break;
-                        };
-*/
-                case WM_PAINT:
-                        //GUI_Clear();
-                        //WM_DefaultProc(pMsg);
-                        break;
-
                 case WM_NOTIFY_PARENT:
                         if( pMsg->Data.v == WM_NOTIFICATION_CLICKED )
                         {
@@ -203,6 +185,7 @@ void    ui_dspl_scr3_cb(                        WM_MESSAGE *            pMsg )
                         }
                         break;
 
+
                 case WM_INIT_DIALOG:
                         hItem   =   pMsg->hWin;
                         WINDOW_SetBkColor( hItem, GUI_BLACK );
@@ -220,6 +203,26 @@ void    ui_dspl_scr3_cb(                        WM_MESSAGE *            pMsg )
                         BUTTON_SetTextAlign( WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_CFG_CH7 ), TEXT_CF_LEFT | TEXT_CF_VCENTER );
                         BUTTON_SetTextAlign( WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_CFG_CH8 ), TEXT_CF_LEFT | TEXT_CF_VCENTER );
 
+                        WM_CreateTimer( hWin, 0, 1000, 0 );
+
+                        break;
+
+                case WM_TIMER:
+
+                        time_raw        =   time( NULL );
+                        t               =   gmtime( &time_raw );
+
+                        snprintf( str, sizeof(str), "%02d/%02d/%04d", t->tm_mday, t->tm_mon, t->tm_year + 1970 );
+                        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_DATE );
+                        BUTTON_SetText( hItem, str );
+
+                        snprintf( str, sizeof(str), "%02d:%02d:%02d", t->tm_hour, t->tm_min, t->tm_sec );
+                        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_TIME );
+                        BUTTON_SetText( hItem, str );
+
+                        WM_Update( hWin );
+
+                        WM_RestartTimer( pMsg->Data.v, 0 );     //pMsg->Data.v contains a handle the expired timer only if the message WM_TIMER is currently processed
                         break;
 
                 default:

@@ -369,55 +369,5 @@ void    ui_dspl_init( void )
         WM_SetCallback( WM_HBKWIN, _cbBackgroundWin );
 
         ui_dspl_header_buttons_init();
-
-        //GUI_Delay( 1000 );
-
-/*
-        while( 1 )
-        {
-                MainTaskLoop()
-
-                ui_dspl_scr0_update();
-
-                hItem   =   WM_GetDialogItem( ui_dspl_scrn_hndl[ 0 ], GUI_ID_SCR0_BUTTON_UP );
-                WM_BringToTop( hItem );
-                //APP_TRACE( "GUI_ID_SCR0_BUTTON_UP = %d\n", hItem );
-
-                hItem   =   WM_GetDialogItem( ui_dspl_scrn_hndl[ 0 ], GUI_ID_SCR0_BUTTON_DOWN );
-                WM_BringToTop( hItem );
-                //APP_TRACE( "GUI_ID_SCR0_BUTTON_DOWN = %d\n", hItem );
-
-                hItem   =   WM_GetDialogItem( ui_dspl_scrn_hndl[ 0 ], GUI_ID_SCR0_BUTTON_LEFT );
-                WM_BringToTop( hItem );
-
-                hItem   =   WM_GetDialogItem( ui_dspl_scrn_hndl[ 0 ], GUI_ID_SCR0_BUTTON_RGHT );
-                WM_BringToTop( hItem );
-                //GUI_Delay( 100 );
-        }
-*/
-
 }
 
-
-void    ui_dspl_loop( void )
-{
-        //ui_dspl_scr0_update();
-/*
-        WM_HWIN         hItem;
-
-
-        hItem   =   WM_GetDialogItem( ui_dspl_scrn_hndl[ 0 ], GUI_ID_SCR0_BUTTON_UP );
-        WM_BringToTop( hItem );
-        //APP_TRACE( "GUI_ID_SCR0_BUTTON_UP = %d\n", hItem );
-
-        hItem   =   WM_GetDialogItem( ui_dspl_scrn_hndl[ 0 ], GUI_ID_SCR0_BUTTON_DOWN );
-        WM_BringToTop( hItem );
-        //APP_TRACE( "GUI_ID_SCR0_BUTTON_DOWN = %d\n", hItem );
-
-        hItem   =   WM_GetDialogItem( ui_dspl_scrn_hndl[ 0 ], GUI_ID_SCR0_BUTTON_LEFT );
-        WM_BringToTop( hItem );
-
-        hItem   =   WM_GetDialogItem( ui_dspl_scrn_hndl[ 0 ], GUI_ID_SCR0_BUTTON_RGHT );
-        WM_BringToTop( hItem );
-*/
-}

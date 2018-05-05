@@ -11,8 +11,8 @@ int storage_name_compose(                       char *                  str,
                                         const   char *			ext,
                                                 size_t                  max_len )
 {
-	time_t          timer   =   time( NULL );
-	struct tm *     curr    =   localtime( &timer );
+	time_t          t       =   time( NULL );
+	struct tm *     curr    =   localtime( &t );
 	int             n       =   0;
 
 
@@ -21,7 +21,7 @@ int storage_name_compose(                       char *                  str,
 		n	=   snprintf(   str,
 		                        max_len,
 		                        "%04d%02d%02d.%02d%02d%02d.%s",
-		                        curr->tm_year + 1900,
+		                        curr->tm_year + 1970,
 		                        curr->tm_mon + 1,
 		                        curr->tm_mday,
 		                        curr->tm_hour,
