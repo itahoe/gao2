@@ -1,6 +1,6 @@
 /**
   * @file    app.c
-  * @brief   App
+  * @brief   Application Header
   * @author  Igor T. <research.tahoe@gmail.com>
   */
 
@@ -9,6 +9,8 @@
 #define APP_H
 
 
+#include <time.h>
+#include "app_trace.h"
 #include "stm32f7xx_hal.h"
 #include "GUI.h"
 
@@ -21,11 +23,9 @@
 void    app_config_clock( void );
 void    app_config_mpu( void );
 
-void    app_rtc_init( void );
-void    app_rtc_date_read(              RTC_DateTypeDef *       date );
-void    app_rtc_date_write(             RTC_DateTypeDef *       date );
-void    app_rtc_time_read(              RTC_TimeTypeDef *       time );
-void    app_rtc_time_write(             RTC_TimeTypeDef *       time );
+void    app_rtc_init(                           void                    );
+time_t  app_rtc_get(                            void                    );
+void    app_rtc_set(                            time_t *        raw     );
 
 void    task_ui(                        const   void *          argument );
 void    task_recv(                      const   void *          argument );

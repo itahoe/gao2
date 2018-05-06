@@ -22,15 +22,16 @@
   */
 DWORD get_fattime( void )
 {
-                time_t          systime = time( NULL );
-	struct  tm *            p       = gmtime( &systime );
+                time_t          raw     = time( NULL );
+	struct  tm *            s       = gmtime( &raw );
                 int             adj     = (1970 - 1980);
-                DWORD           fattime = (( p->tm_year + adj)    << 25) |
-                                          (( p->tm_mon + 1)       << 21) |
-                                          (( p->tm_mday )         << 16) |
-                                          (( p->tm_hour )         << 11) |
-                                          (( p->tm_min )          <<  5) |
-                                          (( p->tm_sec )          >>  1);
+                DWORD           t_fat   =   (( s->tm_year + adj)    << 25) |
+                                            //(( s->tm_mon + 1)       << 21) |
+                                            (( s->tm_mon )          << 21) |
+                                            (( s->tm_mday )         << 16) |
+                                            (( s->tm_hour )         << 11) |
+                                            (( s->tm_min )          <<  5) |
+                                            (( s->tm_sec )          >>  1);
 
-	return( fattime );
+	return( t_fat );
 }

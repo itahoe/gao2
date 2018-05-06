@@ -15,25 +15,15 @@
 #pragma module_name = "?time"
 
 
-__time32_t (__time32)(__time32_t *t)
+__time32_t (__time32)( __time32_t *     t )
 {
-                RTC_DateTypeDef         rtc_date;
-                RTC_TimeTypeDef         rtc_time;
-        struct  tm                      s;
-                time_t	                time_raw;
+        time_t	                raw     =   app_rtc_get();
 
 
-        app_rtc_time_read( &rtc_time );
-        app_rtc_date_read( &rtc_date );
+        if( t != NULL )
+        {
+                *t      =   raw;
+        }
 
-        s.tm_year       =   rtc_date.Year;
-        s.tm_mon        =   rtc_date.Month;
-        s.tm_mday       =   rtc_date.Date;
-        s.tm_hour       =   rtc_time.Hours;
-        s.tm_min        =   rtc_time.Minutes;
-        s.tm_sec        =   rtc_time.Seconds;
-
-        time_raw        =   mktime( &s );
-
-	return( time_raw );
+        return( raw );
 }

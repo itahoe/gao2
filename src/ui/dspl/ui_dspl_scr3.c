@@ -14,9 +14,6 @@
 extern  GUI_CONST_STORAGE       GUI_FONT        GUI_FontSegoePrint49;
 
 
-//        WM_HTIMER       hTmr;
-
-
 /*
 static const GUI_WIDGET_CREATE_INFO _aDialogSelect[] = {
   //{ FRAMEWIN_CreateIndirect, "Select vehicle",  0,                 55,  30, 210, 200, 0 },
@@ -149,14 +146,31 @@ void    ui_dspl_scr3_cb(                        WM_MESSAGE *            pMsg )
                 int             Id;
                 WM_HWIN         hItem;
                 WM_HWIN         hWin    =   pMsg->hWin;
-                //WM_HWIN         hDlg;
-                time_t          time_raw;
-	struct  tm *            t;
+                time_t          t_raw;
+	struct  tm *            s;
                 char            str[16];
 
 
         switch( pMsg->MsgId )
         {
+                case WM_TIMER:
+                        t_raw   =   time( NULL );
+                        s       =   gmtime( &t_raw );
+
+                        snprintf( str, sizeof( str ), "%02d/%02d/%04d", s->tm_mday, s->tm_mon, s->tm_year + 1970 );
+                        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_DATE );
+                        BUTTON_SetText( hItem, str );
+
+                        snprintf( str, sizeof( str ), "%02d:%02d:%02d", s->tm_hour, s->tm_min, s->tm_sec );
+                        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_TIME );
+                        BUTTON_SetText( hItem, str );
+
+                        WM_Update( hWin );
+
+                        WM_RestartTimer( pMsg->Data.v, 0 );     //pMsg->Data.v contains a handle the expired timer only if the message WM_TIMER is currently processed
+
+                        break;
+
                 case WM_NOTIFY_PARENT:
                         if( pMsg->Data.v == WM_NOTIFICATION_CLICKED )
                         {
@@ -205,24 +219,6 @@ void    ui_dspl_scr3_cb(                        WM_MESSAGE *            pMsg )
 
                         WM_CreateTimer( hWin, 0, 1000, 0 );
 
-                        break;
-
-                case WM_TIMER:
-
-                        time_raw        =   time( NULL );
-                        t               =   gmtime( &time_raw );
-
-                        snprintf( str, sizeof(str), "%02d/%02d/%04d", t->tm_mday, t->tm_mon, t->tm_year + 1970 );
-                        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_DATE );
-                        BUTTON_SetText( hItem, str );
-
-                        snprintf( str, sizeof(str), "%02d:%02d:%02d", t->tm_hour, t->tm_min, t->tm_sec );
-                        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_TIME );
-                        BUTTON_SetText( hItem, str );
-
-                        WM_Update( hWin );
-
-                        WM_RestartTimer( pMsg->Data.v, 0 );     //pMsg->Data.v contains a handle the expired timer only if the message WM_TIMER is currently processed
                         break;
 
                 default:

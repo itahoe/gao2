@@ -1,6 +1,6 @@
 /**
   * @file    app.c
-  * @brief   App
+  * @brief   Application
   * @author  Igor T. <research.tahoe@gmail.com>
   */
 
@@ -166,10 +166,6 @@ void CPU_CACHE_Enable(void)
   */
 int main( void )
 {
-        RTC_TimeTypeDef         time;
-        RTC_DateTypeDef         date;
-
-
         app_config_mpu();
 
         CPU_CACHE_Enable();
@@ -193,17 +189,6 @@ int main( void )
         BSP_LED_Off( LED2 );
 
         app_rtc_init();
-
-        app_rtc_date_read( &date );
-        app_rtc_date_write( &date );
-
-        //APP_TRACE( "DATE: %04d-%02d-%02d\n", 1970+date.Year, date.Month, date.Date );
-
-        app_rtc_time_read( &time );
-        app_rtc_time_write( &time );
-
-        //APP_TRACE( "TIME: %02d:%02d:%02d\n", time.Hours, time.Minutes, time.Seconds );
-
 
         //HAL_InitTick( 0xFF );
 

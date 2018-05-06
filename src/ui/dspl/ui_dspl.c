@@ -80,8 +80,8 @@ static const GUI_WIDGET_CREATE_INFO ui_dspl_scr3_info[] =
 
     //{ BUTTON_CreateIndirect,    "31/12/1970",   GUI_ID_SCR3_BUTTON_DATE,      0,     60,    220,     60,      0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    "23:59:59",     GUI_ID_SCR3_BUTTON_TIME,      0,    120,    220,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "31/12/1970",   GUI_ID_SCR3_BUTTON_DATE,      0,     80,    220,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "23:59:59",     GUI_ID_SCR3_BUTTON_TIME,      0,    140,    220,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--/--/----",   GUI_ID_SCR3_BUTTON_DATE,      0,     80,    220,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--:--:--",     GUI_ID_SCR3_BUTTON_TIME,      0,    140,    220,     60,      0,      0x0,    0 },
 
     //{ BUTTON_CreateIndirect,    "1. RS-485 115200 HART", GUI_ID_SCR3_BUTTON_CFG_CH1,  250,  60,    550,     50,  0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    "2. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH2,  250, 110,    550,     50,  0,      0x0,    0 },

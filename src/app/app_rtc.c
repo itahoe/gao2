@@ -17,6 +17,46 @@
 static  RTC_HandleTypeDef       hrtc;
 
 
+static
+void    app_rtc_date_read(              RTC_DateTypeDef *       date )
+{
+        HAL_RTC_GetDate( &hrtc, date, FORMAT_BIN );
+
+        if( (date->Date == 0) || (date->Month == 0))
+        {
+                //date->Date = date->Month = 1;
+        }
+
+        //APP_TRACE( "DATE: %04d-%02d-%02d\n", date->Year, date->Month, date->Date );
+}
+
+
+static
+void    app_rtc_date_write(             RTC_DateTypeDef *       date )
+{
+        HAL_RTC_SetDate( &hrtc, date, FORMAT_BIN );
+}
+
+
+static
+void    app_rtc_time_read(              RTC_TimeTypeDef *       time )
+{
+        HAL_RTC_GetTime( &hrtc, time, FORMAT_BIN );
+
+        //APP_TRACE( "TIME: %02d-%02d-%02d\n", time->Hours, time->Minutes, time->Seconds );
+}
+
+
+static
+void    app_rtc_time_write(             RTC_TimeTypeDef *       time )
+{
+        time->StoreOperation    =   0;
+        time->SubSeconds        =   0;
+        time->DayLightSaving    =   0;
+        HAL_RTC_SetTime( &hrtc, time, FORMAT_BIN );
+}
+
+
 void    app_rtc_init( void )
 {
         RCC_OscInitTypeDef              osc;
@@ -41,16 +81,6 @@ void    app_rtc_init( void )
 
         __HAL_RCC_RTC_ENABLE();
 
-
-        /*##-1- Configure the RTC peripheral #######################################*/
-        /* Configure RTC prescaler and RTC data registers */
-        /* RTC configured as follow:
-        - Hour Format    = Format 24
-        - Asynch Prediv  = Value according to source clock
-        - Synch Prediv   = Value according to source clock
-        - OutPut         = Output Disable
-        - OutPutPolarity = High Polarity
-        - OutPutType     = Open Drain */
         hrtc.Instance                   =   RTC;
         hrtc.Init.HourFormat            =   RTC_HOURFORMAT_24;
         hrtc.Init.AsynchPrediv          =   RTC_ASYNCH_PREDIV;
@@ -66,33 +96,46 @@ void    app_rtc_init( void )
 }
 
 
-void    app_rtc_date_read(              RTC_DateTypeDef *       date )
+time_t  app_rtc_get( void )
 {
-        HAL_RTC_GetDate( &hrtc, date, FORMAT_BIN );
+                RTC_DateTypeDef         date;
+                RTC_TimeTypeDef         time;
+                time_t	                raw;
+        struct  tm                      s;
 
-        if( (date->Date == 0) || (date->Month == 0))
-        {
-                date->Date = date->Month = 1;
-        }
+
+        app_rtc_time_read( &time );
+        app_rtc_date_read( &date );
+
+        s.tm_sec        =   time.Seconds;
+        s.tm_min        =   time.Minutes;
+        s.tm_hour       =   time.Hours;
+        s.tm_mday       =   date.Date;
+        s.tm_mon        =   date.Month;
+        s.tm_year       =   date.Year;
+
+        raw             =   mktime( &s );
+
+	return( raw );
 }
 
 
-void    app_rtc_date_write(             RTC_DateTypeDef *       date )
+void    app_rtc_set(                    time_t *                raw     )
 {
-        HAL_RTC_SetDate( &hrtc, date, FORMAT_BIN );
-}
+                RTC_DateTypeDef         date;
+                RTC_TimeTypeDef         time;
+        struct  tm *                    p;
 
 
-void    app_rtc_time_read(              RTC_TimeTypeDef *       time )
-{
-        HAL_RTC_GetTime( &hrtc, time, FORMAT_BIN );
-}
+        p               =   gmtime( raw );
 
+        time.Seconds    =   p->tm_sec;
+        time.Minutes    =   p->tm_min;
+        time.Hours      =   p->tm_hour;
+        date.Date       =   p->tm_mday;
+        date.Month      =   p->tm_mon;
+        date.Year       =   p->tm_year;
 
-void    app_rtc_time_write(             RTC_TimeTypeDef *       time )
-{
-        time->StoreOperation    =   0;
-        time->SubSeconds        =   0;
-        time->DayLightSaving    =   0;
-        HAL_RTC_SetTime( &hrtc, time, FORMAT_BIN );
+        app_rtc_time_write( &time );
+        app_rtc_date_write( &date );
 }
