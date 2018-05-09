@@ -22,12 +22,10 @@ void    app_rtc_date_read(              RTC_DateTypeDef *       date )
 {
         HAL_RTC_GetDate( &hrtc, date, FORMAT_BIN );
 
-        if( (date->Date == 0) || (date->Month == 0))
+        if( date->Year < 70 )
         {
-                //date->Date = date->Month = 1;
+                date->Year      =   70;
         }
-
-        //APP_TRACE( "DATE: %04d-%02d-%02d\n", date->Year, date->Month, date->Date );
 }
 
 
@@ -42,8 +40,6 @@ static
 void    app_rtc_time_read(              RTC_TimeTypeDef *       time )
 {
         HAL_RTC_GetTime( &hrtc, time, FORMAT_BIN );
-
-        //APP_TRACE( "TIME: %02d-%02d-%02d\n", time->Hours, time->Minutes, time->Seconds );
 }
 
 
@@ -100,41 +96,115 @@ time_t  app_rtc_get( void )
 {
                 RTC_DateTypeDef         date;
                 RTC_TimeTypeDef         time;
-                time_t	                raw;
-        struct  tm                      s;
+                time_t	                t;
+        struct  tm                      ts;
 
 
         app_rtc_time_read( &time );
         app_rtc_date_read( &date );
 
-        s.tm_sec        =   time.Seconds;
-        s.tm_min        =   time.Minutes;
-        s.tm_hour       =   time.Hours;
-        s.tm_mday       =   date.Date;
-        s.tm_mon        =   date.Month;
-        s.tm_year       =   date.Year;
+        ts.tm_sec       =   time.Seconds;
+        ts.tm_min       =   time.Minutes;
+        ts.tm_hour      =   time.Hours;
+        ts.tm_mday      =   date.Date;
+        ts.tm_mon       =   date.Month;
+        ts.tm_year      =   date.Year;
+        ts.tm_isdst     =   0;
+        t               =   mktime( &ts );
 
-        raw             =   mktime( &s );
+        //APP_TRACE( "<A> %02d %02d %02d %d\n", time.Hours, time.Minutes, time.Seconds, t );
 
-	return( raw );
+	return( t );
 }
 
 
-void    app_rtc_set(                    time_t *                raw     )
+void    app_rtc_set(                    time_t *                t       )
 {
                 RTC_DateTypeDef         date;
                 RTC_TimeTypeDef         time;
+        struct  tm *                    ts;
+
+
+        ts              =   gmtime( t );
+
+        time.Seconds    =   ts->tm_sec;
+        time.Minutes    =   ts->tm_min;
+        time.Hours      =   ts->tm_hour;
+        date.Date       =   ts->tm_mday;
+        date.Month      =   ts->tm_mon;
+        date.Year       =   ts->tm_year;
+
+        app_rtc_time_write( &time );
+        app_rtc_date_write( &date );
+}
+
+
+void    app_rtc_ctl(                    const   app_rtc_ctl_t   ctl     )
+{
+                time_t	                t;
+        struct  tm                      ts;
         struct  tm *                    p;
 
 
-        p               =   gmtime( raw );
+        RTC_DateTypeDef         date;
+        RTC_TimeTypeDef         time;
 
+
+        app_rtc_time_read( &time );
+        app_rtc_date_read( &date );
+
+        //APP_TRACE( "<1> %02d %02d %04d\n", date.Date, date.Month, date.Year );
+        //APP_TRACE( "<1> %02d %02d %02d\n", time.Hours, time.Minutes, time.Seconds );
+
+        switch( ctl )
+        {
+                //case APP_RTC_CTL_YEAR_INCREASE:         date.Year++;    break;
+                //case APP_RTC_CTL_YEAR_DECREASE:         date.Year--;    break;
+                case APP_RTC_CTL_YEAR_INCREASE:     date.Year       = (date.Year < 136) ? date.Year + 1 :  70;      break;
+                case APP_RTC_CTL_YEAR_DECREASE:     date.Year       = (date.Year >  70) ? date.Year - 1 :  70;      break;
+
+                case APP_RTC_CTL_MONTH_INCREASE:        date.Month++;   break;
+                case APP_RTC_CTL_MONTH_DECREASE:        date.Month--;   break;
+                //case APP_RTC_CTL_MONTH_INCREASE:    date.Month      = (date.Month < 11) ? date.Month + 1 :  0;      break;
+                //case APP_RTC_CTL_MONTH_DECREASE:    date.Month      = (date.Month >  0) ? date.Month - 1 : 11;      break;
+
+                case APP_RTC_CTL_DAY_INCREASE:          date.Date++;    break;
+                case APP_RTC_CTL_DAY_DECREASE:          date.Date--;    break;
+
+                case APP_RTC_CTL_HOUR_INCREASE:         time.Hours      = (time.Hours < 23) ? time.Hours + 1 :  0;   break;
+                case APP_RTC_CTL_HOUR_DECREASE:         time.Hours      = (time.Hours >  0) ? time.Hours - 1 : 23;   break;
+
+                case APP_RTC_CTL_MINUTE_INCREASE:       time.Minutes    = (time.Minutes < 59) ? time.Minutes + 1 :  0; break;
+                case APP_RTC_CTL_MINUTE_DECREASE:       time.Minutes    = (time.Minutes >  0) ? time.Minutes - 1 : 59; break;
+
+                case APP_RTC_CTL_SECOND_INCREASE:       time.Seconds    = (time.Seconds < 59) ? time.Seconds + 1 :  0; break;
+                case APP_RTC_CTL_SECOND_DECREASE:       time.Seconds    = (time.Seconds >  0) ? time.Seconds - 1 : 59; break;
+
+                default:
+                        break;
+        }
+
+        //APP_TRACE( "<2> %02d %02d %04d\n", date.Date, date.Month, date.Year );
+        //APP_TRACE( "<2> %02d %02d %02d\n", time.Hours, time.Minutes, time.Seconds );
+
+        ts.tm_sec       =   time.Seconds;
+        ts.tm_min       =   time.Minutes;
+        ts.tm_hour      =   time.Hours;
+        ts.tm_mday      =   date.Date;
+        ts.tm_mon       =   date.Month;
+        ts.tm_year      =   (date.Year < 70) ? 70 : (date.Year >= 135) ? 135 : date.Year;
+        ts.tm_isdst     =   0;
+        t               =   mktime( &ts );
+        p               =   gmtime( &t );
         time.Seconds    =   p->tm_sec;
         time.Minutes    =   p->tm_min;
         time.Hours      =   p->tm_hour;
         date.Date       =   p->tm_mday;
         date.Month      =   p->tm_mon;
         date.Year       =   p->tm_year;
+
+        //APP_TRACE( "<3> %02d %02d %04d\n", date.Date, date.Month, date.Year );
+        //APP_TRACE( "<3> %02d %02d %02d\n", time.Hours, time.Minutes, time.Seconds );
 
         app_rtc_time_write( &time );
         app_rtc_date_write( &date );

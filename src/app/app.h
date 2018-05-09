@@ -20,12 +20,31 @@
 #include "otm8009a.h"
 
 
+
+typedef enum    app_rtc_ctl_e
+{
+        APP_RTC_CTL_YEAR_INCREASE,
+        APP_RTC_CTL_YEAR_DECREASE,
+        APP_RTC_CTL_MONTH_INCREASE,
+        APP_RTC_CTL_MONTH_DECREASE,
+        APP_RTC_CTL_DAY_INCREASE,
+        APP_RTC_CTL_DAY_DECREASE,
+        APP_RTC_CTL_HOUR_INCREASE,
+        APP_RTC_CTL_HOUR_DECREASE,
+        APP_RTC_CTL_MINUTE_INCREASE,
+        APP_RTC_CTL_MINUTE_DECREASE,
+        APP_RTC_CTL_SECOND_INCREASE,
+        APP_RTC_CTL_SECOND_DECREASE,
+} app_rtc_ctl_t;
+
+
 void    app_config_clock( void );
 void    app_config_mpu( void );
 
 void    app_rtc_init(                           void                    );
 time_t  app_rtc_get(                            void                    );
 void    app_rtc_set(                            time_t *        raw     );
+void    app_rtc_ctl(                    const   app_rtc_ctl_t   ctl     );
 
 void    task_ui(                        const   void *          argument );
 void    task_recv(                      const   void *          argument );

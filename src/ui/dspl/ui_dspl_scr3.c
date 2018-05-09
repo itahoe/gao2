@@ -11,126 +11,167 @@
 #include "ui_dspl.h"
 
 
-extern  GUI_CONST_STORAGE       GUI_FONT        GUI_FontSegoePrint49;
+static  const                   char *          date_month[]    = { "ßÍÂ", "ÔÅÂ", "ÌÀÐ", "ÀÏÐ", "ÌÀÉ", "ÈÞÍ", "ÈÞË", "ÀÂÃ", "ÑÅÍ", "ÎÊÒ", "ÍÎß", "ÄÅÊ", };
 
 
-/*
-static const GUI_WIDGET_CREATE_INFO _aDialogSelect[] = {
-  //{ FRAMEWIN_CreateIndirect, "Select vehicle",  0,                 55,  30, 210, 200, 0 },
-  //{ WINDOW_CreateIndirect,       "Select vehicle",  0,                 55,  30, 210, 200, 0 },
-  //{ WINDOW_CreateIndirect,    "scr31",         GUI_ID_SCR3_1_WINDOW, 0,   0, 800,    430,      0,      0x0,    0 },
-  { WINDOW_CreateIndirect,    "scr31",         GUI_ID_SCR3_1_WINDOW, 0,   0, 800,    480,      0,      0x0,    0 },
-  //{ TEXT_CreateIndirect,     "Available vehicles:", 0,              9,   6, 120,  20, 0 },
-  //{ LISTVIEW_CreateIndirect, NULL,              GUI_ID_LISTVIEW0,   7,  20, 190, 120, 0 },
-  { BUTTON_CreateIndirect,   "OK",              GUI_ID_OK,         100, 350,  200,  100, 0 },
-  { BUTTON_CreateIndirect,   "Cancel",          GUI_ID_CANCEL,     500, 350,  200,  100, 0 }
-};
-*/
-
-/*
-static void _InitDialogSelect(WM_HWIN hWin) {
-  //WM_HWIN hItem;
-  //int     i;
-
-  //i = 0;
-  //
-  // Init framewindow
-  //
-  //FRAMEWIN_SetFont(hWin, &GUI_Font10_ASCII);
-  //FRAMEWIN_SetTitleHeight(hWin, 14);
-  //FRAMEWIN_SetMoveable(hWin, 1);
-  //
-  // Init listbox items
-  //
-  //hItem = WM_GetDialogItem(hWin, GUI_ID_LISTVIEW0);
-  //WM_SetScrollbarV(hItem, 1);
-  //LISTVIEW_SetGridVis(hItem, 1);
-  //LISTVIEW_SetLBorder(hItem, 3);
-  //LISTVIEW_SetRBorder(hItem, 3);
-  //LISTVIEW_AddColumn(hItem,  80, "Make",    GUI_TA_LEFT);
-  //LISTVIEW_AddColumn(hItem, 100, "Options", GUI_TA_LEFT);
-  //while (_acItems[i][0][0]) {
-  // _AddListviewItem(hItem, _acItems[i][0], _acItems[i][1]);
-  //  i++;
-  //}
-}
-*/
-
-/*
-static int _GetVehicle(WM_HWIN hWin) {
-  WM_HWIN hItem;
-  int     CurSel;
-  int     NumItems;
-
-  hItem    = WM_GetDialogItem(hWin, GUI_ID_LISTVIEW0);
-  NumItems = LISTVIEW_GetNumRows(hItem);
-  CurSel   = LISTVIEW_GetSel(hItem);
-  if ((CurSel >= 0) && (CurSel < NumItems)) {
-    //strcpy(_acVehicle, _acItems[CurSel][0]);
-    //strcat(_acVehicle, " ");
-    //strcat(_acVehicle, _acItems[CurSel][1]);
-
-    hItem = WM_GetDialogItem(hWin, GUI_ID_EDIT0);
-    //EDIT_SetText(hItem, _acVehicle);
-    return 1;
-  }
-  return 0;
-}
-*/
-
-/*
-static void _cbDialogSelect(            WM_MESSAGE *            pMsg )
+static
+const   GUI_WIDGET_CREATE_INFO  dlg_date[]      =
 {
-        WM_HWIN         hWin;
+  { WINDOW_CreateIndirect, "",          0,                                0,  80, 800, 400, 0 },
+  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_DATE_TXT_DAY,       100, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
+  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_DATE_TXT_MON,       300, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
+  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_DATE_TXT_YEAR,      500, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
+  { BUTTON_CreateIndirect, "+",         GUI_ID_SCR3_DATE_BTN_DAY_UP,    100,   0, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "-",         GUI_ID_SCR3_DATE_BTN_DAY_DN,    100, 200, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "+",         GUI_ID_SCR3_DATE_BTN_MON_UP,    300,   0, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "-",         GUI_ID_SCR3_DATE_BTN_MON_DN,    300, 200, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "+",         GUI_ID_SCR3_DATE_BTN_YEAR_UP,   500,   0, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "-",         GUI_ID_SCR3_DATE_BTN_YEAR_DN,   500, 200, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "ÍÀÇÀÄ",     GUI_ID_SCR3_DATE_BTN_BACK,      300, 300, 200, 100, 0 },
+};
+
+
+static
+const   GUI_WIDGET_CREATE_INFO  dlg_time[]      =
+{
+  { WINDOW_CreateIndirect, "",          0,                                0,  80, 800, 400, 0 },
+  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_TIME_TXT_HOUR,      100, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
+  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_TIME_TXT_MIN,       300, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
+  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_TIME_TXT_SEC,       500, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
+  { BUTTON_CreateIndirect, "+",         GUI_ID_SCR3_TIME_BTN_HOUR_UP,   100,   0, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "-",         GUI_ID_SCR3_TIME_BTN_HOUR_DN,   100, 200, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "+",         GUI_ID_SCR3_TIME_BTN_MIN_UP,    300,   0, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "-",         GUI_ID_SCR3_TIME_BTN_MIN_DN,    300, 200, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "+",         GUI_ID_SCR3_TIME_BTN_SEC_UP,    500,   0, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "-",         GUI_ID_SCR3_TIME_BTN_SEC_DN,    500, 200, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "ÍÀÇÀÄ",     GUI_ID_SCR3_TIME_BTN_BACK,      300, 300, 200, 100, 0 },
+};
+
+
+
+static
+void    dlg_date_update(                WM_HWIN                 hWin )
+{
+                WM_HWIN         hItem;
+                char            str[16];
+                time_t          t;
+	struct  tm *            ts;
+
+
+        t       =   time( NULL );
+        ts      =   gmtime( &t );
+
+        strftime( str, sizeof(str), "%Y", ts );
+        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_DATE_TXT_YEAR );
+        TEXT_SetText( hItem, str );
+
+        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_DATE_TXT_MON );
+        TEXT_SetText( hItem, date_month[ ts->tm_mon ] );
+
+        strftime( str, sizeof(str), "%d", ts );
+        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_DATE_TXT_DAY );
+        TEXT_SetText( hItem, str );
+
+}
+
+
+static
+void    dlg_time_update(                WM_HWIN                 hWin )
+{
+                WM_HWIN         hItem;
+                char            str[16];
+                time_t          t       = time( NULL );
+	struct  tm *            ts      = gmtime( &t );
+
+
+        strftime( str, sizeof(str), "%H", ts );
+        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_TIME_TXT_HOUR );
+        TEXT_SetText( hItem, str );
+
+        strftime( str, sizeof(str), "%M", ts );
+        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_TIME_TXT_MIN );
+        TEXT_SetText( hItem, str );
+
+        strftime( str, sizeof(str), "%S", ts );
+        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_TIME_TXT_SEC );
+        TEXT_SetText( hItem, str );
+}
+
+
+static
+void    dlg_date_cb(                    WM_MESSAGE *            pMsg    )
+{
         WM_HWIN         hItem;
+        int             NCode;
         int             Id;
 
 
-        hWin    =   pMsg->hWin;
-
         switch( pMsg->MsgId )
         {
+                case WM_NOTIFY_PARENT:
+                        Id    = WM_GetId(pMsg->hWinSrc);    // Id of widget
+                        NCode = pMsg->Data.v;               // Notification code
 
-                //case WM_PAINT:
-                        //GUI_Clear();
-                        //WM_DefaultProc(pMsg);
-                        //break;
+                        switch( NCode )
+                        {
+                                case WM_NOTIFICATION_CLICKED:      // React only if clicked
+                                        switch( Id )
+                                        {
+                                                case GUI_ID_SCR3_DATE_BTN_YEAR_UP:
+                                                        app_rtc_ctl( APP_RTC_CTL_YEAR_INCREASE );
+                                                        dlg_date_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
 
-                case WM_INIT_DIALOG:
-                        WINDOW_SetBkColor( hWin, GUI_BLACK );
-                        //WINDOW_SetBkColor( hWin, GUI_DARKGRAY );
+                                                case GUI_ID_SCR3_DATE_BTN_YEAR_DN:
+                                                        app_rtc_ctl( APP_RTC_CTL_YEAR_DECREASE );
+                                                        dlg_date_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
 
-                        WM_SelectWindow( hWin );
-                        //GUI_Clear();
-                        //_InitDialogSelect(hWin);
-                        //WM_SetFocus(  WM_GetDialogItem( hWin, GUI_ID_OK )  );
-                        //WM_BringToTop( hWin );
-                        //WM_ShowWindow( hWin );
-                        //WM_MakeModal( hWin );
-                        WM_SetFocus( hWin );
+                                                case GUI_ID_SCR3_DATE_BTN_MON_UP:
+                                                        app_rtc_ctl( APP_RTC_CTL_MONTH_INCREASE );
+                                                        dlg_date_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_DATE_BTN_MON_DN:
+                                                        app_rtc_ctl( APP_RTC_CTL_MONTH_DECREASE );
+                                                        dlg_date_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_DATE_BTN_DAY_UP:
+                                                        app_rtc_ctl( APP_RTC_CTL_DAY_INCREASE );
+                                                        dlg_date_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_DATE_BTN_DAY_DN:
+                                                        app_rtc_ctl( APP_RTC_CTL_DAY_DECREASE );
+                                                        dlg_date_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_DATE_BTN_BACK:
+                                                        GUI_EndDialog(pMsg->hWin, 0);
+                                                        break;
+
+                                                default:
+                                                        break;
+                                        } //switch( Id )
+
+                                        break;
+                        } //switch( NCode )
                         break;
 
-                case WM_NOTIFY_PARENT:
-                        if( pMsg->Data.v == WM_NOTIFICATION_RELEASED )
-                        {
-                                Id      =   WM_GetId( pMsg->hWinSrc );
+                case WM_INIT_DIALOG:
+                        hItem   =   pMsg->hWin;
+                        WINDOW_SetBkColor( hItem, GUI_BLACK );
 
-                                switch( Id )
-                                {
-                                        case GUI_ID_OK:
-                                                if( _GetVehicle(hWin) == 0 )
-                                                {
-                                                        //_MessageBox("You have to select a vehicle!", "ERROR");
-                                                        //WM_MakeModal(hWin);
-                                                        //WM_SetFocus(hWin);
-                                                }
-                                                break;
+                        dlg_date_update( pMsg->hWin );
 
-                                        case GUI_ID_CANCEL:
-                                                GUI_EndDialog(pMsg->hWin, 0);
-                                                break;
-                                }
-                        }
+                        WM_Update( pMsg->hWin );
                         break;
 
                 default:
@@ -138,37 +179,122 @@ static void _cbDialogSelect(            WM_MESSAGE *            pMsg )
                         break;
         }
 }
-*/
+
+
+static
+void    dlg_time_cb(                    WM_MESSAGE *            pMsg    )
+{
+        int     NCode;
+        int     Id;
+
+
+        switch( pMsg->MsgId )
+        {
+                case WM_TIMER:
+                        dlg_time_update( pMsg->hWin );
+                        WM_RestartTimer( pMsg->Data.v, 0 );     //pMsg->Data.v contains a handle the expired timer only if the message WM_TIMER is currently processed
+                        break;
+
+                case WM_NOTIFY_PARENT:
+                        Id    = WM_GetId(pMsg->hWinSrc);        // Id of widget
+                        NCode = pMsg->Data.v;                   // Notification code
+                        switch( NCode )
+                        {
+                                case WM_NOTIFICATION_CLICKED:
+                                        switch( Id )
+                                        {
+                                                case GUI_ID_SCR3_TIME_BTN_HOUR_UP:
+                                                        app_rtc_ctl( APP_RTC_CTL_HOUR_INCREASE );
+                                                        dlg_time_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_TIME_BTN_HOUR_DN:
+                                                        app_rtc_ctl( APP_RTC_CTL_HOUR_DECREASE );
+                                                        dlg_time_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_TIME_BTN_MIN_UP:
+                                                        app_rtc_ctl( APP_RTC_CTL_MINUTE_INCREASE );
+                                                        dlg_time_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_TIME_BTN_MIN_DN:
+                                                        app_rtc_ctl( APP_RTC_CTL_MINUTE_DECREASE );
+                                                        dlg_time_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_TIME_BTN_SEC_UP:
+                                                        app_rtc_ctl( APP_RTC_CTL_SECOND_INCREASE );
+                                                        dlg_time_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_TIME_BTN_SEC_DN:
+                                                        app_rtc_ctl( APP_RTC_CTL_SECOND_DECREASE );
+                                                        dlg_time_update( pMsg->hWin );
+                                                        WM_Update( pMsg->hWin );
+                                                        break;
+
+                                                case GUI_ID_SCR3_TIME_BTN_BACK:
+                                                        GUI_EndDialog(pMsg->hWin, 0);
+                                                        break;
+
+                                                default:
+                                                        break;
+                                        }
+                                        break;
+                        }
+                        break;
+
+                case WM_INIT_DIALOG:
+                        WINDOW_SetBkColor( pMsg->hWin, GUI_BLACK );
+                        dlg_time_update( pMsg->hWin );
+                        WM_CreateTimer( pMsg->hWin, 0, 1000, 0 );
+                        break;
+
+                default:
+                        WM_DefaultProc(pMsg);
+                        break;
+        }
+}
+
 
 void    ui_dspl_scr3_cb(                        WM_MESSAGE *            pMsg )
 {
-                //int             NCode;
                 int             Id;
                 WM_HWIN         hItem;
                 WM_HWIN         hWin    =   pMsg->hWin;
-                time_t          t_raw;
-	struct  tm *            s;
+                time_t          t;
+	struct  tm *            ts;
                 char            str[16];
 
 
         switch( pMsg->MsgId )
         {
                 case WM_TIMER:
-                        t_raw   =   time( NULL );
-                        s       =   gmtime( &t_raw );
+                        t       =   time( NULL );
+                        ts      =   gmtime( &t );
 
-                        snprintf( str, sizeof( str ), "%02d/%02d/%04d", s->tm_mday, s->tm_mon, s->tm_year + 1970 );
+                        strftime( str, sizeof(str), "%d/%m/%Y", ts );
                         hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_DATE );
                         BUTTON_SetText( hItem, str );
 
-                        snprintf( str, sizeof( str ), "%02d:%02d:%02d", s->tm_hour, s->tm_min, s->tm_sec );
+                        strftime( str, sizeof(str), "%H:%M:%S", ts );
                         hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_TIME );
+                        BUTTON_SetText( hItem, str );
+
+                        //strftime( str, sizeof(str), "%Ec", ts );
+                        snprintf( str, sizeof( str ), "%d", t );
+                        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_CFG_CH1 );
                         BUTTON_SetText( hItem, str );
 
                         WM_Update( hWin );
 
                         WM_RestartTimer( pMsg->Data.v, 0 );     //pMsg->Data.v contains a handle the expired timer only if the message WM_TIMER is currently processed
-
                         break;
 
                 case WM_NOTIFY_PARENT:
@@ -178,27 +304,19 @@ void    ui_dspl_scr3_cb(                        WM_MESSAGE *            pMsg )
 
                                 switch( Id )
                                 {
-/*
                                         case GUI_ID_SCR3_BUTTON_DATE:
-                                                //hDlg    =   GUI_CreateDialogBox( _aDialogSelect, GUI_COUNTOF(_aDialogSelect), &_cbDialogSelect, WM_HBKWIN, 0, 0 );
-                                                hDlg    =   GUI_CreateDialogBox( _aDialogSelect, GUI_COUNTOF(_aDialogSelect), &_cbDialogSelect, hWin, 0, 0 );
-                                                //WM_MakeModal( hDlg );
-                                                //WM_SetFocus( hDlg );
-                                                //WM_MakeModal( hWin );
-                                                //WM_SetFocus( hWin );
-                                                GUI_ExecCreatedDialog( hDlg );
+                                                GUI_ExecDialogBox( dlg_date, GUI_COUNTOF(dlg_date), dlg_date_cb, hWin, 0, 0 );
                                                 break;
-*/
-/*
-                                        case GUI_ID_OK:
-                                        case GUI_ID_CANCEL:
-                                                GUI_EndDialog(hWin, 0);
+
+                                        case GUI_ID_SCR3_BUTTON_TIME:
+                                                GUI_ExecDialogBox( dlg_time, GUI_COUNTOF(dlg_time), dlg_time_cb, hWin, 0, 0 );
                                                 break;
-*/
+
+                                        default:
+                                                break;
                                 }
                         }
                         break;
-
 
                 case WM_INIT_DIALOG:
                         hItem   =   pMsg->hWin;

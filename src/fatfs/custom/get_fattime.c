@@ -20,18 +20,21 @@
   *             bit10:5     Minute (0..59)
   *             bit4:0      Second / 2 (0..29)
   */
+
+#include "app_trace.h"
+
 DWORD get_fattime( void )
 {
-                time_t          raw     = time( NULL );
-	struct  tm *            s       = gmtime( &raw );
-                int             adj     = (1970 - 1980);
-                DWORD           t_fat   =   (( s->tm_year + adj)    << 25) |
-                                            //(( s->tm_mon + 1)       << 21) |
-                                            (( s->tm_mon )          << 21) |
-                                            (( s->tm_mday )         << 16) |
-                                            (( s->tm_hour )         << 11) |
-                                            (( s->tm_min )          <<  5) |
-                                            (( s->tm_sec )          >>  1);
+                time_t          t       = time( NULL );
+	struct  tm *            ts      = gmtime( &t );
+                int             adj     = (1900 - 1980);
+                DWORD           fattime =   (( ts->tm_year + adj)   << 25) |
+                                            (( ts->tm_mon + 1)      << 21) |
+                                            //(( ts->tm_mon )         << 21) |
+                                            (( ts->tm_mday )        << 16) |
+                                            (( ts->tm_hour )        << 11) |
+                                            (( ts->tm_min )         <<  5) |
+                                            (( ts->tm_sec )         >>  1);
 
-	return( t_fat );
+	return( fattime );
 }

@@ -258,11 +258,8 @@
 /  When enable exFAT, also LFN needs to be enabled. (_USE_LFN >= 1)
 /  Note that enabling exFAT discards C89 compatibility. */
 
-#if defined NDEBUG
-        #define _FS_NORTC	1
-#else
-        #define _FS_NORTC	0
-#endif
+//#define _FS_NORTC	1
+#define _FS_NORTC	0
 
 #define _NORTC_MON	1
 #define _NORTC_MDAY	1
