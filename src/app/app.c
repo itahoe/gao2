@@ -143,38 +143,26 @@ void    BSP_Config( void )
 
 
 /**
-  * @brief  CPU L1-Cache enable.
-  * @param  None
-  * @retval None
-  */
-static
-void CPU_CACHE_Enable(void)
-{
-        SCB_EnableICache();     //Enable I-Cache
-        SCB_EnableDCache();     //Enable D-Cache
-}
-
-
-/**
   * @brief  Main program
   * @param  None
   * @retval None
   */
 int main( void )
 {
-        app_config_mpu();
+        app_mpu_config();
 
-        CPU_CACHE_Enable();
+        //@brief  CPU L1-Cache enable.
+        SCB_EnableICache();     //Enable I-Cache
+        SCB_EnableDCache();     //Enable D-Cache
 
-        /* STM32F7xx HAL library initialization:
-       - Configure the Flash prefetch, instruction and Data caches
-       - Configure the Systick to generate an interrupt each 1 msec
-       - Set NVIC Group Priority to 4
-       - Global MSP (MCU Support Package) initialization
-       */
+        //      STM32F7xx HAL library initialization:
+        //      - Configure the Flash prefetch, instruction and Data caches
+        //      - Configure the Systick to generate an interrupt each 1 msec
+        //      - Set NVIC Group Priority to 4
+        //      - Global MSP (MCU Support Package) initialization
         HAL_Init();
 
-        app_config_clock();     //Configure the system clock to 180 MHz
+        app_clock_config();     //Configure the system clock to 180 MHz
 
         BSP_Config();           //Initialize LCD and LEDs
 

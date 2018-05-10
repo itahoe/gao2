@@ -52,15 +52,15 @@ static
 const   GUI_WIDGET_CREATE_INFO  dlg_chnl[]      =
 {
   { WINDOW_CreateIndirect, "",          0,                                0,  80, 800, 400, 0 },
-  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_TIME_TXT_HOUR,      100, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
-  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_TIME_TXT_MIN,       300, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
-  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_TIME_TXT_SEC,       500, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
-  { BUTTON_CreateIndirect, "+",         GUI_ID_BUTTON0,                 100,   0, 200, 100, 0 },
-  { BUTTON_CreateIndirect, "-",         GUI_ID_BUTTON1,                 100, 200, 200, 100, 0 },
-  { BUTTON_CreateIndirect, "+",         GUI_ID_BUTTON2,                 300,   0, 200, 100, 0 },
-  { BUTTON_CreateIndirect, "-",         GUI_ID_BUTTON3,                 300, 200, 200, 100, 0 },
-  { BUTTON_CreateIndirect, "+",         GUI_ID_BUTTON4,                 500,   0, 200, 100, 0 },
-  { BUTTON_CreateIndirect, "-",         GUI_ID_BUTTON5,                 500, 200, 200, 100, 0 },
+  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_CHNL_TXT_PHY,       100, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
+  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_CHNL_TXT_RATE,      300, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
+  { TEXT_CreateIndirect,   "",          GUI_ID_SCR3_CHNL_TXT_PROT,      500, 100, 200, 100, TEXT_CF_HCENTER | TEXT_CF_VCENTER },
+  { BUTTON_CreateIndirect, "+",         GUI_ID_SCR3_CHNL_BTN_UP_PHY,    100,   0, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "-",         GUI_ID_SCR3_CHNL_BTN_DN_PHY,    100, 200, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "+",         GUI_ID_SCR3_CHNL_BTN_UP_RATE,   300,   0, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "-",         GUI_ID_SCR3_CHNL_BTN_DN_RATE,   300, 200, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "+",         GUI_ID_SCR3_CHNL_BTN_UP_PROT,   500,   0, 200, 100, 0 },
+  { BUTTON_CreateIndirect, "-",         GUI_ID_SCR3_CHNL_BTN_DN_PROT,   500, 200, 200, 100, 0 },
   { BUTTON_CreateIndirect, "ÍÀÇÀÄ",     GUI_ID_SCR3_BUTTON_BACK,        300, 300, 200, 100, 0 },
 };
 
@@ -276,6 +276,31 @@ void    dlg_time_cb(                    WM_MESSAGE *            pMsg    )
 
 
 static
+void    dlg_chnl_update(                WM_HWIN                 hWin )
+{
+                WM_HWIN         hItem;
+/*
+                char            str[16];
+                time_t          t       = time( NULL );
+	struct  tm *            ts      = gmtime( &t );
+
+
+        strftime( str, sizeof(str), "%H", ts );
+        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_TIME_TXT_HOUR );
+        TEXT_SetText( hItem, str );
+
+        strftime( str, sizeof(str), "%M", ts );
+        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_TIME_TXT_MIN );
+        TEXT_SetText( hItem, str );
+
+        strftime( str, sizeof(str), "%S", ts );
+        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR3_TIME_TXT_SEC );
+        TEXT_SetText( hItem, str );
+*/
+}
+
+
+static
 void    dlg_chnl_cb(                    WM_MESSAGE *            pMsg    )
 {
         int     NCode;
@@ -292,39 +317,39 @@ void    dlg_chnl_cb(                    WM_MESSAGE *            pMsg    )
                                 case WM_NOTIFICATION_CLICKED:
                                         switch( Id )
                                         {
-                                                case GUI_ID_SCR3_TIME_BTN_HOUR_UP:
-                                                        app_rtc_ctl( APP_RTC_CTL_HOUR_INCREASE );
-                                                        dlg_time_update( pMsg->hWin );
+                                                case GUI_ID_SCR3_CHNL_BTN_UP_PHY:
+                                                        //app_rtc_ctl( APP_RTC_CTL_HOUR_INCREASE );
+                                                        dlg_chnl_update( pMsg->hWin );
                                                         WM_Update( pMsg->hWin );
                                                         break;
 
-                                                case GUI_ID_SCR3_TIME_BTN_HOUR_DN:
-                                                        app_rtc_ctl( APP_RTC_CTL_HOUR_DECREASE );
-                                                        dlg_time_update( pMsg->hWin );
+                                                case GUI_ID_SCR3_CHNL_BTN_DN_PHY:
+                                                        //app_rtc_ctl( APP_RTC_CTL_HOUR_DECREASE );
+                                                        dlg_chnl_update( pMsg->hWin );
                                                         WM_Update( pMsg->hWin );
                                                         break;
 
-                                                case GUI_ID_SCR3_TIME_BTN_MIN_UP:
-                                                        app_rtc_ctl( APP_RTC_CTL_MINUTE_INCREASE );
-                                                        dlg_time_update( pMsg->hWin );
+                                                case GUI_ID_SCR3_CHNL_BTN_UP_RATE:
+                                                        //app_rtc_ctl( APP_RTC_CTL_MINUTE_INCREASE );
+                                                        dlg_chnl_update( pMsg->hWin );
                                                         WM_Update( pMsg->hWin );
                                                         break;
 
-                                                case GUI_ID_SCR3_TIME_BTN_MIN_DN:
-                                                        app_rtc_ctl( APP_RTC_CTL_MINUTE_DECREASE );
-                                                        dlg_time_update( pMsg->hWin );
+                                                case GUI_ID_SCR3_CHNL_BTN_DN_RATE:
+                                                        //app_rtc_ctl( APP_RTC_CTL_MINUTE_DECREASE );
+                                                        dlg_chnl_update( pMsg->hWin );
                                                         WM_Update( pMsg->hWin );
                                                         break;
 
-                                                case GUI_ID_SCR3_TIME_BTN_SEC_UP:
-                                                        app_rtc_ctl( APP_RTC_CTL_SECOND_INCREASE );
-                                                        dlg_time_update( pMsg->hWin );
+                                                case GUI_ID_SCR3_CHNL_BTN_UP_PROT:
+                                                        //app_rtc_ctl( APP_RTC_CTL_SECOND_INCREASE );
+                                                        dlg_chnl_update( pMsg->hWin );
                                                         WM_Update( pMsg->hWin );
                                                         break;
 
-                                                case GUI_ID_SCR3_TIME_BTN_SEC_DN:
-                                                        app_rtc_ctl( APP_RTC_CTL_SECOND_DECREASE );
-                                                        dlg_time_update( pMsg->hWin );
+                                                case GUI_ID_SCR3_CHNL_BTN_DN_PROT:
+                                                        //app_rtc_ctl( APP_RTC_CTL_SECOND_DECREASE );
+                                                        dlg_chnl_update( pMsg->hWin );
                                                         WM_Update( pMsg->hWin );
                                                         break;
 
@@ -341,8 +366,8 @@ void    dlg_chnl_cb(                    WM_MESSAGE *            pMsg    )
 
                 case WM_INIT_DIALOG:
                         WINDOW_SetBkColor( pMsg->hWin, GUI_BLACK );
-                        dlg_time_update( pMsg->hWin );
-                        WM_CreateTimer( pMsg->hWin, 0, 1000, 0 );
+                        dlg_chnl_update( pMsg->hWin );
+                        //WM_CreateTimer( pMsg->hWin, 0, 1000, 0 );
                         break;
 
                 default:

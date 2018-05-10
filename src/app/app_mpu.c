@@ -1,5 +1,5 @@
 /**
-  * @file    app_mpu_config.c
+  * @file    app_mpu.c
   * @brief   Configure MCU clock tree
   * @author  Igor T. <research.tahoe@gmail.com>
   */
@@ -10,7 +10,7 @@
 #include "app.h"
 
 
-void    app_config_mpu( void )
+void    app_mpu_config( void )
 {
         MPU_Region_InitTypeDef  mpu;
 

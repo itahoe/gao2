@@ -38,8 +38,8 @@ typedef enum    app_rtc_ctl_e
 } app_rtc_ctl_t;
 
 
-void    app_config_clock( void );
-void    app_config_mpu( void );
+void    app_clock_config( void );
+void    app_mpu_config( void );
 
 void    app_rtc_init(                           void                    );
 time_t  app_rtc_get(                            void                    );

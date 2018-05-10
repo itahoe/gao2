@@ -1,5 +1,5 @@
 /**
-  * @file    app_config_clock.c
+  * @file    app_clock.c
   * @brief   Configure MCU clock tree
   * @author  Igor T. <research.tahoe@gmail.com>
   */
@@ -10,7 +10,7 @@
 #include "app.h"
 
 
-void    app_config_clock( void )
+void    app_clock_config( void )
 {
         HAL_StatusTypeDef       resp;
         RCC_OscInitTypeDef      osc;
