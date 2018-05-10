@@ -27,10 +27,6 @@
 #define QUE_SIZE_STRG_WRDS                      8
 
 
-
-        //uint8_t                 GUI_Initialized = 0;
-
-        //void    BSP_Pointer_Update( void );
         void    k_TouchUpdate( void );
 
         time_t                  time_dat        =   0;
