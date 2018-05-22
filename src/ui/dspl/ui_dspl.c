@@ -92,14 +92,14 @@ static const GUI_WIDGET_CREATE_INFO ui_dspl_scr3_info[] =
     //{ BUTTON_CreateIndirect,    "7. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH7,  250, 360,    550,     50,  0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    "8. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH8,  250, 410,    550,     50,  0,      0x0,    0 },
 
-    { BUTTON_CreateIndirect,    "1. RS-485 115200 HART", GUI_ID_SCR3_BUTTON_CFG_CH1,  250,  80,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "2. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH2,  250, 130,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "3. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH3,  250, 180,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "4. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH4,  250, 230,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "5. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH5,  250, 280,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "6. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH6,  250, 330,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "7. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH7,  250, 380,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "8. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH8,  250, 430,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH1,  250,  80,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH2,  250, 130,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH3,  250, 180,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH4,  250, 230,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH5,  250, 280,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH6,  250, 330,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH7,  250, 380,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH8,  250, 430,    550,     50,  0,      0x0,    0 },
 };
 
 

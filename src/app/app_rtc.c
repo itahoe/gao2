@@ -209,3 +209,25 @@ void    app_rtc_ctl(                    const   app_rtc_ctl_t   ctl     )
         app_rtc_time_write( &time );
         app_rtc_date_write( &date );
 }
+
+
+void    app_rtc_bckp_read(                      uint32_t *      data,
+                                                size_t          addr,
+                                                size_t          cnt     )
+{
+        while( cnt-- )
+        {
+                *data++         = HAL_RTCEx_BKUPRead( &hrtc, addr++ );
+        }
+}
+
+
+void    app_rtc_bckp_write(                     uint32_t *      data,
+                                                size_t          addr,
+                                                size_t          cnt     )
+{
+        while( cnt-- )
+        {
+                HAL_RTCEx_BKUPWrite( &hrtc, addr++, *data++ );
+        }
+}

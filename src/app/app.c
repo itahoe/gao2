@@ -8,56 +8,59 @@
 #include <stdbool.h>
 #include "app.h"
 #include "app_trace.h"
-#include "app_stream.h"
+#include "app_pipe.h"
 #include "cmsis_os.h"
 
 
 #define TASK_STACK_SIZE_UI_WRDS                 512
-#define TASK_STACK_SIZE_RECV_WRDS               256
+#define TASK_STACK_SIZE_SENS_WRDS               256
 #define TASK_STACK_SIZE_XMIT_WRDS               configMINIMAL_STACK_SIZE
 #define TASK_STACK_SIZE_STRG_WRDS               256
 
 #define TASK_PRIO_UI                            osPriorityNormal
-#define TASK_PRIO_RECV                          osPriorityNormal
+#define TASK_PRIO_SENS                          osPriorityNormal
 #define TASK_PRIO_XMIT                          osPriorityNormal
 #define TASK_PRIO_STRG                          osPriorityNormal
 
-#define QUE_SIZE_RECV_WRDS                      8
+#define QUE_SIZE_SENS_WRDS                      8
 #define QUE_SIZE_UI_WRDS                        32
 #define QUE_SIZE_STRG_WRDS                      8
 
 
         void    k_TouchUpdate( void );
 
-        time_t                  time_dat        =   0;
+        //app_t                   app;
+
+
+        //time_t                  time_dat        =   0;
 
         osThreadId              task_hndl_ui;
-        osThreadId              task_hndl_recv;
+        osThreadId              task_hndl_sens;
         osThreadId              task_hndl_xmit;
         osThreadId              task_hndl_strg;
 
         osStaticThreadDef_t     task_tcb_ui;
-        osStaticThreadDef_t     task_tcb_recv;
+        osStaticThreadDef_t     task_tcb_sens;
         osStaticThreadDef_t     task_tcb_xmit;
         osStaticThreadDef_t     task_tcb_strg;
 
         uint32_t                task_stck_ui[           TASK_STACK_SIZE_UI_WRDS         ];
-        uint32_t                task_stck_recv[         TASK_STACK_SIZE_RECV_WRDS       ];
+        uint32_t                task_stck_sens[         TASK_STACK_SIZE_SENS_WRDS       ];
         uint32_t                task_stck_xmit[         TASK_STACK_SIZE_XMIT_WRDS       ];
         uint32_t                task_stck_strg[         TASK_STACK_SIZE_STRG_WRDS       ];
 
-        QueueHandle_t           que_recv_hndl;
-        osStaticMessageQDef_t   que_recv_qcb;
-        uint8_t                 que_recv_alloc[         QUE_SIZE_RECV_WRDS * sizeof( app_stream_t ) ];
+        QueueHandle_t           que_sens_hndl;
+        osStaticMessageQDef_t   que_sens_qcb;
+        uint8_t                 que_sens_alloc[         QUE_SIZE_SENS_WRDS * sizeof( app_pipe_t ) ];
 
         QueueHandle_t           que_ui_hndl;
         osStaticMessageQDef_t   que_ui_qcb;
-        uint8_t                 que_ui_alloc[           QUE_SIZE_UI_WRDS * sizeof( app_stream_t ) ];
+        uint8_t                 que_ui_alloc[           QUE_SIZE_UI_WRDS * sizeof( app_pipe_t ) ];
 
         //osMessageQId            que_ser4_hndl;
         QueueHandle_t           que_strg_hndl;
         osStaticMessageQDef_t   que_strg_qcb;
-        uint8_t                 que_strg_alloc[         QUE_SIZE_STRG_WRDS * sizeof( app_stream_t ) ];
+        uint8_t                 que_strg_alloc[         QUE_SIZE_STRG_WRDS * sizeof( app_pipe_t ) ];
 
 
         uint8_t         SelLayer        =   0;
@@ -178,25 +181,26 @@ int main( void )
 
         BSP_SDRAM_Init();
 
-        osMessageQStaticDef( RECV, 8, app_stream_t, que_recv_alloc, &que_recv_qcb );
-        que_recv_hndl           =   osMessageCreate( osMessageQ(RECV), NULL );
+        osMessageQStaticDef( SENS, 8, app_pipe_t , que_sens_alloc, &que_sens_qcb );
+        que_sens_hndl           =   osMessageCreate( osMessageQ( SENS ), NULL );
 
-        osMessageQStaticDef( UI,   8, app_stream_t, que_ui_alloc, &que_ui_qcb );
-        que_ui_hndl             =   osMessageCreate( osMessageQ(UI), NULL );
+        osMessageQStaticDef( UI,   8, app_pipe_t , que_ui_alloc, &que_ui_qcb );
+        que_ui_hndl             =   osMessageCreate( osMessageQ( UI   ), NULL );
 
-        osMessageQStaticDef( STRG, 8, app_stream_t, que_strg_alloc, &que_strg_qcb );
-        que_strg_hndl           =   osMessageCreate( osMessageQ(STRG), NULL );
+        osMessageQStaticDef( STRG, 8, app_pipe_t , que_strg_alloc, &que_strg_qcb );
+        que_strg_hndl           =   osMessageCreate( osMessageQ( STRG ), NULL );
 
-        osThreadStaticDef( UI,   task_ui,   TASK_PRIO_UI,     0, TASK_STACK_SIZE_UI_WRDS,   task_stck_ui,   &task_tcb_ui   );
+
+        osThreadStaticDef( UI,   task_ui,       TASK_PRIO_UI,     0, TASK_STACK_SIZE_UI_WRDS,   task_stck_ui,   &task_tcb_ui   );
         task_hndl_ui            =   osThreadCreate( osThread( UI   ),   NULL );
 
-        osThreadStaticDef( RECV, task_recv, TASK_PRIO_RECV,   0, TASK_STACK_SIZE_RECV_WRDS, task_stck_recv, &task_tcb_recv );
-        task_hndl_recv          =   osThreadCreate( osThread( RECV ),   NULL );
+        osThreadStaticDef( SENS, task_sensor,   TASK_PRIO_SENS,   0, TASK_STACK_SIZE_SENS_WRDS, task_stck_sens, &task_tcb_sens );
+        task_hndl_sens          =   osThreadCreate( osThread( SENS ),   NULL );
 
-        osThreadStaticDef( XMIT, task_xmit, TASK_PRIO_XMIT,   0, TASK_STACK_SIZE_XMIT_WRDS, task_stck_xmit, &task_tcb_xmit );
+        osThreadStaticDef( XMIT, task_xmit,     TASK_PRIO_XMIT,   0, TASK_STACK_SIZE_XMIT_WRDS, task_stck_xmit, &task_tcb_xmit );
         task_hndl_xmit          =   osThreadCreate( osThread( XMIT ),   NULL );
 
-        osThreadStaticDef( STRG, task_strg, TASK_PRIO_STRG,   0, TASK_STACK_SIZE_STRG_WRDS, task_stck_strg, &task_tcb_strg );
+        osThreadStaticDef( STRG, task_strg,     TASK_PRIO_STRG,   0, TASK_STACK_SIZE_STRG_WRDS, task_stck_strg, &task_tcb_strg );
         task_hndl_strg          =   osThreadCreate( osThread( STRG ),   NULL );
 
         osKernelStart();        //Start scheduler

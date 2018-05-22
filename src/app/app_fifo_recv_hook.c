@@ -21,6 +21,35 @@ bool app_fifo_rx_hook(                  app_fifo_t *            p )
 {
         bool            resp            =   false;
         uint32_t        ndtr            =   p->dma_get();
+        uint8_t *       head            =   p->data + (p->blck_size - ndtr);
+
+
+        if( head != p->head )
+        {
+                if( head < p->head )
+                {
+                        p->size         =  (p->data + p->blck_size) - p->head;
+                        head            =   p->data;
+                }
+                else
+                {
+                        p->size         =  head - p->head;
+                }
+
+                p->tile         =   p->head;
+                p->head         =   head;
+                p->ndtr         =   ndtr;
+                resp            =   true;
+        }
+
+        return( resp );
+}
+
+
+bool app_fifo16_rx_hook(                app_fifo16_t *          p )
+{
+        bool            resp            =   false;
+        uint32_t        ndtr            =   p->dma_get();
         int16_t *       head            =   p->data + (p->blck_size - ndtr);
 
 

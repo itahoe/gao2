@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include "storage.h"
 #include "cmsis_os.h"
-#include "app_stream.h"
+#include "app_pipe.h"
 #include "app.h"
 #include "app_trace.h"
 
@@ -20,7 +20,7 @@ static  storage_t               log_ch01        =   { .fext   =  "ch01.log", };
 
 void    task_strg(                      const   void *          argument )
 {
-                app_stream_t    stream;
+                app_pipe_t      pipe;
                 bool            ready                   =   false;
                 bool            err;
                 //bool            write_uart2_active      =   false;
@@ -32,7 +32,7 @@ void    task_strg(                      const   void *          argument )
 
         while( true )
         {
-                xQueueReceive( que_strg_hndl, &stream, portMAX_DELAY );
+                xQueueReceive( que_strg_hndl, &pipe, portMAX_DELAY );
 
                 if( ready == false )
                 {
@@ -49,9 +49,8 @@ void    task_strg(                      const   void *          argument )
                 }
                 else
                 {
-                        err     =   storage_write( &log_ch01, (uint8_t *) stream.data, stream.size*2 );
+                        err     =   storage_write( &log_ch01, (uint8_t *) pipe.data, pipe.cnt * 2 );
                         ready   =   err ? false : true;
-
                 }
 
 /*

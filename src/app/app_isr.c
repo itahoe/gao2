@@ -7,22 +7,45 @@
 
 #include "cmsis_os.h"
 #include "app_trace.h"
-#include "app_isr.h"
+//#include "app_isr.h"
+#include "app_pipe.h"
 #include "app.h"
+#include "bsp_ser.h"
+//#include "bsp.h"
 
 
 extern  LTDC_HandleTypeDef      hltdc;
 extern  TIM_HandleTypeDef       TimHandle;
 extern  SD_HandleTypeDef        uSdHandle;
 
+extern  QueueHandle_t           que_sens_hndl;
 
-void hard_fault_handler( uint32_t *arg );
+
+void    NMI_Handler( void );
+void    HardFault_Handler( void );
+void    MemManage_Handler( void );
+void    BusFault_Handler( void );
+void    UsageFault_Handler( void );
+void    DebugMon_Handler( void );
+void    SysTick_Handler( void );
+
+void    SDMMC2_IRQHandler( void );
+void    DMA2_Stream5_IRQHandler( void );
+void    DMA2_Stream0_IRQHandler( void );
+
+void    LTDC_IRQHandler( void );
+void    TIM3_IRQHandler( void );
+void    USART6_IRQHandler( void );
+void    DMA2_Stream6_IRQHandler( void );
+void    DMA2_Stream1_IRQHandler( void );
+
+void    hard_fault_handler(                     uint32_t *      arg     );
 
 
 /**
  * @brief Hard Fault handler
  */
-void hard_fault_handler(uint32_t *arg)
+void    hard_fault_handler(                     uint32_t *      arg     )
 {
 	volatile uint32_t stack_ptr;
 	volatile uint32_t stacked_r0;
@@ -66,7 +89,6 @@ void hard_fault_handler(uint32_t *arg)
 }
 
 
-
 /******************************************************************************/
 /*            Cortex-M7 Processor Exceptions Handlers                         */
 /******************************************************************************/
@@ -76,9 +98,13 @@ void hard_fault_handler(uint32_t *arg)
   * @param  None
   * @retval None
   */
-void NMI_Handler(void)
+void    NMI_Handler( void )
 {
+	#ifdef  NDEBUG
+	NVIC_SystemReset();
+	#else
         while( 1 );
+	#endif //NDEBUG
 }
 
 
@@ -93,7 +119,6 @@ void    HardFault_Handler( void )
 
 	#ifdef  NDEBUG
 	NVIC_SystemReset();
-        //while( 1 );
 	#else
 	asm volatile
 	(
@@ -112,9 +137,13 @@ void    HardFault_Handler( void )
   * @param  None
   * @retval None
   */
-void MemManage_Handler(void)
+void    MemManage_Handler( void )
 {
+	#ifdef  NDEBUG
+	NVIC_SystemReset();
+	#else
         while( 1 );
+	#endif //NDEBUG
 }
 
 
@@ -125,7 +154,11 @@ void MemManage_Handler(void)
   */
 void    BusFault_Handler( void )
 {
+	#ifdef  NDEBUG
+	NVIC_SystemReset();
+	#else
         while( 1 );
+	#endif //NDEBUG
 }
 
 
@@ -136,20 +169,12 @@ void    BusFault_Handler( void )
   */
 void    UsageFault_Handler( void )
 {
+	#ifdef  NDEBUG
+	NVIC_SystemReset();
+	#else
         while( 1 );
+	#endif //NDEBUG
 }
-
-
-/**
-  * @brief  This function handles SVCall exception.
-  * @param  None
-  * @retval None
-  */
-/*
-void SVC_Handler(void)
-{
-}
-*/
 
 
 /**
@@ -159,20 +184,12 @@ void SVC_Handler(void)
   */
 void    DebugMon_Handler( void )
 {
+	#ifdef  NDEBUG
+	NVIC_SystemReset();
+	#else
         while( 1 );
+	#endif //NDEBUG
 }
-
-
-/**
-  * @brief  This function handles PendSVC exception.
-  * @param  None
-  * @retval None
-  */
-/*
-void PendSV_Handler(void)
-{
-}
-*/
 
 
 /**
@@ -215,6 +232,9 @@ void    LTDC_IRQHandler( void )
 }
 
 
+/******************************************************************************/
+/* uSD Card Interrupt Handler's                                               */
+/******************************************************************************/
 /**
  * @brief Handles SD2 card interrupt request.
  * @retval None
@@ -242,4 +262,45 @@ void    DMA2_Stream5_IRQHandler( void )
 void    DMA2_Stream0_IRQHandler( void )
 {
         //HAL_DMA_IRQHandler( uSdHandle.hdmarx );
+}
+
+
+
+/******************************************************************************/
+/* SER1 Interrupt Handler's                                                   */
+/******************************************************************************/
+void    USART6_IRQHandler( void )
+{
+        app_pipe_t      pipe    =   {   .tag            =   APP_PIPE_TAG_SER1_IDLE,
+                                        .data           =   (void *) 0,
+                                        .cnt            =   0 };
+
+        bool    valid;
+
+        valid           =   bsp_ser1_isr();
+
+        pipe.cnt        =   bsp_ser1_dma_recv_get_ndtr();
+
+        if( valid )
+        {
+                pipe.tag        =   APP_PIPE_TAG_SER1_IDLE;
+                xQueueSendFromISR( que_sens_hndl, &pipe, NULL );
+        }
+        else
+        {
+                pipe.tag        =   APP_PIPE_TAG_SER1_ERR;
+                xQueueSendFromISR( que_sens_hndl, &pipe, NULL );
+        }
+}
+
+
+void    DMA2_Stream6_IRQHandler( void )
+{
+        bsp_ser1_dma_tx_isr();
+}
+
+
+void    DMA2_Stream1_IRQHandler( void )
+{
+        bsp_ser1_dma_rx_isr();
 }

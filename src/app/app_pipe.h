@@ -1,22 +1,25 @@
 /**
-  * @file    app_stream.c
-  * @brief   Stream prototype
+  * @file    app_pipe.c
+  * @brief   Pipe services
   * @author  Igor T. <research.tahoe@gmail.com>
   */
 
 
-#ifndef APP_STREAM_H
-#define APP_STREAM_H
+#ifndef APP_PIPE_H
+#define APP_PIPE_H
 
 
 #include <stdint.h>
 #include <stdio.h>
 
 
-typedef enum    app_stream_tag_e
+typedef enum    app_pipe_tag_e
 {
         APP_PIPE_TAG_ERROR,
-        APP_PIPE_TAG_RECV,
+        APP_PIPE_TAG_SENSOR,
+        APP_PIPE_TAG_CONFIG_SET,
+        APP_PIPE_TAG_SER1_IDLE,
+        APP_PIPE_TAG_SER1_ERR,
 
         APP_PIPE_TAG_SER1,
         APP_PIPE_TAG_SER2,
@@ -27,15 +30,15 @@ typedef enum    app_stream_tag_e
         APP_PIPE_TAG_STORAGE_CLOSE,
         APP_PIPE_TAG_STORAGE_OPEN,
         APP_PIPE_TAG_STORAGE_TOGGLE,
-} app_stream_tag_t;
+} app_pipe_tag_t;
 
 
-typedef	struct	app_stream_s
+typedef	struct	app_pipe_s
 {
-        app_stream_tag_t        tag;
+        app_pipe_tag_t          tag;
         int16_t *               data;
-        size_t                  size;
-} app_stream_t;
+        size_t                  cnt;
+} app_pipe_t;
 
 
-#endif  //APP_STREAM_H
+#endif  //APP_PIPE_H

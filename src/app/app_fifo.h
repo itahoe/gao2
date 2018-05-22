@@ -20,15 +20,29 @@ typedef	struct	app_fifo_s
 {
         comm_dma_get_t          dma_get;
         uint32_t                ndtr;
+        uint8_t *               head;
+        uint8_t *               tile;
+        size_t                  size;
+        size_t                  blck_size;
+        uint8_t *               data;
+} app_fifo_t;
+
+
+typedef	struct	app_fifo16_s
+{
+        comm_dma_get_t          dma_get;
+        uint32_t                ndtr;
         int16_t *               head;
         int16_t *               tile;
         size_t                  size;
         size_t                  blck_size;
         int16_t *               data;
-} app_fifo_t;
+} app_fifo16_t;
 
 
 bool app_fifo_rx_hook(                  app_fifo_t *            p );
+
+bool app_fifo16_rx_hook(                app_fifo16_t *          p );
 
 
 #endif	//APP_FIFO_H

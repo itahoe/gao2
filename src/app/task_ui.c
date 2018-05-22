@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include "cmsis_os.h"
 #include "ui_dspl.h"
-#include "app_stream.h"
+#include "app_pipe.h"
 #include "app_trace.h"
 #include "app.h"
 
@@ -62,7 +62,7 @@ void    task_ui(                        const   void *          argument )
 {
         bool                    received;
         TickType_t              polling_cycle_tcks      =   CONF_SER_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
-        app_stream_t            stream;
+        app_pipe_t              pipe;
 
 
         GUI_Init();
@@ -80,20 +80,26 @@ void    task_ui(                        const   void *          argument )
         while( true )
         {
                 GUI_Exec();
-                received        =   xQueueReceive( que_ui_hndl, &stream, polling_cycle_tcks );
+                received        =   xQueueReceive( que_ui_hndl, &pipe, polling_cycle_tcks );
                 if( received )
                 {
-                        if( stream.size < /*CONF_SER4_RECV_BLCK_SIZE_OCT*/ 1024 )
+                        switch( pipe.tag )
                         {
-                                ui_dspl_scr0_update( stream.data, stream.size );
-                        }
-                        else
-                        {
-                                APP_TRACE( "<task_ui> stream.size: %d\n", stream.size );
-                        }
+                                case APP_PIPE_TAG_SENSOR:
+                                        //if( pipe.size < CONF_SER4_RECV_BLCK_SIZE_OCT )
+                                        if( pipe.cnt < 1024 )
+                                        {
+                                                ui_dspl_scr0_update( pipe.data, pipe.cnt );
+                                        }
+                                        else
+                                        {
+                                                APP_TRACE( "<task_ui> pipe.size: %d\n", pipe.cnt );
+                                        }
+                                        break;
 
-                        //taskENTER_CRITICAL();
-                        //taskEXIT_CRITICAL();
+                                default:
+                                        break;
+                        }
                 }
 
         }
