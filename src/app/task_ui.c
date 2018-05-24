@@ -65,22 +65,24 @@ void    task_ui(                        const   void *          argument )
         app_pipe_t              pipe;
 
 
-        GUI_Init();
-        GUI_SetBkColor( GUI_GRAY );
-        GUI_Clear();
-        GUI_SetLayerVisEx( 1, 0 );
-        GUI_SelectLayer( 0 );
-        WM_MULTIBUF_Enable( 1 );
-        WM_SetCreateFlags( WM_CF_MEMDEV );
+        //GUI_Init();
+        //GUI_SetBkColor( GUI_GRAY );
+        //GUI_Clear();
+        //GUI_SetLayerVisEx( 1, 0 );
+        //GUI_SelectLayer( 0 );
+        //WM_MULTIBUF_Enable( 1 );
+        //WM_SetCreateFlags( WM_CF_MEMDEV );
 
-        task_ui_tmr_touch_init( 40 );
+        //task_ui_tmr_touch_init( 40 );
 
-        ui_dspl_init();
+        //ui_dspl_init();
 
         while( true )
         {
-                GUI_Exec();
+
+                //GUI_Exec();
                 received        =   xQueueReceive( que_ui_hndl, &pipe, polling_cycle_tcks );
+/*
                 if( received )
                 {
                         switch( pipe.tag )
@@ -101,6 +103,6 @@ void    task_ui(                        const   void *          argument )
                                         break;
                         }
                 }
-
+*/
         }
 }

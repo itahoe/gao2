@@ -5,7 +5,6 @@
   */
 
 
-#include "app_trace.h"
 #include "bsp.h"
 #include "bsp_ser.h"
 
@@ -66,8 +65,10 @@ void    bsp_ser1_dma_init( void )
         huart6_dma_tx.Init.FIFOThreshold        =   DMA_FIFO_THRESHOLD_FULL;
         huart6_dma_tx.Init.MemBurst             =   DMA_MBURST_INC4;
         huart6_dma_tx.Init.PeriphBurst          =   DMA_PBURST_INC4;
+
         HAL_DMA_Init( &huart6_dma_tx );
         __HAL_LINKDMA( &huart6, hdmatx, huart6_dma_tx );
+
         //HAL_NVIC_SetPriority(   DMA2_Stream6_IRQn,      BSP_NVIC_PRIO_SER1_DMA_TX, 0 );
         //HAL_NVIC_EnableIRQ(     DMA2_Stream6_IRQn );
 */
@@ -105,7 +106,6 @@ void    bsp_ser1_uart_init(             const   size_t          baudrate    )
         NVIC_EnableIRQ(                 USART6_IRQn                     );
 
         LL_USART_EnableIT_IDLE(         usart                           );
-        LL_USART_EnableIT_ERROR(        usart                           );
 }
 
 
@@ -163,10 +163,9 @@ bool bsp_ser1_xmit(                             uint8_t *               data,
 /******************************************************************************/
 
 void    bsp_ser1_recv(                          uint8_t *           data,
-                                                size_t              size )
+                                                size_t              cnt )
 {
-        //const   uint32_t        stream  =   LL_DMA_STREAM_1;
-        const   uint32_t        stream  =   LL_DMA_STREAM_2;
+        const   uint32_t        stream  =   LL_DMA_STREAM_1;
 
         LL_DMA_InitTypeDef      cfg     = {     .PeriphOrM2MSrcAddress  = (uint32_t) LL_USART_DMA_GetRegAddr( usart, LL_USART_DMA_REG_DATA_RECEIVE ),
                                                 .MemoryOrM2MDstAddress  = (uint32_t) data,
@@ -176,7 +175,7 @@ void    bsp_ser1_recv(                          uint8_t *           data,
                                                 .MemoryOrM2MDstIncMode  = LL_DMA_MEMORY_INCREMENT,
                                                 .PeriphOrM2MSrcDataSize = LL_DMA_PDATAALIGN_BYTE,
                                                 .MemoryOrM2MDstDataSize = LL_DMA_PDATAALIGN_BYTE,
-                                                .NbData                 = size,
+                                                .NbData                 = cnt,
                                                 .Priority               = LL_DMA_PRIORITY_HIGH,
                                                 .FIFOMode               = LL_DMA_FIFOMODE_DISABLE,
                                                 .Channel                = LL_DMA_CHANNEL_5 };
@@ -186,14 +185,14 @@ void    bsp_ser1_recv(                          uint8_t *           data,
         LL_DMA_Init(                    dma_rx, stream, &cfg            );
         LL_DMA_EnableIT_TE(             dma_rx, stream                  );
         LL_DMA_EnableStream(            dma_rx, stream                  );
+        LL_USART_ClearFlag_FE( usart );
         LL_USART_EnableDMAReq_RX(       usart                           );
 }
 
 
 uint32_t bsp_ser1_dma_recv_get_ndtr( void )
 {
-        //return( DMA2_Stream1->NDTR );
-        return( DMA2_Stream2->NDTR );
+        return( DMA2_Stream1->NDTR );
 }
 
 /******************************************************************************/
@@ -210,25 +209,13 @@ bool bsp_ser1_isr( void )
                 LL_USART_ClearFlag_IDLE( usart );
                 valid   = true;
         }
-
+/*
         if( LL_USART_IsActiveFlag_FE( usart ) )
         {
                 LL_USART_ClearFlag_FE( usart );
                 valid   = false;
         }
-
-        if( LL_USART_IsActiveFlag_PE( usart ) )
-        {
-                LL_USART_ClearFlag_PE( usart );
-                valid   = false;
-        }
-
-        if( LL_USART_IsActiveFlag_NE( usart ) )
-        {
-                LL_USART_ClearFlag_NE( usart );
-                valid   = false;
-        }
-
+*/
         return( valid );
 }
 
@@ -236,12 +223,10 @@ bool bsp_ser1_isr( void )
 void bsp_ser1_dma_tx_isr( void )
 {
         //HAL_DMA_IRQHandler( huart6.hdmatx );
-        APP_TRACE( "bsp_ser1_dma_tx_isr()\n" );
 }
 
 
 void bsp_ser1_dma_rx_isr( void )
 {
         //HAL_DMA_IRQHandler( huart6.hdmarx );
-        APP_TRACE( "bsp_ser1_dma_rx_isr()\n" );
 }

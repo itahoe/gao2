@@ -37,7 +37,8 @@ void    LTDC_IRQHandler( void );
 void    TIM3_IRQHandler( void );
 void    USART6_IRQHandler( void );
 void    DMA2_Stream6_IRQHandler( void );
-void    DMA2_Stream1_IRQHandler( void );
+//void    DMA2_Stream1_IRQHandler( void );
+void    DMA2_Stream2_IRQHandler( void );
 
 void    hard_fault_handler(                     uint32_t *      arg     );
 
@@ -278,19 +279,19 @@ void    USART6_IRQHandler( void )
         bool    valid;
 
         valid           =   bsp_ser1_isr();
-
         pipe.cnt        =   bsp_ser1_dma_recv_get_ndtr();
 
-        if( valid )
+        //if( valid )
         {
                 pipe.tag        =   APP_PIPE_TAG_SER1_IDLE;
                 xQueueSendFromISR( que_sens_hndl, &pipe, NULL );
         }
-        else
+        //else
         {
-                pipe.tag        =   APP_PIPE_TAG_SER1_ERR;
-                xQueueSendFromISR( que_sens_hndl, &pipe, NULL );
+                //pipe.tag        =   APP_PIPE_TAG_SER1_ERR;
+                //xQueueSendFromISR( que_sens_hndl, &pipe, NULL );
         }
+
 }
 
 
@@ -300,7 +301,8 @@ void    DMA2_Stream6_IRQHandler( void )
 }
 
 
-void    DMA2_Stream1_IRQHandler( void )
+//void    DMA2_Stream1_IRQHandler( void )
+void    DMA2_Stream2_IRQHandler( void )
 {
         bsp_ser1_dma_rx_isr();
 }

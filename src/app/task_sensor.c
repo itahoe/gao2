@@ -25,9 +25,11 @@
 
 
 static  int16_t         ser4_recv_data[ CONF_SER4_RECV_BLCK_SIZE_OCT ];
-static  uint8_t         data_rqst[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
-static  uint8_t         data_resp[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
+static  uint8_t         data_modbus_rqst[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
+static  uint8_t         data_modbus_resp[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
 
+static  int16_t         data_sens;
+static  size_t          offset;
 
 typedef struct  modbus_dev_map_s
 {
@@ -113,7 +115,14 @@ static  app_fifo16_t    ser4   =    {   .dma_get        =   bsp_ser4_dma_recv_nd
                                         .data           =   ser4_recv_data,
                                         .tile           =   ser4_recv_data,
                                         .head           =   ser4_recv_data, };
-
+/*
+static  app_fifo16_t    sens0  =    {   .dma_get        =   bsp_ser4_dma_recv_ndtr_get,
+                                        .blck_size      =   CONF_SER4_RECV_BLCK_SIZE_OCT,
+                                        .ndtr           =   CONF_SER4_RECV_BLCK_SIZE_OCT,
+                                        .data           =   ser4_recv_data,
+                                        .tile           =   ser4_recv_data,
+                                        .head           =   ser4_recv_data, };
+*/
 
 extern  QueueHandle_t           que_sens_hndl;
 extern  QueueHandle_t           que_ui_hndl;
@@ -177,10 +186,12 @@ void    task_sensor(                    const   void *          argument )
 
         (void) argument;
 
+        osDelay( 1000 );
+
         modbus_rtu_init(        &rtu,
                                 dev.addr,
-                                data_rqst,
-                                data_resp       );
+                                data_modbus_rqst,
+                                data_modbus_resp       );
 
         bsp_ser1_init( 9600 );
 
@@ -194,19 +205,44 @@ void    task_sensor(                    const   void *          argument )
                         switch( pipe.tag )
                         {
                                 case APP_PIPE_TAG_SER1_ERR:
+                                        //APP_TRACE( "err\n" );
+                                        //rtu.resp.offset++;
                                         break;
 
                                 case APP_PIPE_TAG_SER1_IDLE:
 
-                                        rtu.resp.len    =   sizeof( data_resp )- pipe.cnt;
+                                        rtu.resp.len    =   sizeof( data_modbus_resp )- pipe.cnt;
+                                        //rtu.resp.offset =   1;
+                                        rtu.resp.offset =   0;
                                         err             =   modbus_rtu_resp( &rtu );
-
-                                        for( len = 0; len < (sizeof( data_resp )- pipe.cnt); len++ )
+                                        //rtu.resp.offset =   0;
+/*
+                                        if( err == 0 )
                                         {
-                                                APP_TRACE( "%02X", *(data_resp + len) );
+                                                data_sens       =   rtu.resp.data[4] << 8;
+                                                data_sens       |=  rtu.resp.data[5] & 0xFF;
+
+                                                APP_TRACE( "%d\n", data_sens );
+                                                data_sens       >>= 6;
+
+                                                //data_sens       =   rtu.resp.data[4] << 8;
+                                                //data_sens       |=  rtu.resp.data[5] & 0xFF;
+                                        }
+*/
+
+                                        APP_TRACE( "resp: " );
+
+                                        for( len = 0; len < (sizeof( data_modbus_resp )- pipe.cnt); len++ )
+                                        {
+                                                APP_TRACE( "%02X", *(data_modbus_resp + len) );
                                         }
 
                                         APP_TRACE( "\tlen: %d\t err: %d\n", len, err );
+
+                                        pipe.tag        =   APP_PIPE_TAG_SENSOR;
+                                        pipe.cnt        =   1;
+                                        pipe.data       =   &data_sens;
+                                        xQueueSend( que_ui_hndl,  &pipe, NULL );
 
 /*
                                         pipe.tag        =   APP_PIPE_TAG_SENSOR;
@@ -227,6 +263,7 @@ void    task_sensor(                    const   void *          argument )
                 }
                 else //queue passed by timeout
                 {
+/*
                         //not_empty       =   0;
                         not_empty       =   create_sin( &ser4 );
 
@@ -239,7 +276,7 @@ void    task_sensor(                    const   void *          argument )
                                 xQueueSend( que_ui_hndl,  &pipe, NULL );
                                 xQueueSend( que_strg_hndl,  &pipe, NULL );
                         }
-
+*/
 
                         rtu.rqst.func   =   MODBUS_FUNC_READ_INPUT_REGISTERS; //0x04
                         //rtu.rqst.reg    =   &dev.reg.device_status;             // { 31001, 1 },
@@ -272,8 +309,21 @@ void    task_sensor(                    const   void *          argument )
                         //rtu.rqst.reg    =   &dev.reg.sensor_threshold_alarm_exponent; // { 41014, 1 },
 
                         len     =   modbus_rtu_rqst( &rtu );
-                        bsp_ser1_xmit( data_rqst, len );
-                        bsp_ser1_recv( data_resp, sizeof( data_resp ) );
+/*
+                        APP_TRACE( "rqst: " );
+                        for( int i = 0; i < len; i++ )
+                        {
+                                APP_TRACE( "%02X", data_rqst[i] );
+                        }
+                        APP_TRACE( "\n" );
+*/
+
+                        bsp_ser1_xmit( data_modbus_rqst, len );
+
+                        taskENTER_CRITICAL();
+                        bsp_ser1_recv( data_modbus_resp, sizeof( data_modbus_resp ) );
+                        taskEXIT_CRITICAL();
+
                 }
         }
 }

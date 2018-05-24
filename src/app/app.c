@@ -18,7 +18,7 @@
 #define TASK_STACK_SIZE_STRG_WRDS               256
 
 #define TASK_PRIO_UI                            osPriorityNormal
-#define TASK_PRIO_SENS                          osPriorityNormal
+#define TASK_PRIO_SENS                          osPriorityHigh
 #define TASK_PRIO_XMIT                          osPriorityNormal
 #define TASK_PRIO_STRG                          osPriorityNormal
 

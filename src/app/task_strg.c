@@ -33,7 +33,7 @@ void    task_strg(                      const   void *          argument )
         while( true )
         {
                 xQueueReceive( que_strg_hndl, &pipe, portMAX_DELAY );
-
+/*
                 if( ready == false )
                 {
                         ready   = storage_open( &log_ch01 );
@@ -52,7 +52,7 @@ void    task_strg(                      const   void *          argument )
                         err     =   storage_write( &log_ch01, (uint8_t *) pipe.data, pipe.cnt * 2 );
                         ready   =   err ? false : true;
                 }
-
+*/
 /*
                 write_uart1_active      =   storage_open( &log_ser1 );
                 err     =   storage_write( &log_ser1, (uint8_t *) stream.data, stream.size*2 );

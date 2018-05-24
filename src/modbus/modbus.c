@@ -80,6 +80,7 @@ void    modbus_rtu_init(                        modbus_rtu_t *  p,
         rqst->len       =   0;
         resp->data      =   data_recv;
         resp->len       =   0;
+        resp->offset    =   0;
 }
 
 
@@ -94,7 +95,8 @@ size_t  modbus_rtu_rqst(                        modbus_rtu_t *  p )
 
         *(data + 0)     =   (uint8_t) (p->dev_addr);
         *(data + 1)     =   rqst->func;
-        reg_addr        =   modbus_addr_translate( rqst->reg->addr );
+        //reg_addr        =   modbus_addr_translate( rqst->reg->addr );
+        reg_addr        =   rqst->reg->addr;
         *(data + 2)     =   reg_addr >> 8;
         *(data + 3)     =   reg_addr & 0xFF;
         *(data + 4)     =   rqst->reg->size >> 8;
@@ -113,16 +115,16 @@ int     modbus_rtu_resp(                        modbus_rtu_t *  p )
         int                     err     = 0;
         uint16_t                crc;
         modbus_rtu_resp_t *     resp    = &( p->resp );
-        uint8_t *               data    = p->resp.data;
+        uint8_t *               raw     = p->resp.data + p->resp.offset;
         size_t                  len;
 
 
-        resp->func      =   (modbus_func_t) *(data + 1);
-        len             =   *(data + 2);
-        crc             =   *(data + 2 + len + 1) << 8;
-        crc             |=  *(data + 2 + len + 2) & 0xFF;
+        resp->func      =   (modbus_func_t) *(raw + 1);
+        len             =   *(raw + 2);
+        crc             =   *(raw + 2 + len + 1) << 8;
+        crc             |=  *(raw + 2 + len + 2) & 0xFF;
 
-        if( crc != modbus_crc( data, 3 + len ) )
+        if( crc != modbus_crc( raw, 3 + len ) )
         {
                 err     =  -1;
         }

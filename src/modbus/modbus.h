@@ -63,6 +63,7 @@ typedef struct  modbus_rtu_resp_s
 {
                 uint8_t *               data;
                 size_t                  len;
+                size_t                  offset;
                 modbus_func_t           func;
         const   modbus_reg_t *          reg;
 } modbus_rtu_resp_t;

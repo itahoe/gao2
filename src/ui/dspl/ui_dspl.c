@@ -331,7 +331,7 @@ void    ui_dspl_init( void )
         //WM_HWIN         hItem;
 
 
-        GUI_Init();
+        //GUI_Init();
         //WM_SetCreateFlags( WM_CF_MEMDEV );
         //WM_EnableMemdev( WM_HBKWIN );
         GUI_SetBkColor( GUI_BLACK );
