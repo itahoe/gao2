@@ -86,6 +86,7 @@ Purpose     : Display controller initialization
 
 
 #define GUI_NUMBYTES  (1024) *  400
+//#define GUI_NUMBYTES  (1024) *  300
 //#define GUI_NUMBYTES  (1024) *  250
 
 

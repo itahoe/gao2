@@ -23,12 +23,13 @@
 //#define MODBUS_PCKT_LEN         6
 //#define MODBUS_PCKT_LEN         5
 
-
+#pragma pack(4)
 static  int16_t         ser4_recv_data[ CONF_SER4_RECV_BLCK_SIZE_OCT ];
 static  uint8_t         data_modbus_rqst[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
 static  uint8_t         data_modbus_resp[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
+#pragma pack(4)
 
-static  int16_t         data_sens;
+static  uint16_t        data_sens;
 static  size_t          offset;
 
 typedef struct  modbus_dev_map_s
@@ -207,6 +208,7 @@ void    task_sensor(                    const   void *          argument )
                                 case APP_PIPE_TAG_SER1_ERR:
                                         //APP_TRACE( "err\n" );
                                         //rtu.resp.offset++;
+                                        //bsp_ser1_recv( data_modbus_resp, sizeof( data_modbus_resp ) );
                                         break;
 
                                 case APP_PIPE_TAG_SER1_IDLE:
@@ -216,20 +218,21 @@ void    task_sensor(                    const   void *          argument )
                                         rtu.resp.offset =   0;
                                         err             =   modbus_rtu_resp( &rtu );
                                         //rtu.resp.offset =   0;
-/*
+
                                         if( err == 0 )
                                         {
                                                 data_sens       =   rtu.resp.data[4] << 8;
                                                 data_sens       |=  rtu.resp.data[5] & 0xFF;
 
+                                                //data_sens       >>= 6;
+                                                //data_sens       >>= 7;
                                                 APP_TRACE( "%d\n", data_sens );
-                                                data_sens       >>= 6;
 
                                                 //data_sens       =   rtu.resp.data[4] << 8;
                                                 //data_sens       |=  rtu.resp.data[5] & 0xFF;
                                         }
-*/
 
+/*
                                         APP_TRACE( "resp: " );
 
                                         for( len = 0; len < (sizeof( data_modbus_resp )- pipe.cnt); len++ )
@@ -238,6 +241,7 @@ void    task_sensor(                    const   void *          argument )
                                         }
 
                                         APP_TRACE( "\tlen: %d\t err: %d\n", len, err );
+*/
 
                                         pipe.tag        =   APP_PIPE_TAG_SENSOR;
                                         pipe.cnt        =   1;
@@ -319,11 +323,7 @@ void    task_sensor(                    const   void *          argument )
 */
 
                         bsp_ser1_xmit( data_modbus_rqst, len );
-
-                        taskENTER_CRITICAL();
                         bsp_ser1_recv( data_modbus_resp, sizeof( data_modbus_resp ) );
-                        taskEXIT_CRITICAL();
-
                 }
         }
 }

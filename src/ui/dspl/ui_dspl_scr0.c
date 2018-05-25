@@ -13,12 +13,16 @@
 
 //#define MAX_VALUE 200
 #define MAX_VALUE 1000
+#define UI_DSPL_SCR0_GRAPH_VSIZE        400
+
 static GRAPH_DATA_Handle  _ahData[3]; // Array of handles for the GRAPH_DATA objects
 static GRAPH_SCALE_Handle _hScaleV;   // Handle of vertical scale
 static GRAPH_SCALE_Handle _hScaleH;   // Handle of horizontal scale
 //static GUI_COLOR _aColor[] = {GUI_RED, GUI_GREEN, GUI_LIGHTGRAY}; // Array of colors for the GRAPH_DATA objects
 static GUI_COLOR _aColor[] = { GUI_GREEN }; // Array of colors for the GRAPH_DATA objects
 static I16 _aValue[3];
+
+
 
 
 static
@@ -78,7 +82,7 @@ void    ui_dspl_scr0_graph_init(        WM_HWIN                 hWin,
                 _aValue[i] = rand() % 180;
                 _ahData[i] = GRAPH_DATA_YT_Create(_aColor[i], 800, 0, 0);
 //GRAPH_SetVSizeY( hItem, 2000 );
-GRAPH_SetVSizeY( hItem, 400 );
+GRAPH_SetVSizeY( hItem, UI_DSPL_SCR0_GRAPH_VSIZE );
 GRAPH_SetVSizeX( hItem, 2000 );
                 GRAPH_AttachData(hItem, _ahData[i]);
         }
@@ -193,6 +197,28 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *            pMsg )
 }
 
 
+static
+int16_t ui_dspl_scr0_scale(                     int16_t         data )
+{
+        int16_t         val;
+
+/*
+        if( data > UI_DSPL_SCR0_GRAPH_VSIZE )
+        {
+                val     =   UI_DSPL_SCR0_GRAPH_VSIZE;
+        }
+        else
+        {
+                val     =   data;
+        }
+*/
+
+        val     =   (data >> 8) + 200;
+
+        return( val );
+}
+
+
 void    ui_dspl_scr0_update(                    int16_t *       data,
                                                 size_t          size )
 {
@@ -224,7 +250,8 @@ void    ui_dspl_scr0_update(                    int16_t *       data,
 
         while( size-- )
         {
-                _aValue[ 0 ]      =   *data++;
+                //_aValue[ 0 ]      =   *data++;
+                _aValue[ 0 ]      =   ui_dspl_scr0_scale( *data++ );
                 GRAPH_DATA_YT_AddValue( _ahData[ 0 ], _aValue[ 0 ] );
         }
 

@@ -74,11 +74,11 @@ void    bsp_ser1_dma_init( void )
 
         LL_AHB1_GRP1_EnableClock( LL_AHB1_GRP1_PERIPH_DMA2 );
 
-        NVIC_SetPriority(       DMA2_Stream6_IRQn, BSP_NVIC_PRIO_SER1_DMA_RX );
+        NVIC_SetPriority(       DMA2_Stream6_IRQn, BSP_NVIC_PRIO_SER1_DMA_TX );
         NVIC_EnableIRQ(         DMA2_Stream6_IRQn                            );
 
-        NVIC_SetPriority(       DMA2_Stream1_IRQn, BSP_NVIC_PRIO_SER1_DMA_TX );
-        NVIC_EnableIRQ(         DMA2_Stream1_IRQn                            );
+        NVIC_SetPriority(       DMA2_Stream2_IRQn, BSP_NVIC_PRIO_SER1_DMA_RX );
+        NVIC_EnableIRQ(         DMA2_Stream2_IRQn                            );
 }
 
 
@@ -185,8 +185,8 @@ void    bsp_ser1_recv(                          uint8_t *           data,
         LL_DMA_DeInit(                  dma_rx, stream                  );
         LL_DMA_Init(                    dma_rx, stream, &cfg            );
         LL_DMA_EnableIT_TE(             dma_rx, stream                  );
-        LL_DMA_EnableStream(            dma_rx, stream                  );
         LL_USART_EnableDMAReq_RX(       usart                           );
+        LL_DMA_EnableStream(            dma_rx, stream                  );
 }
 
 
@@ -195,6 +195,7 @@ uint32_t bsp_ser1_dma_recv_get_ndtr( void )
         //return( DMA2_Stream1->NDTR );
         return( DMA2_Stream2->NDTR );
 }
+
 
 /******************************************************************************/
 /* Interrupt Service Routines                                                 */

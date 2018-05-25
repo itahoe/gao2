@@ -63,26 +63,30 @@ void    task_ui(                        const   void *          argument )
         bool                    received;
         TickType_t              polling_cycle_tcks      =   CONF_SER_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
         app_pipe_t              pipe;
+        int                     resp;
 
+        //taskENTER_CRITICAL();
+        //taskEXIT_CRITICAL();
 
-        //GUI_Init();
-        //GUI_SetBkColor( GUI_GRAY );
+        resp    =   GUI_Init();
+        APP_TRACE( "GUI_Init() %d\n", resp );
         //GUI_Clear();
         //GUI_SetLayerVisEx( 1, 0 );
         //GUI_SelectLayer( 0 );
-        //WM_MULTIBUF_Enable( 1 );
+        WM_MULTIBUF_Enable( 1 );
         //WM_SetCreateFlags( WM_CF_MEMDEV );
+        //GUI_SetBkColor( GUI_GRAY );
 
-        //task_ui_tmr_touch_init( 40 );
+        task_ui_tmr_touch_init( 40 );
 
-        //ui_dspl_init();
+        ui_dspl_init();
 
         while( true )
         {
+                GUI_Exec();
 
-                //GUI_Exec();
                 received        =   xQueueReceive( que_ui_hndl, &pipe, polling_cycle_tcks );
-/*
+
                 if( received )
                 {
                         switch( pipe.tag )
@@ -103,6 +107,6 @@ void    task_ui(                        const   void *          argument )
                                         break;
                         }
                 }
-*/
+
         }
 }

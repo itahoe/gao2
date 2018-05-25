@@ -155,8 +155,8 @@ int main( void )
         app_mpu_config();
 
         //@brief  CPU L1-Cache enable.
-        SCB_EnableICache();     //Enable I-Cache
-        SCB_EnableDCache();     //Enable D-Cache
+        //SCB_EnableICache();     //Enable I-Cache
+        //SCB_EnableDCache();     //Enable D-Cache
 
         //      STM32F7xx HAL library initialization:
         //      - Configure the Flash prefetch, instruction and Data caches
