@@ -1,5 +1,5 @@
 /**
-  * @file    flog.h
+  * @file    stotage.c
   * @brief   File Manager
   * @author  Igor T. <research.tahoe@gmail.com>
   */
@@ -30,24 +30,12 @@ void storage_init( void )
         FATFS_LinkDriver( &SD_Driver, SD_Path );
 }
 
-/**
- * @brief File Manager file close
- */
-void storage_close(                             storage_t *             p )
+
+FRESULT storage_sts_get(                        storage_t *             p )
 {
-	p->fresult      =   f_close( &p->file_log );
-
-        if( p->fresult == FR_OK )
-        {
-                p->sts.enable   =   false;
-        }
-        else
-        {
-                p->sts.enable   =   false;
-        }
-
-        //APP_TRACE_FF( "f_close() = ", p->fresult );
+        return( p->fresult );
 }
+
 
 /**
  * @brief File Manager file open
@@ -104,6 +92,26 @@ bool storage_open(                              storage_t *             p )
 
 
 /**
+ * @brief File Manager file close
+ */
+void storage_close(                             storage_t *             p )
+{
+	p->fresult      =   f_close( &p->file_log );
+
+        if( p->fresult == FR_OK )
+        {
+                p->sts.enable   =   false;
+        }
+        else
+        {
+                p->sts.enable   =   false;
+        }
+
+        //APP_TRACE_FF( "f_close() = ", p->fresult );
+}
+
+
+/**
  * @brief File Manager write
  */
 bool storage_write(                             storage_t *             p,
@@ -151,9 +159,4 @@ bool storage_write(                             storage_t *             p,
 
         err     =   p->fresult == FR_OK ? false : true;
         return( err );
-}
-
-FRESULT storage_sts_get(                        storage_t *             p )
-{
-        return( p->fresult );
 }

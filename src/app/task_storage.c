@@ -1,5 +1,5 @@
 /**
-  * @file    task_strg.c
+  * @file    task_storage.c
   * @brief   Storage services
   * @author  Igor T. <research.tahoe@gmail.com>
   */
@@ -18,7 +18,7 @@ extern  QueueHandle_t           que_strg_hndl;
 static  storage_t               log_ch01        =   { .fext   =  "ch01.log", };
 
 
-void    task_strg(                      const   void *          argument )
+void    task_storage(                   const   void *          argument )
 {
                 app_pipe_t      pipe;
                 bool            ready                   =   false;
@@ -53,6 +53,7 @@ void    task_strg(                      const   void *          argument )
                         ready   =   err ? false : true;
                 }
 */
+
 /*
                 write_uart1_active      =   storage_open( &log_ser1 );
                 err     =   storage_write( &log_ser1, (uint8_t *) stream.data, stream.size*2 );

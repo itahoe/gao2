@@ -169,11 +169,13 @@ int main( void )
 
         BSP_Config();           //Initialize LCD and LEDs
 
+/*
         BSP_LED_On( LED1 );
         BSP_LED_On( LED2 );
         for( uint32_t i = 0x00FFFFFF; i>0; i-- );
         BSP_LED_Off( LED1 );
         BSP_LED_Off( LED2 );
+*/
 
         app_rtc_init();
 
@@ -200,7 +202,7 @@ int main( void )
         osThreadStaticDef( XMIT, task_xmit,     TASK_PRIO_XMIT,   0, TASK_STACK_SIZE_XMIT_WRDS, task_stck_xmit, &task_tcb_xmit );
         task_hndl_xmit          =   osThreadCreate( osThread( XMIT ),   NULL );
 
-        osThreadStaticDef( STRG, task_strg,     TASK_PRIO_STRG,   0, TASK_STACK_SIZE_STRG_WRDS, task_stck_strg, &task_tcb_strg );
+        osThreadStaticDef( STRG, task_storage,  TASK_PRIO_STRG,   0, TASK_STACK_SIZE_STRG_WRDS, task_stck_strg, &task_tcb_strg );
         task_hndl_strg          =   osThreadCreate( osThread( STRG ),   NULL );
 
         osKernelStart();        //Start scheduler

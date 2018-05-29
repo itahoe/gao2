@@ -28,19 +28,25 @@ static GUI_WIDGET_CREATE_INFO ui_dspl_scr0_info[] =
 {
     { WINDOW_CreateIndirect,    "scr0",         GUI_ID_SCR0_WINDOW,           0,      0,    800,    480,      0,      0x0,    0 },
     //{ TEXT_CreateIndirect,      "»«Ã≈–»“≈À‹",   GUI_ID_SCR0_TEXT_HEADER,      0,      0,    800,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { TEXT_CreateIndirect,      "»«Ã≈–»“≈À‹",   GUI_ID_SCR0_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
     //{ GRAPH_CreateIndirect,     0,              GUI_ID_SCR0_GRAPH,            0,     50,    800,    450 },
     { GRAPH_CreateIndirect,     0,              GUI_ID_SCR0_GRAPH,            0,     80,    800,    400 },
-    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_ZOOMOUT,  70,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_ZOOMIN,  130,    410,     60,     60,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_ZOOMOUT,  70,    410,     60,     60,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_ZOOMIN,  130,    410,     60,     60,      0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    "I<",           GUI_ID_SCR0_BUTTON_FRST,    250,    410,     60,     60,      0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    "<<",           GUI_ID_SCR0_BUTTON_RWND,    330,    410,     60,     60,      0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    ">>",           GUI_ID_SCR0_BUTTON_FWRD,    410,    410,     60,     60,      0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    ">I",           GUI_ID_SCR0_BUTTON_LAST,    490,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_UP,      650,    250,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_DOWN,    650,    350,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "<",            GUI_ID_SCR0_BUTTON_LEFT,    600,    300,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    ">",            GUI_ID_SCR0_BUTTON_RGHT,    700,    300,     60,     60,      0,      0x0,    0 },
+
+    //{ BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_UP,      650,    250,     60,     60,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_DOWN,    650,    350,     60,     60,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "<",            GUI_ID_SCR0_BUTTON_LEFT,    600,    300,     60,     60,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    ">",            GUI_ID_SCR0_BUTTON_RGHT,    700,    300,     60,     60,      0,      0x0,    0 },
+
+    //{ BUTTON_CreateIndirect,    "<",            GUI_ID_SCR0_BUTTON_LEFT,    450,    410,     60,     60,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    ">",            GUI_ID_SCR0_BUTTON_RGHT,    530,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_DOWN,    600,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_UP,      680,    410,     60,     60,      0,      0x0,    0 },
 };
 
 

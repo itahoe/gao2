@@ -139,6 +139,13 @@
 #define UI_DSPL_HDR_BTN_COLOR_BCKGRND   GUI_BLACK
 #define UI_DSPL_HDR_BTN_COLOR_FRAME     GUI_BLACK
 
+#define UI_DSPL_SCR0_GRAPH_VSIZE                400
+#define UI_DSPL_GRAPH_DATA_Y_SHFT_STEP          50
+#define UI_DSPL_GRAPH_DATA_X_SHFT_STEP          50
+#define UI_DSPL_GRAPH_DATA_YSIZE_MAX            (UI_DSPL_WIN_SIZE_Y - UI_DSPL_GRAPH_DATA_Y_SHFT_STEP)
+#define UI_DSPL_GRAPH_DATA_YSIZE_MIN            (-UI_DSPL_GRAPH_DATA_YSIZE_MAX)
+#define UI_DSPL_GRAPH_DATA_SCALE                50
+
 
 extern GUI_CONST_STORAGE GUI_FONT GUI_FontCourierNew110;
 extern GUI_CONST_STORAGE GUI_FONT GUI_FontCourierNew73;
@@ -164,10 +171,10 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr1_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr0_cb(                        WM_MESSAGE *            pMsg );
 
-//void    ui_dspl_scr0_update( void );
-//void    ui_dspl_scr0_update(                    short           d );
-void    ui_dspl_scr0_update(                    int16_t *       data,
-                                                size_t          size );
+
+void    ui_dspl_scr0_update(                    int16_t *               data,
+                                                size_t                  size );
+
 
 WM_HWIN ui_dspl_scr3_init(                      WM_CALLBACK *           cb );
 WM_HWIN ui_dspl_scr2_init(                      WM_CALLBACK *           cb );
@@ -177,6 +184,6 @@ WM_HWIN ui_dspl_scr0_init(                      WM_CALLBACK *           cb );
 void    ui_dspl_scrn_slide(                     int                     dir );
 
 void    ui_dspl_init( void );
-//void    ui_dspl_loop( void );
+
 
 #endif	//UI_DSPL_H

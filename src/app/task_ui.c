@@ -63,13 +63,13 @@ void    task_ui(                        const   void *          argument )
         bool                    received;
         TickType_t              polling_cycle_tcks      =   CONF_SER_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
         app_pipe_t              pipe;
-        int                     resp;
+        //int                     resp;
 
         //taskENTER_CRITICAL();
         //taskEXIT_CRITICAL();
 
-        resp    =   GUI_Init();
-        APP_TRACE( "GUI_Init() %d\n", resp );
+        GUI_Init();
+        //APP_TRACE( "GUI_Init() %d\n", resp );
         //GUI_Clear();
         //GUI_SetLayerVisEx( 1, 0 );
         //GUI_SelectLayer( 0 );
@@ -95,7 +95,7 @@ void    task_ui(                        const   void *          argument )
                                         //if( pipe.size < CONF_SER4_RECV_BLCK_SIZE_OCT )
                                         if( pipe.cnt < 1024 )
                                         {
-                                                ui_dspl_scr0_update( pipe.data, pipe.cnt );
+                                                ui_dspl_scr0_update( (int16_t *) pipe.data, pipe.cnt );
                                         }
                                         else
                                         {

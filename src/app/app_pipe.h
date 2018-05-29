@@ -36,7 +36,7 @@ typedef enum    app_pipe_tag_e
 typedef	struct	app_pipe_s
 {
         app_pipe_tag_t          tag;
-        int16_t *               data;
+        void *                  data;
         size_t                  cnt;
 } app_pipe_t;
 

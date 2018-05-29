@@ -20,17 +20,15 @@
 #define CONF_SER_POLLING_CYCLE_mSEC     1000
 #define CONF_SER4_RECV_BLCK_SIZE_OCT    64
 
-//#define MODBUS_PCKT_LEN         6
-//#define MODBUS_PCKT_LEN         5
 
 #pragma pack(4)
-static  int16_t         ser4_recv_data[ CONF_SER4_RECV_BLCK_SIZE_OCT ];
+//static  int16_t         ser4_recv_data[ CONF_SER4_RECV_BLCK_SIZE_OCT ];
 static  uint8_t         data_modbus_rqst[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
 static  uint8_t         data_modbus_resp[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
 #pragma pack(4)
 
-static  uint16_t        data_sens;
-static  size_t          offset;
+static  int16_t         data_sens;
+//static  size_t          offset;
 
 typedef struct  modbus_dev_map_s
 {
@@ -102,22 +100,15 @@ static  const   modbus_dev_t    dev     =
         .reg.sensor_threshold_alarm_exponent            = { 41014, 1 },
 };
 
-
+/*
 static
 uint32_t bsp_ser4_dma_recv_ndtr_get( void )
 {
         return( 0 );
 }
-
-
-static  app_fifo16_t    ser4   =    {   .dma_get        =   bsp_ser4_dma_recv_ndtr_get,
-                                        .blck_size      =   CONF_SER4_RECV_BLCK_SIZE_OCT,
-                                        .ndtr           =   CONF_SER4_RECV_BLCK_SIZE_OCT,
-                                        .data           =   ser4_recv_data,
-                                        .tile           =   ser4_recv_data,
-                                        .head           =   ser4_recv_data, };
+*/
 /*
-static  app_fifo16_t    sens0  =    {   .dma_get        =   bsp_ser4_dma_recv_ndtr_get,
+static  app_fifo16_t    ser4   =    {   .dma_get        =   bsp_ser4_dma_recv_ndtr_get,
                                         .blck_size      =   CONF_SER4_RECV_BLCK_SIZE_OCT,
                                         .ndtr           =   CONF_SER4_RECV_BLCK_SIZE_OCT,
                                         .data           =   ser4_recv_data,
@@ -130,9 +121,16 @@ extern  QueueHandle_t           que_ui_hndl;
 extern  QueueHandle_t           que_strg_hndl;
 
 
-#define MATH_PI         ((double) 3.1415926535897932384626433832795)
+typedef union
+{
+    int16_t             i;
+    uint8_t             u[2];
+} conc_t;
 
 
+//#define MATH_PI         ((double) 3.1415926535897932384626433832795)
+
+/*
 static
 bool    create_sin(                             app_fifo16_t *  p )
 {
@@ -172,7 +170,7 @@ p->tile = (p->head >= (p->data + p->blck_size) ? p->data : p->head );
 
         return( true );
 }
-
+*/
 
 void    task_sensor(                    const   void *          argument )
 {
@@ -183,6 +181,7 @@ void    task_sensor(                    const   void *          argument )
         size_t                  len;
         modbus_rtu_t            rtu;
         int                     err;
+        conc_t                  c;
 
 
         (void) argument;
@@ -214,39 +213,21 @@ void    task_sensor(                    const   void *          argument )
                                 case APP_PIPE_TAG_SER1_IDLE:
 
                                         rtu.resp.len    =   sizeof( data_modbus_resp )- pipe.cnt;
-                                        //rtu.resp.offset =   1;
                                         rtu.resp.offset =   0;
                                         err             =   modbus_rtu_resp( &rtu );
-                                        //rtu.resp.offset =   0;
 
                                         if( err == 0 )
                                         {
-                                                data_sens       =   rtu.resp.data[4] << 8;
-                                                data_sens       |=  rtu.resp.data[5] & 0xFF;
-
-                                                //data_sens       >>= 6;
-                                                //data_sens       >>= 7;
-                                                APP_TRACE( "%d\n", data_sens );
-
-                                                //data_sens       =   rtu.resp.data[4] << 8;
-                                                //data_sens       |=  rtu.resp.data[5] & 0xFF;
+                                                c.u[0]          =   rtu.resp.data[4];
+                                                c.u[1]          =   rtu.resp.data[3];
+                                                data_sens       =   c.i;
                                         }
-
-/*
-                                        APP_TRACE( "resp: " );
-
-                                        for( len = 0; len < (sizeof( data_modbus_resp )- pipe.cnt); len++ )
-                                        {
-                                                APP_TRACE( "%02X", *(data_modbus_resp + len) );
-                                        }
-
-                                        APP_TRACE( "\tlen: %d\t err: %d\n", len, err );
-*/
 
                                         pipe.tag        =   APP_PIPE_TAG_SENSOR;
                                         pipe.cnt        =   1;
                                         pipe.data       =   &data_sens;
                                         xQueueSend( que_ui_hndl,  &pipe, NULL );
+                                        xQueueSend( que_strg_hndl,  &pipe, NULL );
 
 /*
                                         pipe.tag        =   APP_PIPE_TAG_SENSOR;
@@ -313,6 +294,7 @@ void    task_sensor(                    const   void *          argument )
                         //rtu.rqst.reg    =   &dev.reg.sensor_threshold_alarm_exponent; // { 41014, 1 },
 
                         len     =   modbus_rtu_rqst( &rtu );
+                        //rtu.rqst.data[5] = 2;
 /*
                         APP_TRACE( "rqst: " );
                         for( int i = 0; i < len; i++ )

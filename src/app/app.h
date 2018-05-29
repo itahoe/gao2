@@ -119,10 +119,10 @@ void    app_rtc_bckp_write(                     uint32_t *      data,
                                                 size_t          addr,
                                                 size_t          cnt     );
 
-void    task_ui(                        const   void *          argument );
 void    task_sensor(                    const   void *          argument );
+void    task_ui(                        const   void *          argument );
+void    task_storage(                   const   void *          argument );
 void    task_xmit(                      const   void *          argument );
-void    task_strg(                      const   void *          argument );
 
 
 #endif  //APP_H

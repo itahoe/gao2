@@ -18,7 +18,7 @@ static GRAPH_DATA_Handle  _ahData[3]; // Array of handles for the GRAPH_DATA obj
 static GRAPH_SCALE_Handle _hScaleV;   // Handle of vertical scale
 static GRAPH_SCALE_Handle _hScaleH;   // Handle of horizontal scale
 static GUI_COLOR _aColor[] = {GUI_RED, GUI_GREEN, GUI_LIGHTGRAY}; // Array of colors for the GRAPH_DATA objects
-static I16 _aValue[3];
+//static I16 _aValue[3];
 
 
 // USER START (Optionally insert additional static code)
@@ -111,7 +111,7 @@ void    ui_dspl_scr1_add_graph(         WM_HWIN                 hWin,
         //
         for( int i = 0; i < GUI_COUNTOF(_aColor); i++ )
         {
-                _aValue[i] = rand() % 180;
+                //_aValue[i] = rand() % 180;
                 _ahData[i] = GRAPH_DATA_YT_Create(_aColor[i], 800, 0, 0);
                 GRAPH_AttachData(hItem, _ahData[i]);
         }
@@ -227,7 +227,7 @@ WM_HWIN ui_dspl_scr1_init(              WM_CALLBACK *           cb )
         //
         for( int i = 0; i < GUI_COUNTOF(_aColor); i++ )
         {
-                _aValue[i] = rand() % 180;
+                //_aValue[i] = rand() % 180;
                 _ahData[i] = GRAPH_DATA_YT_Create(_aColor[i], 800, 0, 0);
                 GRAPH_AttachData(hItem, _ahData[i]);
         }
