@@ -16,7 +16,7 @@
 typedef enum    app_pipe_tag_e
 {
         APP_PIPE_TAG_ERROR,
-        APP_PIPE_TAG_SENSOR,
+        APP_PIPE_TAG_SENS_01_DATA,
         APP_PIPE_TAG_CONFIG_SET,
         APP_PIPE_TAG_SER1_IDLE,
         APP_PIPE_TAG_SER1_ERR,

@@ -17,7 +17,7 @@ void    MainTaskLoop( void );
 
 
 #define UI_DSPL_SCRN_IDX_MIN    0
-#define UI_DSPL_SCRN_IDX_MAX    4
+#define UI_DSPL_SCRN_IDX_MAX    5
 
 static  int             curr_scrn_idx           =   0;
 
@@ -43,69 +43,84 @@ static GUI_WIDGET_CREATE_INFO ui_dspl_scr0_info[] =
     //{ BUTTON_CreateIndirect,    "<",            GUI_ID_SCR0_BUTTON_LEFT,    600,    300,     60,     60,      0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    ">",            GUI_ID_SCR0_BUTTON_RGHT,    700,    300,     60,     60,      0,      0x0,    0 },
 
+    //{ BUTTON_CreateIndirect,    "REC",          GUI_ID_SCR0_BUTTON_STORAGE, 100,    410,     80,     60,      0,      0x0,    0 },
+
+    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_LEFT,    450,    410,     60,     60,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "\x25B2",            GUI_ID_SCR0_BUTTON_RGHT,    530,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_RGHT,    530,    410,     60,     60,      0,      0x0,    0 },
+
+
     //{ BUTTON_CreateIndirect,    "<",            GUI_ID_SCR0_BUTTON_LEFT,    450,    410,     60,     60,      0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    ">",            GUI_ID_SCR0_BUTTON_RGHT,    530,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_DOWN,    600,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_UP,      680,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA2",            GUI_ID_SCR0_BUTTON_DOWN,    600,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA1",            GUI_ID_SCR0_BUTTON_UP,      680,    410,     60,     60,      0,      0x0,    0 },
 };
 
 
-static const GUI_WIDGET_CREATE_INFO ui_dspl_scr1_info[] =
+static GUI_WIDGET_CREATE_INFO ui_dspl_scr1_info[] =
 {
-    //{ WINDOW_CreateIndirect,    "scr1",         GUI_ID_SCR1_WINDOW,           0,      0,    800,    480,      0,      0x0,    0 },
-    { WINDOW_CreateIndirect,    "scr1",         GUI_ID_SCR1_WINDOW,         800,      0,    800,    480,      0,      0x0,    0 },
-    //{ TEXT_CreateIndirect,      "–≈√»—“–¿“Œ–",  GUI_ID_SCR1_TEXT_HEADER,      0,      0,    800,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { TEXT_CreateIndirect,      "–≈√»—“–¿“Œ–",  GUI_ID_SCR1_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    //{ GRAPH_CreateIndirect,     0,              GUI_ID_SCR1_GRAPH,            0,     50,    800,    450 },
-    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR1_GRAPH,            0,     80,    800,    400 },
-    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR1_BUTTON_ZOOMOUT,  70,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR1_BUTTON_ZOOMIN,  130,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "I<",           GUI_ID_SCR1_BUTTON_FRST,    250,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "<<",           GUI_ID_SCR1_BUTTON_RWND,    330,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    ">>",           GUI_ID_SCR1_BUTTON_FWRD,    410,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    ">I",           GUI_ID_SCR1_BUTTON_LAST,    490,    410,     60,     60,      0,      0x0,    0 },
+    { WINDOW_CreateIndirect,    "scr1",         GUI_ID_SCR1_WINDOW,           0,      0,    800,    480,      0,      0x0,    0 },
+    { TEXT_CreateIndirect,      "PPM",          GUI_ID_SCR1_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { TEXT_CreateIndirect,      "",             GUI_ID_SCR1_TEXT_SENS_VALUE,  0,     80,    800,    400,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
 };
+
 
 static const GUI_WIDGET_CREATE_INFO ui_dspl_scr2_info[] =
 {
-    //{ WINDOW_CreateIndirect,    "scr2",         GUI_ID_SCR2_WINDOW,         800,      0,    800,    480,      0,      0x0,    0 },
+    //{ WINDOW_CreateIndirect,    "scr2",         GUI_ID_SCR2_WINDOW,           0,      0,    800,    480,      0,      0x0,    0 },
     { WINDOW_CreateIndirect,    "scr2",         GUI_ID_SCR2_WINDOW,         800,      0,    800,    480,      0,      0x0,    0 },
-    //{ TEXT_CreateIndirect,      " ¿À»¡–Œ¬ ¿",   GUI_ID_SCR2_TEXT_HEADER,      0,      0,    800,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { TEXT_CreateIndirect,      " ¿À»¡–Œ¬ ¿",   GUI_ID_SCR2_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "Õ¿◊¿“‹",       GUI_ID_SCR2_BUTTON_STRT,    600,    250,    200,     50,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "—¡–Œ—",        GUI_ID_SCR2_BUTTON_CLR,     600,    350,    200,     50,      0,      0x0,    0 },
-    { TEXT_CreateIndirect,      "*********",    GUI_ID_SCR2_TEXT_TEMP,      100,    200,    600,    100,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    //{ TEXT_CreateIndirect,      "–≈√»—“–¿“Œ–",  GUI_ID_SCR2_TEXT_HEADER,      0,      0,    800,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { TEXT_CreateIndirect,      "–≈√»—“–¿“Œ–",  GUI_ID_SCR2_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    //{ GRAPH_CreateIndirect,     0,              GUI_ID_SCR2_GRAPH,            0,     50,    800,    450 },
+    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR2_GRAPH,            0,     80,    800,    400 },
+    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR2_BUTTON_ZOOMOUT,  70,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR2_BUTTON_ZOOMIN,  130,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "I<",           GUI_ID_SCR2_BUTTON_FRST,    250,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "<<",           GUI_ID_SCR2_BUTTON_RWND,    330,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    ">>",           GUI_ID_SCR2_BUTTON_FWRD,    410,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    ">I",           GUI_ID_SCR2_BUTTON_LAST,    490,    410,     60,     60,      0,      0x0,    0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO ui_dspl_scr3_info[] =
 {
     //{ WINDOW_CreateIndirect,    "scr3",         GUI_ID_SCR3_WINDOW,         800,      0,    800,    480,      0,      0x0,    0 },
     { WINDOW_CreateIndirect,    "scr3",         GUI_ID_SCR3_WINDOW,         800,      0,    800,    480,      0,      0x0,    0 },
-    //{ TEXT_CreateIndirect,      "Õ¿—“–Œ… ¿",    GUI_ID_SCR3_TEXT_HEADER,      0,      0,    800,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { TEXT_CreateIndirect,      "Õ¿—“–Œ… ¿",    GUI_ID_SCR3_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    //{ TEXT_CreateIndirect,      " ¿À»¡–Œ¬ ¿",   GUI_ID_SCR3_TEXT_HEADER,      0,      0,    800,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { TEXT_CreateIndirect,      " ¿À»¡–Œ¬ ¿",   GUI_ID_SCR3_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "Õ¿◊¿“‹",       GUI_ID_SCR3_BUTTON_STRT,    600,    250,    200,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "—¡–Œ—",        GUI_ID_SCR3_BUTTON_CLR,     600,    350,    200,     50,      0,      0x0,    0 },
+    { TEXT_CreateIndirect,      "*********",    GUI_ID_SCR3_TEXT_TEMP,      100,    200,    600,    100,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+};
 
-    //{ BUTTON_CreateIndirect,    "31/12/1970",   GUI_ID_SCR3_BUTTON_DATE,      0,     60,    220,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "23:59:59",     GUI_ID_SCR3_BUTTON_TIME,      0,    120,    220,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "--/--/----",   GUI_ID_SCR3_BUTTON_DATE,      0,     80,    220,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "--:--:--",     GUI_ID_SCR3_BUTTON_TIME,      0,    140,    220,     60,      0,      0x0,    0 },
+static const GUI_WIDGET_CREATE_INFO ui_dspl_scr4_info[] =
+{
+    //{ WINDOW_CreateIndirect,    "scr4",         GUI_ID_SCR4_WINDOW,         800,      0,    800,    480,      0,      0x0,    0 },
+    { WINDOW_CreateIndirect,    "scr4",         GUI_ID_SCR4_WINDOW,         800,      0,    800,    480,      0,      0x0,    0 },
+    //{ TEXT_CreateIndirect,      "Õ¿—“–Œ… ¿",    GUI_ID_SCR4_TEXT_HEADER,      0,      0,    800,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { TEXT_CreateIndirect,      "Õ¿—“–Œ… ¿",    GUI_ID_SCR4_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
 
-    //{ BUTTON_CreateIndirect,    "1. RS-485 115200 HART", GUI_ID_SCR3_BUTTON_CFG_CH1,  250,  60,    550,     50,  0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "2. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH2,  250, 110,    550,     50,  0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "3. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH3,  250, 160,    550,     50,  0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "4. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH4,  250, 210,    550,     50,  0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "5. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH5,  250, 260,    550,     50,  0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "6. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH6,  250, 310,    550,     50,  0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "7. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH7,  250, 360,    550,     50,  0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "8. NONE",               GUI_ID_SCR3_BUTTON_CFG_CH8,  250, 410,    550,     50,  0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "31/12/1970",   GUI_ID_SCR4_BUTTON_DATE,      0,     60,    220,     60,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "23:59:59",     GUI_ID_SCR4_BUTTON_TIME,      0,    120,    220,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--/--/----",   GUI_ID_SCR4_BUTTON_DATE,      0,     80,    220,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--:--:--",     GUI_ID_SCR4_BUTTON_TIME,      0,    140,    220,     60,      0,      0x0,    0 },
 
-    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH1,  250,  80,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH2,  250, 130,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH3,  250, 180,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH4,  250, 230,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH5,  250, 280,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH6,  250, 330,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH7,  250, 380,    550,     50,  0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR3_BUTTON_CFG_CH8,  250, 430,    550,     50,  0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "1. RS-485 115200 HART", GUI_ID_SCR4_BUTTON_CFG_CH1,  250,  60,    550,     50,  0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "2. NONE",               GUI_ID_SCR4_BUTTON_CFG_CH2,  250, 110,    550,     50,  0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "3. NONE",               GUI_ID_SCR4_BUTTON_CFG_CH3,  250, 160,    550,     50,  0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "4. NONE",               GUI_ID_SCR4_BUTTON_CFG_CH4,  250, 210,    550,     50,  0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "5. NONE",               GUI_ID_SCR4_BUTTON_CFG_CH5,  250, 260,    550,     50,  0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "6. NONE",               GUI_ID_SCR4_BUTTON_CFG_CH6,  250, 310,    550,     50,  0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "7. NONE",               GUI_ID_SCR4_BUTTON_CFG_CH7,  250, 360,    550,     50,  0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "8. NONE",               GUI_ID_SCR4_BUTTON_CFG_CH8,  250, 410,    550,     50,  0,      0x0,    0 },
+
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR4_BUTTON_CFG_CH1,  250,  80,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR4_BUTTON_CFG_CH2,  250, 130,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR4_BUTTON_CFG_CH3,  250, 180,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR4_BUTTON_CFG_CH4,  250, 230,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR4_BUTTON_CFG_CH5,  250, 280,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR4_BUTTON_CFG_CH6,  250, 330,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR4_BUTTON_CFG_CH7,  250, 380,    550,     50,  0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "--- --- ---",          GUI_ID_SCR4_BUTTON_CFG_CH8,  250, 430,    550,     50,  0,      0x0,    0 },
 };
 
 
@@ -115,6 +130,7 @@ static  const   int                             ui_dspl_scr_info_countof[] =
         GUI_COUNTOF( ui_dspl_scr1_info ),
         GUI_COUNTOF( ui_dspl_scr2_info ),
         GUI_COUNTOF( ui_dspl_scr3_info ),
+        GUI_COUNTOF( ui_dspl_scr4_info ),
 };
 
 static  const   GUI_WIDGET_CREATE_INFO *        ui_dspl_scr_info[] =
@@ -123,6 +139,7 @@ static  const   GUI_WIDGET_CREATE_INFO *        ui_dspl_scr_info[] =
         ui_dspl_scr1_info,
         ui_dspl_scr2_info,
         ui_dspl_scr3_info,
+        ui_dspl_scr4_info,
 };
 
 
@@ -340,6 +357,9 @@ void    ui_dspl_init( void )
         //GUI_Init();
         //WM_SetCreateFlags( WM_CF_MEMDEV );
         //WM_EnableMemdev( WM_HBKWIN );
+
+        //GUI_SetOrientation( GUI_MIRROR_X | GUI_MIRROR_Y );
+
         GUI_SetBkColor( GUI_BLACK );
         WM_SetDesktopColor( GUI_BLACK );
 
@@ -356,6 +376,7 @@ void    ui_dspl_init( void )
 
         TEXT_SetDefaultTextColor( GUI_LIGHTGRAY );
         TEXT_SetDefaultFont( &GUI_FontTahoma40 );
+        //TEXT_SetDefaultFont( &GUI_FontSourceSansPro40 );
 
         SCROLLBAR_SetDefaultSkinClassic();
         //SCROLLBAR_SetDefaultColor(      GUI_LIGHTBLUE,      SCROLLBAR_CI_THUMB      );
@@ -367,10 +388,11 @@ void    ui_dspl_init( void )
         //SCROLLBAR_SetDefaultWidth( 40 );
         SCROLLBAR_SetDefaultWidth( 0 );
 
-        ui_dspl_scrn_hndl[ 0 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[0], ui_dspl_scr_info_countof[0], ui_dspl_scr0_cb, WM_HBKWIN, 0, 0 );
-        ui_dspl_scrn_hndl[ 1 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[1], ui_dspl_scr_info_countof[1], ui_dspl_scr1_cb, WM_HBKWIN, 0, 0 );
-        ui_dspl_scrn_hndl[ 2 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[2], ui_dspl_scr_info_countof[2], ui_dspl_scr2_cb, WM_HBKWIN, 0, 0 );
+        ui_dspl_scrn_hndl[ 4 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[4], ui_dspl_scr_info_countof[4], ui_dspl_scr4_cb, WM_HBKWIN, 0, 0 );
         ui_dspl_scrn_hndl[ 3 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[3], ui_dspl_scr_info_countof[3], ui_dspl_scr3_cb, WM_HBKWIN, 0, 0 );
+        ui_dspl_scrn_hndl[ 2 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[2], ui_dspl_scr_info_countof[2], ui_dspl_scr2_cb, WM_HBKWIN, 0, 0 );
+        ui_dspl_scrn_hndl[ 1 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[1], ui_dspl_scr_info_countof[1], ui_dspl_scr1_cb, WM_HBKWIN, 0, 0 );
+        ui_dspl_scrn_hndl[ 0 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[0], ui_dspl_scr_info_countof[0], ui_dspl_scr0_cb, WM_HBKWIN, 0, 0 );
 
         WM_SetCallback( WM_HBKWIN, _cbBackgroundWin );
 

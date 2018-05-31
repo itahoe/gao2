@@ -17,7 +17,8 @@
 #include "modbus.h"
 
 
-#define CONF_SER_POLLING_CYCLE_mSEC     1000
+//#define CONF_SER_POLLING_CYCLE_mSEC     1000
+#define CONF_SER_POLLING_CYCLE_mSEC     500
 #define CONF_SER4_RECV_BLCK_SIZE_OCT    64
 
 
@@ -27,7 +28,8 @@ static  uint8_t         data_modbus_rqst[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
 static  uint8_t         data_modbus_resp[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
 #pragma pack(4)
 
-static  int16_t         data_sens;
+//static  int16_t         data_sens;
+static  uint32_t        data_sens;
 //static  size_t          offset;
 
 typedef struct  modbus_dev_map_s
@@ -46,6 +48,8 @@ typedef struct  modbus_dev_map_s
         modbus_reg_t    sensor_calc_sensitivity_coef_real;
         modbus_reg_t    sensor_calc_sensitivity_coef_exponent;
         modbus_reg_t    sensor_value;
+        modbus_reg_t    sensor_value_high;
+        modbus_reg_t    sensor_value_low;
         modbus_reg_t    current_loop_value;
         modbus_reg_t    sensor_id;
         modbus_reg_t    version;
@@ -85,8 +89,10 @@ static  const   modbus_dev_t    dev     =
         .reg.sensor_calc_zero_offset_exponent           = { 31024, 1 },
         .reg.sensor_calc_sensitivity_coef_real          = { 31025, 1 },
         .reg.sensor_calc_sensitivity_coef_exponent      = { 31026, 1 },
-        .reg.sensor_value                               = { 33000, 1 },
-        .reg.current_loop_value                         = { 33001, 1 },
+        .reg.sensor_value                               = { 33000, 2 },
+        .reg.sensor_value_high                          = { 33000, 1 },
+        .reg.sensor_value_low                           = { 33001, 1 },
+        .reg.current_loop_value                         = { 33002, 1 },
         .reg.sensor_id                                  = { 40401, 6 },
         .reg.version                                    = { 40417, 3 },
         .reg.sensor_scale_min_real                      = { 41001, 1 },
@@ -123,8 +129,8 @@ extern  QueueHandle_t           que_strg_hndl;
 
 typedef union
 {
-    int16_t             i;
-    uint8_t             u[2];
+    uint32_t            i;
+    uint8_t             u[ 4 ];
 } conc_t;
 
 
@@ -174,7 +180,8 @@ p->tile = (p->head >= (p->data + p->blck_size) ? p->data : p->head );
 
 void    task_sensor(                    const   void *          argument )
 {
-        TickType_t              polling_cycle_tcks      = CONF_SER_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
+        //TickType_t              polling_cycle_tcks      = CONF_SER_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
+        TickType_t              polling_cycle_tcks      = 500 / portTICK_PERIOD_MS;
         bool                    received;
         bool                    not_empty;
         app_pipe_t              pipe;
@@ -218,12 +225,20 @@ void    task_sensor(                    const   void *          argument )
 
                                         if( err == 0 )
                                         {
-                                                c.u[0]          =   rtu.resp.data[4];
-                                                c.u[1]          =   rtu.resp.data[3];
+                                                //c.u[0]          =   rtu.resp.data[4];
+                                                //c.u[1]          =   rtu.resp.data[3];
+
+                                                c.u[0]          =   rtu.resp.data[6];
+                                                c.u[1]          =   rtu.resp.data[5];
+                                                c.u[2]          =   rtu.resp.data[4];
+                                                c.u[3]          =   rtu.resp.data[3];
+
+                                                //APP_TRACE( "%02X%02X%02X%02X %02X%02X%02X%02X\n", rtu.resp.data[3], rtu.resp.data[4], rtu.resp.data[5], rtu.resp.data[6], c.u[0], c.u[1], c.u[2], c.u[3] );
+
                                                 data_sens       =   c.i;
                                         }
 
-                                        pipe.tag        =   APP_PIPE_TAG_SENSOR;
+                                        pipe.tag        =   APP_PIPE_TAG_SENS_01_DATA;
                                         pipe.cnt        =   1;
                                         pipe.data       =   &data_sens;
                                         xQueueSend( que_ui_hndl,  &pipe, NULL );
@@ -277,9 +292,10 @@ void    task_sensor(                    const   void *          argument )
                         //rtu.rqst.reg    =   &dev.reg.sensor_calc_zero_offset_exponent; // { 31024, 1 },
                         //rtu.rqst.reg    =   &dev.reg.sensor_calc_sensitivity_coef_real; // { 31025, 1 },
                         //rtu.rqst.reg    =   &dev.reg.sensor_calc_sensitivity_coef_exponent; // { 31026, 1 },
-                        rtu.rqst.reg    =   &dev.reg.sensor_value;              // { 33000, 1 },
-                        //rtu.rqst.reg    =   &dev.reg.current_loop_value;        // { 33001, 1 },
-
+                        rtu.rqst.reg    =   &dev.reg.sensor_value;              // { 33000, 2 },
+                        //rtu.rqst.reg    =   &dev.reg.sensor_value_high;         // { 33000, 1 },
+                        //rtu.rqst.reg    =   &dev.reg.sensor_value_low;          // { 33001, 1 },
+                        //rtu.rqst.reg    =   &dev.reg.current_loop_value;        // { 33002, 1 },
                         //rtu.rqst.func   =   MODBUS_FUNC_READ_HOLDING_REGISTERS; // 0x03
                         //rtu.rqst.reg    =   &dev.reg.sensor_id;                 // { 40401, 6 };
                         //rtu.rqst.reg    =   &dev.reg.version;                   // { 40417, 3 }

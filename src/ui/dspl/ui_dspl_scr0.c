@@ -90,7 +90,9 @@ void    ui_dspl_scr0_graph_init(        WM_HWIN                 hWin,
         //
         // Create and add vertical scale
         //
-        hGraphScaleV    =   GRAPH_SCALE_Create( 25, GUI_TA_RIGHT, GRAPH_SCALE_CF_VERTICAL, 100 );
+        //hGraphScaleV    =   GRAPH_SCALE_Create( 25, GUI_TA_RIGHT, GRAPH_SCALE_CF_VERTICAL, 100 );
+        hGraphScaleV    =   GRAPH_SCALE_Create( 30, GUI_TA_RIGHT, GRAPH_SCALE_CF_VERTICAL, 100 );
+        GRAPH_SCALE_SetFont( hGraphScaleV, &GUI_FontTahoma20 );
         GRAPH_SCALE_SetTextColor( hGraphScaleV, GUI_DARKGREEN );
         GRAPH_AttachScale( hItem, hGraphScaleV );
 
@@ -98,6 +100,7 @@ void    ui_dspl_scr0_graph_init(        WM_HWIN                 hWin,
         // Create and add horizontal scale
         //
         hGraphScaleH    =   GRAPH_SCALE_Create( 20, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 100 );
+        GRAPH_SCALE_SetFont( hGraphScaleH, &GUI_FontTahoma20 );
         GRAPH_SCALE_SetTextColor( hGraphScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale( hItem, hGraphScaleH );
 
@@ -215,8 +218,11 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
         }
 }
 
-
+/*
 void    ui_dspl_scr0_update(                    int16_t *       data,
+                                                size_t          size )
+*/
+void    ui_dspl_scr0_update(                    float *         data,
                                                 size_t          size )
 {
         WM_HWIN         hTextHeader     = WM_GetDialogItem( hWin, GUI_ID_SCR0_TEXT_HEADER );
@@ -228,11 +234,22 @@ void    ui_dspl_scr0_update(                    int16_t *       data,
 
         while( size-- )
         {
-                sensor_value    =   s10e5_to_s23e8( (int) *data++ );
-                snprintf( str, sizeof(str), "%3.3f %%", sensor_value * 10 );
+                //sensor_value    =   s10e5_to_s23e8( (int) *data++ );
+                //snprintf( str, sizeof(str), "%3.3f %%", sensor_value * 10 );
+
+                //APP_TRACE( "%04X\n", (uint32_t) *data );
+                sensor_value    =   *data++;
+                sensor_value    *=  UI_DSPL_GRAPH_DATA_SCALE;
+
+                if( sensor_value > 9999 )
+                {
+                        sensor_value    =   9999;
+                }
+
+                snprintf( str, sizeof(str), "%3.2f PPM", sensor_value );
                 TEXT_SetText( hTextHeader, str );
 
-                graph_sample    =   (int16_t) (UI_DSPL_GRAPH_DATA_SCALE * sensor_value);
+                graph_sample    =   (int16_t) sensor_value;
                 GRAPH_DATA_YT_AddValue( hGraphData, graph_sample );
        }
 

@@ -6,7 +6,6 @@
 
 
 #include <time.h>
-//#include "bsp_storage.h"
 #include "storage.h"
 #include "diskio.h"
 #include "ff.h"
@@ -44,9 +43,10 @@ bool storage_open(                              storage_t *             p )
 {
         bool            resp    =   false;
 
+
 	storage_name_compose( p->fname, p->fext, sizeof( p->fname ) );
 
-	p->fresult      =   f_open( &p->file_log, p->fname, FA_CREATE_ALWAYS | FA_WRITE);
+	p->fresult      =   f_open( &p->hfile, p->fname, FA_CREATE_ALWAYS | FA_WRITE);
 
         //APP_TRACE_FF( "f_open() = ", p->fresult );
 
@@ -69,7 +69,7 @@ bool storage_open(                              storage_t *             p )
 
 		if( p->fresult == FR_OK )
 		{
-			p->fresult      =   f_open( &p->file_log, p->fname, FA_CREATE_ALWAYS | FA_WRITE);
+			p->fresult      =   f_open( &p->hfile, p->fname, FA_CREATE_ALWAYS | FA_WRITE);
 
                         ////p->sts.enable   =   (p->fresult == FR_OK) ? true : false;
                         ////resp            =   (p->fresult == FR_OK) ? true : false;
@@ -96,7 +96,7 @@ bool storage_open(                              storage_t *             p )
  */
 void storage_close(                             storage_t *             p )
 {
-	p->fresult      =   f_close( &p->file_log );
+	p->fresult      =   f_close( &p->hfile );
 
         if( p->fresult == FR_OK )
         {
@@ -115,44 +115,61 @@ void storage_close(                             storage_t *             p )
  * @brief File Manager write
  */
 bool storage_write(                             storage_t *             p,
-                                        const   uint8_t *               pbuf,
-                                                size_t                  len )
+                                        const   uint8_t *               data,
+                                                size_t                  cnt )
 {
 	uint32_t        wr_bytes        =   0;
         bool            err;
 
 
-        while( len > 0 )
+        while( cnt > 0 )
         {
-                p->fresult      =   f_write( &p->file_log, pbuf, len, (void *) &wr_bytes );
+                p->fresult      =   f_write( &p->hfile, data, cnt, (void *) &wr_bytes );
 
-                if( p->fresult  == FR_OK )
+                APP_TRACE_FF( "f_write() = ", p->fresult );
+
+                if( p->fresult == FR_OK )
                 {
-                        if( wr_bytes < len )
+                        if( wr_bytes < cnt )
                         {
                                 ////APP_TRACE( "f_write() - len: %d, wr_bytes: %d\n", len, wr_bytes );
                         }
                         else
                         {
-                                f_sync( &p->file_log );
+                                f_sync( &p->hfile );
                         }
 
-                        len     -=  wr_bytes;
-                        pbuf    +=  wr_bytes;
+                        cnt     -=  wr_bytes;
+                        data    +=  wr_bytes;
+
                 }
                 else
                 {
+                        if( p->fresult == FR_INVALID_OBJECT )
+                        {
+                                storage_open( p );
+
+                                APP_TRACE_FF( "storage_open() = ", p->fresult );
+
+                                if( p->fresult != FR_OK )
+                                {
+                                        break;
+                                }
+                        }
                         //APP_TRACE_FF( "f_write() = ", p->fresult );
                         ////APP_TRACE( "pbuf: %0X\n", pbuf );
                         ////APP_TRACE( "len: %d\n", len );
                         ////APP_TRACE( "wr_bytes: %d\n", wr_bytes );
+
+
                         break;
+
                 }
         }
 
         if( p->fresult == FR_OK )
         {
-                f_sync( &p->file_log );
+                f_sync( &p->hfile );
         }
 
         //APP_TRACE_FF( "f_write() = ", p->fresult );

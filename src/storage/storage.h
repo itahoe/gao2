@@ -32,7 +32,7 @@ typedef	union	storage_sts_u
 typedef struct  storage_s
 {
 	storage_sts_t   sts;
-	FIL             file_log;
+	FIL             hfile;
 	char            fname[ _MAX_LFN ];
 	char            fext[ STORAGE_FEXT_MAX ];
 	FRESULT         fresult;

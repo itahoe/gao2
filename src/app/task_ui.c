@@ -91,11 +91,13 @@ void    task_ui(                        const   void *          argument )
                 {
                         switch( pipe.tag )
                         {
-                                case APP_PIPE_TAG_SENSOR:
+                                case APP_PIPE_TAG_SENS_01_DATA:
                                         //if( pipe.size < CONF_SER4_RECV_BLCK_SIZE_OCT )
                                         if( pipe.cnt < 1024 )
                                         {
-                                                ui_dspl_scr0_update( (int16_t *) pipe.data, pipe.cnt );
+                                                //APP_TRACE( "UI %08X\n", *( (uint32_t *) pipe.data) );
+                                                ui_dspl_scr0_update( (float *) pipe.data, pipe.cnt );
+                                                ui_dspl_scr1_update( (float *) pipe.data, pipe.cnt );
                                         }
                                         else
                                         {

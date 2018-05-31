@@ -95,13 +95,15 @@
 
 /* Define Layer 0 color mode, orientation and sizes */
 #define COLOR_MODE_0            CMS_RGB565
-#define ORIENTATION_0           ROTATION_0
+//#define ORIENTATION_0           ROTATION_0
+#define ORIENTATION_0           ROTATION_180
 #define XSIZE_0                 XSIZE_PHYS
 #define YSIZE_0                 YSIZE_PHYS
 
 /* Define Layer 1 color mode, orientation and sizes */
 #define COLOR_MODE_1            CMS_ARGB4444
-#define ORIENTATION_1           ROTATION_0
+//#define ORIENTATION_1           ROTATION_0
+#define ORIENTATION_1           ROTATION_180
 #define XSIZE_1                 XSIZE_PHYS
 #define YSIZE_1                 YSIZE_PHYS
 

@@ -15,7 +15,7 @@
 
 extern  QueueHandle_t           que_strg_hndl;
 
-static  storage_t               log_ch01        =   { .fext   =  "ch01.log", };
+static  storage_t               strg_01         =   { .fext   =  "ch01.log", };
 
 
 void    task_storage(                   const   void *          argument )
@@ -68,12 +68,17 @@ void    task_storage(                   const   void *          argument )
                 storage_close( &log_ser1 );
 */
 
-/*
-                switch( stream.tag )
+
+                switch( pipe.tag )
                 {
-                        case APP_PIPE_TAG_RECV:
+                        case APP_PIPE_TAG_SENS_01_DATA:
+                                //if( storage_enabled( &strg_01 ) )
+                                {
+                                        //storage_write( &strg_01, pipe.data, pipe.cnt );
+                                }
                                 break;
 
+/*
                         case APP_PIPE_TAG_ERROR:
                                 APP_TRACE( "app_task_storage()::APP_PIPE_TAG_ERROR\n" );
                                 break;
@@ -93,11 +98,11 @@ void    task_storage(                   const   void *          argument )
 
                         case APP_PIPE_TAG_STORAGE_TOGGLE:
                                 break;
-
+*/
                         default:
                                 break;
                 }
-*/
+
                 //ui_led_sd_set(  write_uart2_active || write_uart1_active );
         }
 }
