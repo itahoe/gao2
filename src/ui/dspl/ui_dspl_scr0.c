@@ -12,6 +12,7 @@
 #include "float16.h"
 #include <math.h>
 #include <float.h>
+#include "app.h"
 
 
 static  WM_HWIN                 hWin;
@@ -19,11 +20,13 @@ static  GRAPH_DATA_Handle       hGraphData;
 static  GRAPH_SCALE_Handle      hGraphScaleV;   // Handle of vertical scale
 static  GRAPH_SCALE_Handle      hGraphScaleH;   // Handle of horizontal scale
 static  int                     graph_data_offset_y;
+static  int                     scr0_idx        = 0;
+static  int                     scr0_idx_max    = 2;
 
 
 static
-void    _UserDraw(                              WM_HWIN         hWin,
-                                                int             Stage   )
+void    ui_dspl_scr0_graph_draw(        WM_HWIN                 hWin,
+                                        int                     Stage   )
 {
         if( Stage == GRAPH_DRAW_LAST )
         {
@@ -85,7 +88,7 @@ void    ui_dspl_scr0_graph_init(        WM_HWIN                 hWin,
         GRAPH_SetGridVis( hItem, 1 );
         //GRAPH_SetGridFixedX( hItem, 1 );
 
-        GRAPH_SetUserDraw( hItem, _UserDraw );
+        GRAPH_SetUserDraw( hItem, ui_dspl_scr0_graph_draw );
 
         //
         // Create and add vertical scale
@@ -109,6 +112,36 @@ void    ui_dspl_scr0_graph_init(        WM_HWIN                 hWin,
         //GRAPH_SCALE_SetTickDist( _hScaleH, 25 );
         GRAPH_SCALE_SetTickDist( hGraphScaleH, 100 );
 }
+
+
+void    ui_dspl_scr0_toggle(            WM_HWIN                 hWin,
+                                        int                     idx )
+{
+        switch( idx )
+        {
+                case 0:
+                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_TEXT_SENS_VALUE )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_GRAPH       )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BUTTON_LEFT )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BUTTON_RGHT )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BUTTON_DOWN )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BUTTON_UP   )  );
+                        break;
+
+                case 1:
+                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_GRAPH       )  );
+                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BUTTON_LEFT )  );
+                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BUTTON_RGHT )  );
+                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BUTTON_DOWN )  );
+                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BUTTON_UP   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_TEXT_SENS_VALUE )  );
+                        break;
+
+                default:
+                        break;
+        }
+}
+
 
 static
 void    ui_dspl_scr0_graph_shft_up( void )
@@ -166,6 +199,7 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
         switch( pMsg->MsgId )
         {
                 case WM_NOTIFY_PARENT:
+                        hWin    =   pMsg->hWin;
                         Id      =   WM_GetId( pMsg->hWinSrc );                  // Id of widget
                         NCode   =   pMsg->Data.v;                               // Notification code
                         switch( NCode )
@@ -173,6 +207,16 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
                                 case WM_NOTIFICATION_CLICKED:
 
                                         hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_GRAPH );
+
+                                        if( Id == GUI_ID_SCR0_BUTTON_HEADER )
+                                        {
+                                                if( ++scr0_idx >= scr0_idx_max )
+                                                {
+                                                        scr0_idx        =   0;
+                                                }
+
+                                                ui_dspl_scr0_toggle( hWin, scr0_idx );
+                                        }
 
                                         if( Id == GUI_ID_SCR0_BUTTON_UP )
                                         {
@@ -202,9 +246,19 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
                         hWin    =   pMsg->hWin;
                         WINDOW_SetBkColor( hWin, GUI_BLACK );
 
-                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_TEXT_HEADER );
+                        //hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_TEXT_HEADER );
+                        //TEXT_SetBkColor( hItem, UI_DSPL_HDR_COLOR_BCKGRND );
+                        //TEXT_SetFont( hItem, &UI_DSPL_HDR_TXT_FONT );
+
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_BUTTON_HEADER );
+                        BUTTON_SetFont( hItem, &UI_DSPL_HDR_TXT_FONT );
+
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_TEXT_SENS_VALUE );
                         TEXT_SetBkColor( hItem, UI_DSPL_HDR_COLOR_BCKGRND );
-                        TEXT_SetFont( hItem, &UI_DSPL_HDR_TXT_FONT );
+                        TEXT_SetTextColor( hItem, GUI_GREEN );
+                        TEXT_SetFont( hItem, &GUI_FontTahoma255 );
+                        WM_HideWindow( hItem );
+
 
                         hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_GRAPH );
                         ui_dspl_scr0_graph_init( hItem, GUI_ID_SCR0_GRAPH );
@@ -218,40 +272,53 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
         }
 }
 
-/*
-void    ui_dspl_scr0_update(                    int16_t *       data,
-                                                size_t          size )
-*/
+
+static
+void    ui_dspl_scr0_graph_update(              float           sample )
+{
+        WM_HWIN         hGraph          = WM_GetDialogItem( WM_HBKWIN, GUI_ID_SCR0_GRAPH );
+
+
+        GRAPH_DATA_YT_AddValue( hGraphData, (int16_t) sample );
+        WM_BringToBottom( hGraph );
+}
+
+
+static
+void    ui_dspl_scr0_text_update(               float           sample )
+{
+        WM_HWIN         hTextHeader     = WM_GetDialogItem( hWin, GUI_ID_SCR0_TEXT_SENS_VALUE );
+        char            str[16];
+
+
+        snprintf( str, sizeof(str), "%4.2f", sample );
+        TEXT_SetText(           hTextHeader, str );
+        TEXT_SetBkColor(        hTextHeader, sample > 50 ? GUI_RED      : GUI_BLACK );
+        TEXT_SetTextColor(      hTextHeader, sample > 50 ? GUI_BLACK    : GUI_GREEN );
+}
+
+
 void    ui_dspl_scr0_update(                    float *         data,
                                                 size_t          size )
 {
-        WM_HWIN         hTextHeader     = WM_GetDialogItem( hWin, GUI_ID_SCR0_TEXT_HEADER );
-        WM_HWIN         hGraph          = WM_GetDialogItem( WM_HBKWIN, GUI_ID_SCR0_GRAPH );
-        float           sensor_value;
-        int16_t         graph_sample;
+        WM_HWIN         hButtonHeader   = WM_GetDialogItem( hWin, GUI_ID_SCR0_BUTTON_HEADER );
+        float           sample;
         char            str[16];
 
 
         while( size-- )
         {
-                //sensor_value    =   s10e5_to_s23e8( (int) *data++ );
-                //snprintf( str, sizeof(str), "%3.3f %%", sensor_value * 10 );
+                sample  =   *data++;
 
-                //APP_TRACE( "%04X\n", (uint32_t) *data );
-                sensor_value    =   *data++;
-                sensor_value    *=  UI_DSPL_GRAPH_DATA_SCALE;
-
-                if( sensor_value > 9999 )
+                if( sample > 9999 )
                 {
-                        sensor_value    =   9999;
+                        sample  =   9999;
                 }
 
-                snprintf( str, sizeof(str), "%3.2f PPM", sensor_value );
-                TEXT_SetText( hTextHeader, str );
+                snprintf( str, sizeof(str), "%4.2f PPM", sample );
+                BUTTON_SetText( hButtonHeader, str );
 
-                graph_sample    =   (int16_t) sensor_value;
-                GRAPH_DATA_YT_AddValue( hGraphData, graph_sample );
-       }
-
-        WM_BringToBottom( hGraph );
+                ui_dspl_scr0_graph_update( sample );
+                ui_dspl_scr0_text_update( sample );
+        }
 }

@@ -97,7 +97,7 @@ void    task_ui(                        const   void *          argument )
                                         {
                                                 //APP_TRACE( "UI %08X\n", *( (uint32_t *) pipe.data) );
                                                 ui_dspl_scr0_update( (float *) pipe.data, pipe.cnt );
-                                                ui_dspl_scr1_update( (float *) pipe.data, pipe.cnt );
+                                                //ui_dspl_scr1_update( (float *) pipe.data, pipe.cnt );
                                         }
                                         else
                                         {
