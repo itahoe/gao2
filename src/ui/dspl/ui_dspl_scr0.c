@@ -5,14 +5,22 @@
   */
 
 
-#include <stdlib.h>
-#include <string.h>
+#include <float.h>
+//#include <stdlib.h>
 #include "DIALOG.h"
 #include "ui_dspl.h"
-#include "float16.h"
-#include <math.h>
-#include <float.h>
-#include "app.h"
+
+
+typedef struct  scr0_graph_s
+{
+        int             offset_y;
+} scr0_graph_t;
+
+typedef struct  scr0_s
+{
+        int             idx;
+        scr0_graph_t    graph;
+} scr0_t;
 
 
 static  WM_HWIN                 hWin;
@@ -22,6 +30,7 @@ static  GRAPH_SCALE_Handle      hGraphScaleH;   // Handle of horizontal scale
 static  int                     graph_data_offset_y;
 static  int                     scr0_idx        = 0;
 static  int                     scr0_idx_max    = 2;
+static  scr0_t                  scr0;
 
 
 static
@@ -30,20 +39,6 @@ void    ui_dspl_scr0_graph_draw(        WM_HWIN                 hWin,
 {
         if( Stage == GRAPH_DRAW_LAST )
         {
-                //char acText[] = "Temperature";
-                char acText[] = "";
-                GUI_RECT Rect;
-                GUI_RECT RectInvalid;
-                int FontSizeY;
-
-                GUI_SetFont( &GUI_Font16B_ASCII );
-                FontSizeY = GUI_GetFontSizeY();
-                WM_GetInsideRect(&Rect);
-                WM_GetInvalidRect(hWin, &RectInvalid);
-                Rect.x1 = Rect.x0 + FontSizeY;
-                GUI_SetColor( GUI_YELLOW );
-                GUI_DispStringInRectEx( acText, &Rect, GUI_TA_HCENTER, strlen(acText), GUI_ROTATE_CCW );
-
                 GUI_SetColor( GUI_GRAY );
                 //GUI_DrawLine( 400, 0, 400, 480 );
                 GUI_DrawLine( UI_DSPL_WIN_SIZE_X/2, 0, UI_DSPL_WIN_SIZE_X/2, UI_DSPL_WIN_SIZE_Y );
@@ -293,8 +288,8 @@ void    ui_dspl_scr0_text_update(               float           sample )
 
         snprintf( str, sizeof(str), "%4.2f", sample );
         TEXT_SetText(           hTextHeader, str );
-        TEXT_SetBkColor(        hTextHeader, sample > 50 ? GUI_RED      : GUI_BLACK );
-        TEXT_SetTextColor(      hTextHeader, sample > 50 ? GUI_BLACK    : GUI_GREEN );
+        TEXT_SetBkColor(        hTextHeader, sample < 50 ? GUI_BLACK    : GUI_RED   );
+        TEXT_SetTextColor(      hTextHeader, sample < 50 ? GUI_GREEN    : GUI_BLACK );
 }
 
 

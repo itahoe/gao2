@@ -93,7 +93,8 @@ void k_TouchUpdate( void )
         xDiff   = (TS_State.x > ts.touchX[0]) ? (TS_State.x - ts.touchX[0]) : (ts.touchX[0] - TS_State.x);
         yDiff   = (TS_State.y > ts.touchY[0]) ? (TS_State.y - ts.touchY[0]) : (ts.touchY[0] - TS_State.y);
 
-        if( (TS_State.Pressed != ts.touchDetected ) || (xDiff > 20 ) || (yDiff > 20) )
+        //if( (TS_State.Pressed != ts.touchDetected ) || (xDiff > 20 ) || (yDiff > 20) )
+        if( (TS_State.Pressed != ts.touchDetected ) || (xDiff > 10 ) || (yDiff > 10) )
         {
                 TS_State.Pressed        =   ts.touchDetected;
                 TS_State.Layer          =   SelLayer;
@@ -103,6 +104,7 @@ void k_TouchUpdate( void )
 
                         if( I2C_Address == TS_I2C_ADDRESS )
                         {
+/*
                                 if( ts.touchY[0] < 240 )
                                 {
                                         TS_State.y      =   ts.touchY[0];
@@ -111,6 +113,8 @@ void k_TouchUpdate( void )
                                 {
                                         TS_State.y      =   (ts.touchY[0] * 480) / 445;
                                 }
+*/
+                                TS_State.y      =   ts.touchY[0];
                         }
                         else
                         {
