@@ -27,40 +27,19 @@ WM_HWIN         ui_dspl_scrn_hndl[ UI_DSPL_SCRN_IDX_MAX ];
 static GUI_WIDGET_CREATE_INFO ui_dspl_scr0_info[] =
 {
     { WINDOW_CreateIndirect,    "scr0",         GUI_ID_SCR0_WINDOW,           0,      0,    800,    480,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "",             GUI_ID_SCR0_BUTTON_HEADER,  150,      0,    500,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TEXT_SENS_VALUE,  0,     80,    800,    400,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR0_GRAPH,            0,     80,    800,    400 },
-    //{ BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_ZOOMOUT,  70,    410,     60,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_ZOOMIN,  130,    410,     60,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "I<",           GUI_ID_SCR0_BUTTON_FRST,    250,    410,     60,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "<<",           GUI_ID_SCR0_BUTTON_RWND,    330,    410,     60,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    ">>",           GUI_ID_SCR0_BUTTON_FWRD,    410,    410,     60,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    ">I",           GUI_ID_SCR0_BUTTON_LAST,    490,    410,     60,     60,      0,      0x0,    0 },
-
-    //{ BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_UP,      650,    250,     60,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_DOWN,    650,    350,     60,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "<",            GUI_ID_SCR0_BUTTON_LEFT,    600,    300,     60,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    ">",            GUI_ID_SCR0_BUTTON_RGHT,    700,    300,     60,     60,      0,      0x0,    0 },
-
-    //{ BUTTON_CreateIndirect,    "REC",          GUI_ID_SCR0_BUTTON_STORAGE, 100,    410,     80,     60,      0,      0x0,    0 },
-
-    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BUTTON_LEFT,    450,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BUTTON_RGHT,    530,    410,     60,     60,      0,      0x0,    0 },
-
-    //{ BUTTON_CreateIndirect,    "<",            GUI_ID_SCR0_BUTTON_LEFT,    450,    410,     60,     60,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    ">",            GUI_ID_SCR0_BUTTON_RGHT,    530,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "\xA2",            GUI_ID_SCR0_BUTTON_DOWN,    600,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "\xA1",            GUI_ID_SCR0_BUTTON_UP,      680,    410,     60,     60,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "",             GUI_ID_SCR0_BTN_HEADER,     150,      0,    500,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_SENS,         0,     80,    800,    400,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR0_GRAPH,            0,     80,    800,    UI_DSPL_SCR0_GRAPH_VSIZE_Y },
+    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BTN_ZOOM_I,       0,    430,    100,     50,      0,      0x0,    0 },
+    { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_ZOOM,       100,    430,    100,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BTN_ZOOM_O,     200,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "M",            GUI_ID_SCR0_BTN_MODE,       350,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA2",         GUI_ID_SCR0_BTN_SHFT_DN,    500,    430,    100,     50,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "\xAE",         GUI_ID_SCR0_BTN_SHFT_DN,    500,    430,    100,     50,      0,      0x0,    0 },
+    { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_SHFT,       600,    430,    100,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA1",         GUI_ID_SCR0_BTN_SHFT_UP,    700,    430,    100,     50,      0,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "\xAF",         GUI_ID_SCR0_BTN_SHFT_UP,    700,    430,    100,     50,      0,      0x0,    0 },
 };
-
-/*
-static GUI_WIDGET_CREATE_INFO ui_dspl_scr1_info[] =
-{
-    { WINDOW_CreateIndirect,    "scr1",         GUI_ID_SCR1_WINDOW,           0,      0,    800,    480,      0,      0x0,    0 },
-    { TEXT_CreateIndirect,      "PPM",          GUI_ID_SCR1_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { TEXT_CreateIndirect,      "",             GUI_ID_SCR1_TEXT_SENS_VALUE,  0,     80,    800,    400,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-};
-*/
 
 static const GUI_WIDGET_CREATE_INFO ui_dspl_scr1_info[] =
 {
@@ -391,7 +370,8 @@ void    ui_dspl_init( void )
         BUTTON_SetDefaultTextColor(     GUI_LIGHTBLUE,  BUTTON_CI_UNPRESSED     );
         //BUTTON_SetDefaultFocusColor( GUI_GRAY );
         BUTTON_SetDefaultTextAlign( GUI_TA_HCENTER | GUI_TA_VCENTER );
-        BUTTON_SetDefaultFont( &GUI_FontTahoma40 );
+        BUTTON_SetDefaultFont( &UI_DSPL_DFLT_FONT_BUTTON);
+
 
         TEXT_SetDefaultTextColor( GUI_LIGHTGRAY );
         TEXT_SetDefaultFont( &GUI_FontTahoma40 );

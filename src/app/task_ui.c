@@ -17,7 +17,7 @@
 
 extern  void    k_TouchUpdate( void );
 
-extern  QueueHandle_t           que_ui_hndl;
+extern  QueueHandle_t   que_ui_hndl;
 
 static  TimerHandle_t   tmr_touch_hndl;
 static  StaticTimer_t   tmr_touch_alloc;

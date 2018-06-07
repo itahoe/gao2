@@ -244,7 +244,7 @@ WM_HWIN ui_dspl_scr1_init(              WM_CALLBACK *           cb )
         y0      =   UI_DSPL_WIN_SIZE_Y - sizeY - 10;
 
         x0      =   0 + sizeX/2 + sizeX*0 + 40;
-        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR0_BUTTON_ZOOMOUT );
+        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR1_BUTTON_ZOOMOUT );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_UNPRESSED,  GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_PRESSED,    GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_DISABLED,   GUI_BLACK );
@@ -252,7 +252,7 @@ WM_HWIN ui_dspl_scr1_init(              WM_CALLBACK *           cb )
         BUTTON_SetText(         hItem,  "-"  );
 
         x0      =   0 + sizeX/2 + sizeX*1 + 40;
-        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR0_BUTTON_ZOOMIN );
+        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR1_BUTTON_ZOOMIN );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_UNPRESSED,  GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_PRESSED,    GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_DISABLED,   GUI_BLACK );
@@ -260,7 +260,7 @@ WM_HWIN ui_dspl_scr1_init(              WM_CALLBACK *           cb )
         BUTTON_SetText(         hItem,  "+"  );
 
         x0      =   (UI_DSPL_WIN_SIZE_X/2 - sizeX/2) - 20*1 - sizeX/2;
-        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR0_BUTTON_RWND);
+        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR1_BUTTON_RWND);
         BUTTON_SetBkColor(      hItem, BUTTON_CI_UNPRESSED,  GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_PRESSED,    GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_DISABLED,   GUI_BLACK );
@@ -268,7 +268,7 @@ WM_HWIN ui_dspl_scr1_init(              WM_CALLBACK *           cb )
         BUTTON_SetText(         hItem,  "<<"  );
 
         x0      =   (UI_DSPL_WIN_SIZE_X/2 - sizeX/2) + 20*1 + sizeX/2;
-        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR0_BUTTON_FWRD );
+        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR1_BUTTON_FWRD );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_UNPRESSED,  GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_PRESSED,    GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_DISABLED,   GUI_BLACK );
@@ -276,7 +276,7 @@ WM_HWIN ui_dspl_scr1_init(              WM_CALLBACK *           cb )
         BUTTON_SetText(         hItem,  ">>"  );
 
         x0      =   (UI_DSPL_WIN_SIZE_X/2 - sizeX/2) - 20*2 - sizeX/2 - sizeX*1;
-        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR0_BUTTON_FRST );
+        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR1_BUTTON_FRST );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_UNPRESSED,  GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_PRESSED,    GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_DISABLED,   GUI_BLACK );
@@ -284,7 +284,7 @@ WM_HWIN ui_dspl_scr1_init(              WM_CALLBACK *           cb )
         BUTTON_SetText(         hItem,  "I<"  );
 
         x0      =   (UI_DSPL_WIN_SIZE_X/2 - sizeX/2) + 20*2 + sizeX/2 + sizeX*1;
-        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR0_BUTTON_LAST );
+        hItem   =   BUTTON_CreateEx( x0, y0, sizeX, sizeY,  hWin,  WM_CF_SHOW, 0, GUI_ID_SCR1_BUTTON_LAST );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_UNPRESSED,  GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_PRESSED,    GUI_BLACK );
         BUTTON_SetBkColor(      hItem, BUTTON_CI_DISABLED,   GUI_BLACK );
