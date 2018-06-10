@@ -152,6 +152,31 @@
 #define UI_DSPL_SCR0_GRAPH_DATA_ZOOM_MAX        8
 
 
+typedef enum    graph_ctl_mode_e
+{
+        GRAPH_CTL_MODE_FRST     = 0,
+        GRAPH_CTL_MODE_H        = 0,
+        GRAPH_CTL_MODE_V,
+        GRAPH_CTL_MODE_LAST,
+} graph_ctl_mode_t;
+
+
+typedef struct  scr_graph_s
+{
+        size_t                  shftX;
+        int                     shftY;
+        int16_t                 zoom;
+        graph_ctl_mode_t        mode;
+} scr_graph_t;
+
+typedef struct  scr_s
+{
+        int                     idx;
+        int                     idx_max;
+        scr_graph_t             graph;
+} scr_t;
+
+
 extern  GUI_CONST_STORAGE GUI_FONT      GUI_FontCourierNew110;
 extern  GUI_CONST_STORAGE GUI_FONT      GUI_FontCourierNew73;
 extern  GUI_CONST_STORAGE GUI_FONT      GUI_FontCourierNew54;
@@ -188,8 +213,10 @@ void    ui_dspl_scr0_update(                    float *         data,
 WM_HWIN ui_dspl_scr2_init(                      WM_CALLBACK *           cb );
 WM_HWIN ui_dspl_scr1_init(                      WM_CALLBACK *           cb );
 
+/*
 void    ui_dspl_scr0_toggle(                    WM_HWIN                 hWin,
                                                 int                     idx );
+*/
 
 void    ui_dspl_scrn_slide(                     int                     dir );
 

@@ -12,38 +12,14 @@
 #include "fifo.h"
 
 
-typedef enum    graph_ctl_mode_e
-{
-        GRAPH_CTL_MODE_FRST     = 0,
-        GRAPH_CTL_MODE_H        = 0,
-        GRAPH_CTL_MODE_V,
-        GRAPH_CTL_MODE_LAST,
-} graph_ctl_mode_t;
-
-
-typedef struct  scr_graph_s
-{
-        size_t                  shftX;
-        int                     shftY;
-        int16_t                 zoom;
-        graph_ctl_mode_t        mode;
-} scr_graph_t;
-
-typedef struct  scr_s
-{
-        int                     idx;
-        int                     idx_max;
-        scr_graph_t             graph;
-} scr_t;
-
-
 static  WM_HWIN                 hWin;
 static  GRAPH_DATA_Handle       hGraphData;
 static  GRAPH_SCALE_Handle      hGraphScaleV;   // Handle of vertical scale
 
 static  int16_t                 graph_data_buf[ UI_DSPL_GRAPH_VSIZE_X ];
 
-static  scr_t                   scr0        = { .graph.zoom     = 1,
+static  scr_t                   scr0        = { .graph.shftX    = UI_DSPL_GRAPH_DATA_DIFF_X,
+                                                .graph.zoom     = 1,
                                                 .idx_max        = 2, };
 
 static  fifo16_t                graph_data  = { .data           =   graph_data_buf,
@@ -233,12 +209,11 @@ void    graph_shft_left(                        scr_t *         scr,
         switch( graph->mode )
         {
                 case GRAPH_CTL_MODE_H:
+                        graph->shftY    +=  UI_DSPL_GRAPH_DATA_SHFT_Y_STEP;
 
-                        graph->shftY    -=  UI_DSPL_GRAPH_DATA_SHFT_Y_STEP;
-
-                        if( graph->shftY <=  UI_DSPL_GRAPH_DATA_YSIZE_MIN )
+                        if( graph->shftY >=  UI_DSPL_GRAPH_DATA_YSIZE_MAX )
                         {
-                                graph->shftY    =   UI_DSPL_GRAPH_DATA_YSIZE_MIN;
+                                graph->shftY        =   UI_DSPL_GRAPH_DATA_YSIZE_MAX;
                         }
 
                         GRAPH_DATA_YT_SetOffY( hGraphData, graph->shftY );
@@ -248,13 +223,11 @@ void    graph_shft_left(                        scr_t *         scr,
 
                 case GRAPH_CTL_MODE_V:
 
-                        if( graph->shftX > UI_DSPL_GRAPH_DATA_SHFT_X_STEP )
+                        graph->shftX    +=  UI_DSPL_GRAPH_DATA_SHFT_X_STEP;
+
+                        if( graph->shftX > UI_DSPL_GRAPH_DATA_DIFF_X )
                         {
-                                graph->shftX    -=  UI_DSPL_GRAPH_DATA_SHFT_X_STEP;
-                        }
-                        else
-                        {
-                                graph->shftX    =   0;
+                                graph->shftX    =   UI_DSPL_GRAPH_DATA_DIFF_X;
                         }
 
                         text_shft_update( hText, graph->shftX );
@@ -280,11 +253,12 @@ void    graph_shft_rght(                        scr_t *         scr,
         switch( graph->mode )
         {
                 case GRAPH_CTL_MODE_H:
-                        graph->shftY    +=  UI_DSPL_GRAPH_DATA_SHFT_Y_STEP;
 
-                        if( graph->shftY >=  UI_DSPL_GRAPH_DATA_YSIZE_MAX )
+                        graph->shftY    -=  UI_DSPL_GRAPH_DATA_SHFT_Y_STEP;
+
+                        if( graph->shftY <=  UI_DSPL_GRAPH_DATA_YSIZE_MIN )
                         {
-                                graph->shftY        =   UI_DSPL_GRAPH_DATA_YSIZE_MAX;
+                                graph->shftY    =   UI_DSPL_GRAPH_DATA_YSIZE_MIN;
                         }
 
                         GRAPH_DATA_YT_SetOffY( hGraphData, graph->shftY );
@@ -294,11 +268,13 @@ void    graph_shft_rght(                        scr_t *         scr,
 
                 case GRAPH_CTL_MODE_V:
 
-                        graph->shftX    +=  UI_DSPL_GRAPH_DATA_SHFT_X_STEP;
-
-                        if( graph->shftX > UI_DSPL_GRAPH_DATA_DIFF_X )
+                        if( graph->shftX > UI_DSPL_GRAPH_DATA_SHFT_X_STEP )
                         {
-                                graph->shftX    =   UI_DSPL_GRAPH_DATA_DIFF_X;
+                                graph->shftX    -=  UI_DSPL_GRAPH_DATA_SHFT_X_STEP;
+                        }
+                        else
+                        {
+                                graph->shftX    =   0;
                         }
 
                         text_shft_update( hText, graph->shftX );
@@ -356,10 +332,16 @@ void    graph_mode_next(                const   WM_HWIN         hWin,
 }
 
 
-void    ui_dspl_scr0_toggle(            WM_HWIN                 hWin,
-                                        int                     idx )
+static
+void    scr0_toggle(                            WM_HWIN         hWin,
+                                                scr_t *         scr     )
 {
-        switch( idx )
+        if( ++(scr->idx) >= scr->idx_max )
+        {
+                scr->idx        =   0;
+        }
+
+        switch( scr->idx )
         {
                 case 0:
                         WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_TXT_SENS        )  );
@@ -441,12 +423,7 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
 
                                         if( Id == GUI_ID_SCR0_BTN_HEADER )
                                         {
-                                                if( ++(scr0.idx) >= scr0.idx_max )
-                                                {
-                                                        scr0.idx        =   0;
-                                                }
-
-                                                ui_dspl_scr0_toggle( hWin, scr0.idx );
+                                                scr0_toggle( hWin, &scr0 );
                                         }
 
                                         if( Id == GUI_ID_SCR0_BTN_MODE )
