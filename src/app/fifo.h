@@ -37,7 +37,32 @@ void    fifo16_init(                            fifo16_t *      p,
 static
 void    fifo16_flush(                           fifo16_t *      p )
 {
-        p->tile = p->head;
+        p->tile         =   p->head;
+}
+
+
+static
+void    fifo16_ofst_tile(                       fifo16_t *      p,
+                                                int             ofst )
+{
+/*
+        if( p->head >= ofst )
+        {
+                p->tile         =  p->head - ofst;
+        }
+        else
+        {
+                p->tile         =  p->head + p->size - ofst;
+        }
+*/
+
+        p->tile         =  p->head + ofst;
+
+        if( p->tile >= p->size )
+        {
+                p->tile         -=  p->size;
+        }
+
 }
 
 

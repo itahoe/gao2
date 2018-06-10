@@ -26,18 +26,18 @@ WM_HWIN         ui_dspl_scrn_hndl[ UI_DSPL_SCRN_IDX_MAX ];
 
 static GUI_WIDGET_CREATE_INFO ui_dspl_scr0_info[] =
 {
-    { WINDOW_CreateIndirect,    "scr0",         GUI_ID_SCR0_WINDOW,           0,      0,    800,    480,      0,      0x0,    0 },
+    { WINDOW_CreateIndirect,    "scr0",         GUI_ID_SCR0_WIN,              0,      0,    800,    480,      0,      0x0,    0 },
     { BUTTON_CreateIndirect,    "",             GUI_ID_SCR0_BTN_HEADER,     150,      0,    500,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
     { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_SENS,         0,     80,    800,    400,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR0_GRAPH,            0,     80,    800,    UI_DSPL_SCR0_GRAPH_VSIZE_Y },
-    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BTN_ZOOM_I,       0,    430,    100,     50,      0,      0x0,    0 },
+    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR0_GRAPH,            0,     80,    UI_DSPL_GRAPH_SIZE_X,    UI_DSPL_GRAPH_SIZE_Y},
+    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BTN_ZOOM_LEFT,    0,    430,    100,     50,      0,      0x0,    0 },
     { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_ZOOM,       100,    430,    100,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BTN_ZOOM_O,     200,    430,    100,     50,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "M",            GUI_ID_SCR0_BTN_MODE,       350,    430,    100,     50,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "\xA2",         GUI_ID_SCR0_BTN_SHFT_DN,    500,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BTN_ZOOM_RGHT,  200,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xAD",         GUI_ID_SCR0_BTN_MODE,       350,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA2",         GUI_ID_SCR0_BTN_SHFT_LEFT,  500,    430,    100,     50,      0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    "\xAE",         GUI_ID_SCR0_BTN_SHFT_DN,    500,    430,    100,     50,      0,      0x0,    0 },
     { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_SHFT,       600,    430,    100,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "\xA1",         GUI_ID_SCR0_BTN_SHFT_UP,    700,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA1",         GUI_ID_SCR0_BTN_SHFT_RGHT,  700,    430,    100,     50,      0,      0x0,    0 },
     //{ BUTTON_CreateIndirect,    "\xAF",         GUI_ID_SCR0_BTN_SHFT_UP,    700,    430,    100,     50,      0,      0x0,    0 },
 };
 
@@ -377,15 +377,18 @@ void    ui_dspl_init( void )
         TEXT_SetDefaultFont( &GUI_FontTahoma40 );
         //TEXT_SetDefaultFont( &GUI_FontSourceSansPro40 );
 
-        SCROLLBAR_SetDefaultSkinClassic();
-        //SCROLLBAR_SetDefaultColor(      GUI_LIGHTBLUE,      SCROLLBAR_CI_THUMB      );
+        SCROLLBAR_SetDefaultColor(      GUI_LIGHTBLUE,      SCROLLBAR_CI_THUMB      );
         //SCROLLBAR_SetDefaultColor(      GUI_BLACK,      SCROLLBAR_CI_SHAFT      );
         //SCROLLBAR_SetDefaultColor(      GUI_BLACK,      SCROLLBAR_CI_ARROW      );
-        SCROLLBAR_SetDefaultColor(      GUI_TRANSPARENT,      SCROLLBAR_CI_THUMB      );
-        SCROLLBAR_SetDefaultColor(      GUI_TRANSPARENT,      SCROLLBAR_CI_SHAFT      );
-        SCROLLBAR_SetDefaultColor(      GUI_TRANSPARENT,      SCROLLBAR_CI_ARROW      );
         //SCROLLBAR_SetDefaultWidth( 40 );
-        SCROLLBAR_SetDefaultWidth( 0 );
+
+        SCROLLBAR_SetDefaultSkinClassic();
+        //SCROLLBAR_SetDefaultColor(      GUI_TRANSPARENT,      SCROLLBAR_CI_THUMB      );
+        //SCROLLBAR_SetDefaultColor(      GUI_TRANSPARENT,      SCROLLBAR_CI_SHAFT      );
+        //SCROLLBAR_SetDefaultColor(      GUI_TRANSPARENT,      SCROLLBAR_CI_ARROW      );
+        //SCROLLBAR_SetDefaultWidth( 0 );
+
+
 
         //ui_dspl_scrn_hndl[ 4 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[4], ui_dspl_scr_info_countof[4], ui_dspl_scr4_cb, WM_HBKWIN, 0, 0 );
         ui_dspl_scrn_hndl[ 3 ]  =   GUI_CreateDialogBox( ui_dspl_scr_info[3], ui_dspl_scr_info_countof[3], ui_dspl_scr3_cb, WM_HBKWIN, 0, 0 );

@@ -40,7 +40,7 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg )
                                 //case WM_NOTIFICATION_RELEASED:                  // React only if released
                                         if( Id == GUI_ID_SCR2_BUTTON_STRT )
                                         {
-                                                BSP_LED_Toggle( LED1 );
+                                                //BSP_LED_Toggle( LED1 );
                                                 hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR2_TEXT_TEMP );
                                                 TEXT_SetText( hItem, "*** —“¿–“ ***" );
                                                 //WM_Invalidate( hWin );
@@ -48,7 +48,7 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg )
 
                                         if( Id == GUI_ID_SCR2_BUTTON_CLR )
                                         {
-                                                BSP_LED_Toggle( LED2 );
+                                                //BSP_LED_Toggle( LED2 );
                                                 hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR2_TEXT_TEMP );
                                                 TEXT_SetText( hItem, "--- —¡–Œ— ---" );
                                                 //WM_Invalidate( hWin );

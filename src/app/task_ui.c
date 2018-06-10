@@ -83,9 +83,14 @@ void    task_ui(                        const   void *          argument )
 
         while( true )
         {
+                //BSP_LED_Toggle( LED1 );
+
+                BSP_LED_Off( LED1 );
                 GUI_Exec();
 
                 received        =   xQueueReceive( que_ui_hndl, &pipe, polling_cycle_tcks );
+
+                BSP_LED_On( LED1 );
 
                 if( received )
                 {

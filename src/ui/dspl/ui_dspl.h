@@ -11,21 +11,17 @@
 #define  UI_DSPL_H
 
 
-#define UI_DSPL_DFLT_FONT_BUTTON                GUI_FontTahoma40
-
-
-#define GUI_ID_SCR0_WINDOW                      (GUI_ID_USER + 0x000)
+#define GUI_ID_SCR0_WIN                         (GUI_ID_USER + 0x000)
 #define GUI_ID_SCR0_TXT_ZOOM                    (GUI_ID_USER + 0x010)
 #define GUI_ID_SCR0_TXT_SHFT                    (GUI_ID_USER + 0x011)
 #define GUI_ID_SCR0_TXT_SENS                    (GUI_ID_USER + 0x012)
 #define GUI_ID_SCR0_BTN_HEADER                  (GUI_ID_USER + 0x020)
 #define GUI_ID_SCR0_BTN_MODE                    (GUI_ID_USER + 0x021)
-#define GUI_ID_SCR0_BTN_ZOOM_I                  (GUI_ID_USER + 0x022)
-#define GUI_ID_SCR0_BTN_ZOOM_O                  (GUI_ID_USER + 0x023)
-#define GUI_ID_SCR0_BTN_SHFT_UP                 (GUI_ID_USER + 0x024)
-#define GUI_ID_SCR0_BTN_SHFT_DN                 (GUI_ID_USER + 0x025)
+#define GUI_ID_SCR0_BTN_ZOOM_LEFT               (GUI_ID_USER + 0x022)
+#define GUI_ID_SCR0_BTN_ZOOM_RGHT               (GUI_ID_USER + 0x023)
+#define GUI_ID_SCR0_BTN_SHFT_LEFT               (GUI_ID_USER + 0x024)
+#define GUI_ID_SCR0_BTN_SHFT_RGHT               (GUI_ID_USER + 0x025)
 #define GUI_ID_SCR0_GRAPH                       (GUI_ID_USER + 0x030)
-
 
 #define GUI_ID_SCR1_WINDOW                      (GUI_ID_USER + 0x100)
 #define GUI_ID_SCR1_TEXT_HEADER                 (GUI_ID_USER + 0x101)
@@ -97,6 +93,9 @@
 #define GUI_ID_BUTTON_NEXT                      (GUI_ID_USER + 0xF01)
 //#define GUI_ID_BUTTON_HEADER                    (GUI_ID_USER + 0xF02)
 
+#define UI_DSPL_DFLT_FONT_BUTTON                GUI_FontTahoma40
+
+
 #define UI_DSPL_SIZE_X                          800
 #define UI_DSPL_SIZE_Y                          480
 #define UI_DSPL_BAR_SIZE_X                      UI_DSPL_SIZE_X
@@ -104,11 +103,6 @@
 #define UI_DSPL_BAR_SIZE_Y                      80
 #define UI_DSPL_BAR_POS_X0                      0
 #define UI_DSPL_BAR_POS_Y0                      0
-
-//#define UI_DSPL_WIN_SIZE_X                      UI_DSPL_SIZE_X
-//#define UI_DSPL_WIN_SIZE_Y                      (UI_DSPL_SIZE_Y - UI_DSPL_BAR_SIZE_Y)
-//#define UI_DSPL_WIN_POS_X0                      0
-//#define UI_DSPL_WIN_POS_Y0                      (0 + UI_DSPL_BAR_SIZE_Y)
 
 #define UI_DSPL_WIN_SIZE_X                      UI_DSPL_SIZE_X
 #define UI_DSPL_WIN_SIZE_Y                      UI_DSPL_SIZE_Y
@@ -120,15 +114,11 @@
 
 #define UI_DSPL_HDR_BTN_SIZE_X                  150
 #define UI_DSPL_HDR_BTN_SIZE_Y                  UI_DSPL_BAR_SIZE_Y
-
-//#define UI_DSPL_HDR_TXT_SIZE_X                  (UI_DSPL_BAR_SIZE_X - (UI_DSPL_HDR_BTN_SIZE_X * 2))
 #define UI_DSPL_HDR_TXT_SIZE_X                  UI_DSPL_BAR_SIZE_X
 #define UI_DSPL_HDR_TXT_SIZE_Y                  UI_DSPL_BAR_SIZE_Y
-//#define UI_DSPL_HDR_COLOR_BCKGRND               GUI_DARKGRAY
 #define UI_DSPL_HDR_COLOR_BCKGRND               GUI_BLACK
 
 #define UI_DSPL_HDR_TXT_FONT                    GUI_FontTahoma60
-
 
 #define UI_DSPL_HDR_BTN_PREV_POS_X0             0
 #define UI_DSPL_HDR_BTN_PREV_POS_Y0             UI_DSPL_BAR_POS_Y0
@@ -141,18 +131,21 @@
 #define UI_DSPL_HDR_BTN_COLOR_BCKGRND           GUI_BLACK
 #define UI_DSPL_HDR_BTN_COLOR_FRAME             GUI_BLACK
 
-#define UI_DSPL_SCR0_GRAPH_VSIZE_Y              350
-//#define UI_DSPL_SCR0_GRAPH_VSIZE_MAX            (400 * 8)
-#define UI_DSPL_SCR0_GRAPH_VSIZE_STEP           ( 400 )
-
-//#define UI_DSPL_SCR0_GRAPH_VSIZE_X              2000
-#define UI_DSPL_GRAPH_XSIZE                     UI_DSPL_WIN_SIZE_X
+#define UI_DSPL_GRAPH_SIZE_X                    UI_DSPL_WIN_SIZE_X
+#define UI_DSPL_GRAPH_VSIZE_X                   (2 * UI_DSPL_GRAPH_SIZE_X)
+#define UI_DSPL_GRAPH_DATA_DIFF_X               (UI_DSPL_GRAPH_VSIZE_X - UI_DSPL_GRAPH_SIZE_X)
 
 
-#define UI_DSPL_GRAPH_DATA_Y_SHFT_STEP          50
-#define UI_DSPL_GRAPH_DATA_X_SHFT_STEP          50
-#define UI_DSPL_GRAPH_DATA_YSIZE_MAX            (UI_DSPL_WIN_SIZE_Y - UI_DSPL_BAR_SIZE_Y)
+#define UI_DSPL_GRAPH_SIZE_Y                    350
+#define UI_DSPL_GRAPH_DATA_SIZE_Y               (UI_DSPL_GRAPH_SIZE_Y - 15)
+
+#define UI_DSPL_GRAPH_DATA_SHFT_X_STEP          (UI_DSPL_GRAPH_SIZE_X / 4)
+#define UI_DSPL_GRAPH_DATA_SHFT_Y_STEP          100
+
+//#define UI_DSPL_GRAPH_DATA_YSIZE_MAX            (UI_DSPL_WIN_SIZE_Y - UI_DSPL_BAR_SIZE_Y)
+#define UI_DSPL_GRAPH_DATA_YSIZE_MAX            1000
 #define UI_DSPL_GRAPH_DATA_YSIZE_MIN            (-UI_DSPL_GRAPH_DATA_YSIZE_MAX)
+
 #define UI_DSPL_GRAPH_DATA_SCALE                1
 
 #define UI_DSPL_SCR0_GRAPH_DATA_ZOOM_STEP       2
@@ -186,20 +179,14 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr1_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr0_cb(                        WM_MESSAGE *            pMsg );
 
-/*
-void    ui_dspl_scr0_update(                    int16_t *               data,
-                                                size_t                  size );
-*/
 void    ui_dspl_scr1_update(                    float *         data,
                                                 size_t          size );
 
 void    ui_dspl_scr0_update(                    float *         data,
                                                 size_t          size );
 
-//WM_HWIN ui_dspl_scr3_init(                      WM_CALLBACK *           cb );
 WM_HWIN ui_dspl_scr2_init(                      WM_CALLBACK *           cb );
 WM_HWIN ui_dspl_scr1_init(                      WM_CALLBACK *           cb );
-//WM_HWIN ui_dspl_scr0_init(                      WM_CALLBACK *           cb );
 
 void    ui_dspl_scr0_toggle(                    WM_HWIN                 hWin,
                                                 int                     idx );
