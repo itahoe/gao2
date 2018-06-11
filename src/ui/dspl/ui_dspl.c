@@ -17,7 +17,7 @@ void    MainTaskLoop( void );
 
 
 #define UI_DSPL_SCRN_IDX_MIN    0
-#define UI_DSPL_SCRN_IDX_MAX    5
+#define UI_DSPL_SCRN_IDX_MAX    4
 
 static  int             curr_scrn_idx           =   0;
 
