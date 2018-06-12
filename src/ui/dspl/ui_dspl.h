@@ -33,15 +33,15 @@
 #define GUI_ID_SCR1_BUTTON_ZOOMOUT              (GUI_ID_USER + 0x107)
 #define GUI_ID_SCR1_BUTTON_ZOOMIN               (GUI_ID_USER + 0x108)
 
-#define GUI_ID_SCR2_WINDOW                      (GUI_ID_USER + 0x200)
-#define GUI_ID_SCR2_TEXT_HEADER                 (GUI_ID_USER + 0x201)
-#define GUI_ID_SCR2_TEXT_TEMP                   (GUI_ID_USER + 0x202)
-#define GUI_ID_SCR2_BUTTON_RWND                 (GUI_ID_USER + 0x203)
-#define GUI_ID_SCR2_BUTTON_FWRD                 (GUI_ID_USER + 0x204)
-#define GUI_ID_SCR2_BUTTON_FRST                 (GUI_ID_USER + 0x205)
-#define GUI_ID_SCR2_BUTTON_LAST                 (GUI_ID_USER + 0x206)
-#define GUI_ID_SCR2_BUTTON_STRT                 (GUI_ID_USER + 0x207)
-#define GUI_ID_SCR2_BUTTON_CLR                  (GUI_ID_USER + 0x208)
+#define GUI_ID_SCR2_WIN                         (GUI_ID_USER + 0x200)
+#define GUI_ID_SCR2_TXT_HEADER                  (GUI_ID_USER + 0x210)
+#define GUI_ID_SCR2_TXT_SHFT                    (GUI_ID_USER + 0x211)
+#define GUI_ID_SCR2_BTN_SHFT_LEFT               (GUI_ID_USER + 0x220)
+#define GUI_ID_SCR2_BTN_SHFT_RGHT               (GUI_ID_USER + 0x221)
+#define GUI_ID_SCR2_BTN_SAVE                    (GUI_ID_USER + 0x222)
+#define GUI_ID_SCR2_GRAPH                       (GUI_ID_USER + 0x230)
+
+
 
 #define GUI_ID_SCR3_WINDOW                      (GUI_ID_USER + 0x300)
 #define GUI_ID_SCR3_1_WINDOW                    (GUI_ID_USER + 0x301)
@@ -118,7 +118,7 @@
 #define UI_DSPL_HDR_TXT_SIZE_Y                  UI_DSPL_BAR_SIZE_Y
 #define UI_DSPL_HDR_COLOR_BCKGRND               GUI_BLACK
 
-#define UI_DSPL_HDR_TXT_FONT                    GUI_FontTahoma60
+#define UI_DSPL_HEADER_FONT                     GUI_FontTahoma60
 
 #define UI_DSPL_HDR_BTN_PREV_POS_X0             0
 #define UI_DSPL_HDR_BTN_PREV_POS_Y0             UI_DSPL_BAR_POS_Y0
@@ -150,6 +150,9 @@
 
 #define UI_DSPL_SCR0_GRAPH_DATA_ZOOM_STEP       2
 #define UI_DSPL_SCR0_GRAPH_DATA_ZOOM_MAX        8
+
+// SCR2
+#define UI_DSPL_GRPH2_Y_SHFT_STEP               10
 
 
 typedef enum    graph_ctl_mode_e

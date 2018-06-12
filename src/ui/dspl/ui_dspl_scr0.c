@@ -209,11 +209,12 @@ void    graph_shft_left(                        scr_t *         scr,
         switch( graph->mode )
         {
                 case GRAPH_CTL_MODE_H:
-                        graph->shftY    +=  UI_DSPL_GRAPH_DATA_SHFT_Y_STEP;
 
-                        if( graph->shftY >=  UI_DSPL_GRAPH_DATA_YSIZE_MAX )
+                        graph->shftY    -=  UI_DSPL_GRAPH_DATA_SHFT_Y_STEP;
+
+                        if( graph->shftY <=  UI_DSPL_GRAPH_DATA_YSIZE_MIN )
                         {
-                                graph->shftY        =   UI_DSPL_GRAPH_DATA_YSIZE_MAX;
+                                graph->shftY    =   UI_DSPL_GRAPH_DATA_YSIZE_MIN;
                         }
 
                         GRAPH_DATA_YT_SetOffY( hGraphData, graph->shftY );
@@ -223,11 +224,13 @@ void    graph_shft_left(                        scr_t *         scr,
 
                 case GRAPH_CTL_MODE_V:
 
-                        graph->shftX    +=  UI_DSPL_GRAPH_DATA_SHFT_X_STEP;
-
-                        if( graph->shftX > UI_DSPL_GRAPH_DATA_DIFF_X )
+                        if( graph->shftX > UI_DSPL_GRAPH_DATA_SHFT_X_STEP )
                         {
-                                graph->shftX    =   UI_DSPL_GRAPH_DATA_DIFF_X;
+                                graph->shftX    -=  UI_DSPL_GRAPH_DATA_SHFT_X_STEP;
+                        }
+                        else
+                        {
+                                graph->shftX    =   0;
                         }
 
                         text_shft_update( hText, graph->shftX );
@@ -253,12 +256,11 @@ void    graph_shft_rght(                        scr_t *         scr,
         switch( graph->mode )
         {
                 case GRAPH_CTL_MODE_H:
+                        graph->shftY    +=  UI_DSPL_GRAPH_DATA_SHFT_Y_STEP;
 
-                        graph->shftY    -=  UI_DSPL_GRAPH_DATA_SHFT_Y_STEP;
-
-                        if( graph->shftY <=  UI_DSPL_GRAPH_DATA_YSIZE_MIN )
+                        if( graph->shftY >=  UI_DSPL_GRAPH_DATA_YSIZE_MAX )
                         {
-                                graph->shftY    =   UI_DSPL_GRAPH_DATA_YSIZE_MIN;
+                                graph->shftY        =   UI_DSPL_GRAPH_DATA_YSIZE_MAX;
                         }
 
                         GRAPH_DATA_YT_SetOffY( hGraphData, graph->shftY );
@@ -268,13 +270,11 @@ void    graph_shft_rght(                        scr_t *         scr,
 
                 case GRAPH_CTL_MODE_V:
 
-                        if( graph->shftX > UI_DSPL_GRAPH_DATA_SHFT_X_STEP )
+                        graph->shftX    +=  UI_DSPL_GRAPH_DATA_SHFT_X_STEP;
+
+                        if( graph->shftX > UI_DSPL_GRAPH_DATA_DIFF_X )
                         {
-                                graph->shftX    -=  UI_DSPL_GRAPH_DATA_SHFT_X_STEP;
-                        }
-                        else
-                        {
-                                graph->shftX    =   0;
+                                graph->shftX    =   UI_DSPL_GRAPH_DATA_DIFF_X;
                         }
 
                         text_shft_update( hText, graph->shftX );
@@ -405,8 +405,6 @@ void    ui_dspl_scr0_update(                    float *         data,
 void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
 {
         WM_HWIN         hItem;
-        WM_HWIN         hTextShft;
-        WM_HWIN         hTextZoom;
         int             NCode;
         int             Id;
 
@@ -459,26 +457,27 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
                         hWin    =   pMsg->hWin;
                         WINDOW_SetBkColor( hWin, GUI_BLACK );
 
-                        hItem           =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_BTN_HEADER );
-                        BUTTON_SetFont( hItem, &UI_DSPL_HDR_TXT_FONT );
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_BTN_HEADER );
+                        BUTTON_SetFont( hItem, &UI_DSPL_HEADER_FONT );
 
-                        hItem           =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_TXT_SENS );
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_TXT_SHFT );
+                        TEXT_SetFont( hItem, &UI_DSPL_DFLT_FONT_BUTTON );
+                        text_shft_update( hItem, 0 );
+
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_TXT_ZOOM );
+                        TEXT_SetFont( hItem, &UI_DSPL_DFLT_FONT_BUTTON );
+                        text_zoom_update( hItem, scr0.graph.zoom );
+
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_GRAPH );
+                        graph_init( hItem, GUI_ID_SCR0_GRAPH );
+                        graph_redraw( &graph_data, &scr0 );
+
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_TXT_SENS );
                         TEXT_SetBkColor(        hItem, UI_DSPL_HDR_COLOR_BCKGRND );
                         TEXT_SetTextColor(      hItem, GUI_GREEN                );
                         TEXT_SetFont(           hItem, &GUI_FontTahoma255       );
                         WM_HideWindow( hItem );
 
-                        hTextZoom       =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_TXT_ZOOM );
-                        TEXT_SetFont( hTextZoom, &UI_DSPL_DFLT_FONT_BUTTON );
-                        text_zoom_update( hTextZoom, scr0.graph.zoom );
-
-                        hTextShft       =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_TXT_SHFT );
-                        TEXT_SetFont( hTextShft, &UI_DSPL_DFLT_FONT_BUTTON );
-                        text_shft_update( hTextShft, 0 );
-
-                        hItem           =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_GRAPH );
-                        graph_init( hItem, GUI_ID_SCR0_GRAPH );
-                        graph_redraw( &graph_data, &scr0 );
                         break;
 
                 default:

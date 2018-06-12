@@ -8,28 +8,157 @@
 #include "app.h"
 #include "DIALOG.h"
 #include "ui_dspl.h"
+#include "fifo.h"
+
+
+static  WM_HWIN                 hWin;
+static  GRAPH_DATA_Handle       hGraphData;
+static  GRAPH_SCALE_Handle      hGraphScaleV;   // Handle of vertical scale
+
+static  int16_t                 graph_data_buf[ UI_DSPL_GRAPH_SIZE_X ];
+
+static  scr_t                   scr2        = { .graph.shftX    = UI_DSPL_GRAPH_DATA_DIFF_X,
+                                                .graph.zoom     = 1,
+                                                .idx_max        = 2, };
+
+static  fifo16_t                graph_data  = { .data           =   graph_data_buf,
+                                                .size           =   sizeof(graph_data_buf)/sizeof(graph_data_buf[0]),
+                                                .tile           =   0,
+                                                .head           =   0, };
+
+
+
+static
+void    graph_user_draw(                const   WM_HWIN         hWin,
+                                        const   int             Stage   )
+{
+        if( Stage == GRAPH_DRAW_LAST )
+        {
+                GUI_SetColor( GUI_GRAY );
+                GUI_DrawLine( UI_DSPL_GRAPH_SIZE_X/2, 0, UI_DSPL_GRAPH_SIZE_X/2, UI_DSPL_WIN_SIZE_Y );
+        }
+}
+
+
+static
+void    graph_redraw(                           fifo16_t *      data,
+                                       const    scr_t *         scr     )
+{
+        const   scr_graph_t *   p               = &( scr->graph );
+                int16_t         sample;
+
+
+        fifo16_ofst_tile( data, p->shftX );
+
+        for( int i = 0; i < UI_DSPL_GRAPH_SIZE_X; i++ )
+        {
+                sample  =   fifo16_get( data );
+                GRAPH_DATA_YT_AddValue( hGraphData, sample * p->zoom );
+        }
+
+}
+
+
+static
+void    graph_init(                     const   WM_HWIN         hWin,
+                                                int             id      )
+{
+        WM_HWIN         hGraph;
+        int             x0      =   UI_DSPL_WIN_POS_X0;
+        int             y0      =   UI_DSPL_WIN_POS_Y0;
+        int             sizeX   =   UI_DSPL_GRAPH_SIZE_X;
+        int             sizeY   =   UI_DSPL_GRAPH_SIZE_Y;
+
+
+        hGraph          =   GRAPH_CreateEx( x0, y0, sizeX, sizeY, hWin, UI_DSPL_WIN_STYLE, 0, id );
+        GRAPH_SetColor(         hGraph, GUI_BLACK,      GRAPH_CI_BK     );
+        GRAPH_SetColor(         hGraph, GUI_BLACK,      GRAPH_CI_BORDER );
+        GRAPH_SetColor(         hGraph, GUI_BLACK,      GRAPH_CI_FRAME  );
+        GRAPH_SetColor(         hGraph, GUI_DARKGRAY,   GRAPH_CI_GRID   );
+
+        // Add graphs
+        hGraphData      =   GRAPH_DATA_YT_Create( GUI_GREEN, UI_DSPL_GRAPH_SIZE_X, 0, 0);
+        GRAPH_DATA_YT_SetAlign( hGraphData, GRAPH_ALIGN_LEFT );
+        GRAPH_AttachData(       hGraph, hGraphData );
+
+        // Set graph attributes
+        GRAPH_SetGridDistY(     hGraph,  50 );
+        GRAPH_SetGridDistX(     hGraph, 100 );
+        GRAPH_SetGridVis(       hGraph,   1 );
+        //GRAPH_SetGridFixedX( hItem, 1 );
+        GRAPH_SetLineStyleV(    hGraph, GUI_LS_DASH );
+        GRAPH_SetUserDraw(      hGraph, graph_user_draw );
+
+        // Create and add vertical scale
+        hGraphScaleV    =   GRAPH_SCALE_Create( 30, GUI_TA_RIGHT, GRAPH_SCALE_CF_VERTICAL, 100 );
+        GRAPH_SCALE_SetFont(            hGraphScaleV,   &GUI_FontTahoma20   );
+        GRAPH_SCALE_SetTextColor(       hGraphScaleV,   GUI_DARKGREEN       );
+        GRAPH_AttachScale(              hGraph,         hGraphScaleV        );
+}
+
+
+static
+void    text_shft_update(               const   WM_HWIN         hText,
+                                                int             i       )
+{
+        char            str[8];
+
+        snprintf( str, sizeof(str), "%d", i );
+        TEXT_SetText( hText, str );
+}
+
+
+static
+void    graph_shft_left(                        scr_t *         scr,
+                                                fifo16_t *      data    )
+{
+        const   WM_HWIN         hGraph  = WM_GetDialogItem( hWin, GUI_ID_SCR2_GRAPH     );
+        const   WM_HWIN         hText   = WM_GetDialogItem( hWin, GUI_ID_SCR2_TXT_SHFT  );
+                scr_graph_t *   graph   = &( scr->graph );
+
+
+        graph->shftY    -=  UI_DSPL_GRPH2_Y_SHFT_STEP;
+
+        if( graph->shftY <=  UI_DSPL_GRAPH_DATA_YSIZE_MIN )
+        {
+                graph->shftY    =   UI_DSPL_GRAPH_DATA_YSIZE_MIN;
+        }
+
+        GRAPH_DATA_YT_SetOffY( hGraphData, graph->shftY );
+        text_shft_update( hText, graph->shftY );
+
+}
+
+
+static
+void    graph_shft_rght(                        scr_t *         scr,
+                                                fifo16_t *      data    )
+{
+        const   WM_HWIN         hGraph  = WM_GetDialogItem( hWin, GUI_ID_SCR2_GRAPH     );
+        const   WM_HWIN         hText   = WM_GetDialogItem( hWin, GUI_ID_SCR2_TXT_SHFT  );
+                scr_graph_t *   graph   = &( scr->graph );
+
+
+        graph->shftY    +=  UI_DSPL_GRPH2_Y_SHFT_STEP;
+        if( graph->shftY >=  UI_DSPL_GRAPH_DATA_YSIZE_MAX )
+        {
+                graph->shftY        =   UI_DSPL_GRAPH_DATA_YSIZE_MAX;
+        }
+
+        GRAPH_DATA_YT_SetOffY( hGraphData, graph->shftY );
+        text_shft_update( hText, graph->shftY );
+}
 
 
 void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg )
 {
-        WM_HWIN         hWin;
         WM_HWIN         hItem;
         int             NCode;
         int             Id;
 
 
-        hWin    =   pMsg->hWin;
-
-        //APP_TRACE_EMWIN( "ui_dspl_scr2_cb()\t", pMsg->MsgId );
-
         switch( pMsg->MsgId )
         {
-/*
-                case WM_PAINT:
-                        GUI_SetBkColor( GUI_BLACK );
-                        GUI_Clear();
-                        break;
-*/
                 case WM_NOTIFY_PARENT:
                         Id      =   WM_GetId( pMsg->hWinSrc );                  // Id of widget
                         NCode   =   pMsg->Data.v;                               // Notification code
@@ -37,56 +166,33 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg )
                         {
 
                                 case WM_NOTIFICATION_CLICKED:
-                                //case WM_NOTIFICATION_RELEASED:                  // React only if released
-                                        if( Id == GUI_ID_SCR2_BUTTON_STRT )
+                                        if( Id == GUI_ID_SCR2_BTN_SHFT_LEFT )
                                         {
-                                                //BSP_LED_Toggle( LED1 );
-                                                hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR2_TEXT_TEMP );
-                                                TEXT_SetText( hItem, "*** ÑÒÀÐÒ ***" );
-                                                //WM_Invalidate( hWin );
+                                                graph_shft_left( &scr2, &graph_data );
                                         }
 
-                                        if( Id == GUI_ID_SCR2_BUTTON_CLR )
+                                        if( Id == GUI_ID_SCR2_BTN_SHFT_RGHT )
                                         {
-                                                //BSP_LED_Toggle( LED2 );
-                                                hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR2_TEXT_TEMP );
-                                                TEXT_SetText( hItem, "--- ÑÁÐÎÑ ---" );
-                                                //WM_Invalidate( hWin );
+                                                graph_shft_rght( &scr2, &graph_data );
                                         }
                                         break;
                         };
-
-                        //WM_DefaultProc(pMsg);
-
                         break;
 
                 case WM_INIT_DIALOG:
-                        hItem   =   pMsg->hWin;
-                        WINDOW_SetBkColor( hItem, GUI_BLACK );
+                        hWin    =   pMsg->hWin;
+                        WINDOW_SetBkColor( hWin, GUI_BLACK );
 
-                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR2_TEXT_HEADER );
-                        TEXT_SetBkColor( hItem, UI_DSPL_HDR_COLOR_BCKGRND );
-                        TEXT_SetFont( hItem, &UI_DSPL_HDR_TXT_FONT );
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR2_TXT_HEADER );
+                        TEXT_SetFont( hItem, &UI_DSPL_HEADER_FONT );
 
-                        //GUI_MEMDEV_Select( hItem );
-                        //GUI_SetBkColor( GUI_TRANSPARENT );
-                        //GUI_Clear();
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR2_TXT_SHFT );
+                        TEXT_SetFont( hItem, &UI_DSPL_DFLT_FONT_BUTTON );
+                        text_shft_update( hItem, 0 );
 
-                        //hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR2_GRAPH );
-                        //ui_dspl_scr0_add_graph( hItem, GUI_ID_SCR0_GRAPH );
-
-                        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR2_BUTTON_STRT );
-                        //BUTTON_SetFocusColor( hItem, GUI_YELLOW );
-                        BUTTON_SetFocusable( hItem, 0 );
-
-                        hItem   =   WM_GetDialogItem( hWin, GUI_ID_SCR2_BUTTON_CLR );
-                        //BUTTON_SetFocusColor( hItem, GUI_YELLOW );
-                        BUTTON_SetFocusable( hItem, 0 );
-
-                        //BUTTON_SetBkColor(      hItem, BUTTON_CI_UNPRESSED,  GUI_DARKGRAY );
-                        //BUTTON_SetBkColor(      hItem, BUTTON_CI_PRESSED,    GUI_GRAY );
-                        //BUTTON_SetBkColor(      hItem, BUTTON_CI_DISABLED,   GUI_BLACK );
-                        //BUTTON_SetFrameColor(   hItem, GUI_YELLOW );
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR2_GRAPH );
+                        graph_init( hItem, GUI_ID_SCR2_GRAPH );
+                        graph_redraw( &graph_data, &scr2 );
 
                         break;
 

@@ -139,7 +139,7 @@ void    ui_dspl_scr1_cb(                        WM_MESSAGE *            pMsg )
 
                         hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR1_TEXT_HEADER );
                         TEXT_SetBkColor( hItem, UI_DSPL_HDR_COLOR_BCKGRND );
-                        TEXT_SetFont( hItem, &UI_DSPL_HDR_TXT_FONT );
+                        TEXT_SetFont( hItem, &UI_DSPL_HEADER_FONT );
 
                         hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR1_GRAPH );
                         ui_dspl_scr1_add_graph( hItem, GUI_ID_SCR1_GRAPH );

@@ -74,7 +74,7 @@ void    task_storage(                   const   void *          argument )
                         case APP_PIPE_TAG_SENS_01_DATA:
                                 //if( storage_enabled( &strg_01 ) )
                                 {
-                                        //storage_write( &strg_01, pipe.data, pipe.cnt );
+                                        storage_write( &strg_01, pipe.data, pipe.cnt );
                                 }
                                 break;
 

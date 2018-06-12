@@ -448,7 +448,7 @@ void    ui_dspl_scr3_cb(                        WM_MESSAGE *            pMsg )
 
                         hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR3_TEXT_HEADER );
                         TEXT_SetBkColor( hItem, UI_DSPL_HDR_COLOR_BCKGRND );
-                        TEXT_SetFont( hItem, &UI_DSPL_HDR_TXT_FONT );
+                        TEXT_SetFont( hItem, &UI_DSPL_HEADER_FONT );
 
                         BUTTON_SetTextAlign( WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_CFG_CH1 ), TEXT_CF_LEFT | TEXT_CF_VCENTER );
                         BUTTON_SetTextAlign( WM_GetDialogItem( hWin, GUI_ID_SCR3_BUTTON_CFG_CH2 ), TEXT_CF_LEFT | TEXT_CF_VCENTER );
