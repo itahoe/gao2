@@ -100,9 +100,8 @@ void    task_ui(                        const   void *          argument )
                                         //if( pipe.size < CONF_SER4_RECV_BLCK_SIZE_OCT )
                                         if( pipe.cnt < 1024 )
                                         {
-                                                //APP_TRACE( "UI %08X\n", *( (uint32_t *) pipe.data) );
                                                 ui_dspl_scr0_update( (float *) pipe.data, pipe.cnt );
-                                                //ui_dspl_scr1_update( (float *) pipe.data, pipe.cnt );
+                                                ui_dspl_scr2_update( (float *) pipe.data, pipe.cnt );
                                         }
                                         else
                                         {

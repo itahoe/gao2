@@ -173,14 +173,6 @@ int main( void )
 
         BSP_Config();           //Initialize LCD and LEDs
 
-/*
-        BSP_LED_On( LED1 );
-        BSP_LED_On( LED2 );
-        for( uint32_t i = 0x00FFFFFF; i>0; i-- );
-        BSP_LED_Off( LED1 );
-        BSP_LED_Off( LED2 );
-*/
-
         app_rtc_init();
 
         //HAL_InitTick( 0xFF );

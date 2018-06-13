@@ -29,41 +29,40 @@ static GUI_WIDGET_CREATE_INFO ui_dspl_scr0_info[] =
     { WINDOW_CreateIndirect,    "scr0",         GUI_ID_SCR0_WIN,              0,      0,    800,    480,      0,      0x0,    0 },
     { BUTTON_CreateIndirect,    "",             GUI_ID_SCR0_BTN_HEADER,     150,      0,    500,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
     { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_SENS,         0,     80,    800,    400,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR0_GRAPH,            0,     80,    UI_DSPL_GRAPH_SIZE_X,    UI_DSPL_GRAPH_SIZE_Y},
-    { BUTTON_CreateIndirect,    "\xA2",         GUI_ID_SCR0_BTN_SHFT_LEFT,    0,    430,    100,     50,      0,      0x0,    0 },
-    { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_SHFT,       100,    430,    100,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "\xA1",         GUI_ID_SCR0_BTN_SHFT_RGHT,  200,    430,    100,     50,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "\xAD",         GUI_ID_SCR0_BTN_MODE,       350,    430,    100,     50,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BTN_ZOOM_LEFT,  500,    430,    100,     50,      0,      0x0,    0 },
-    { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_ZOOM,       600,    430,    100,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BTN_ZOOM_RGHT,  700,    430,    100,     50,      0,      0x0,    0 },
+    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR0_GRAPH,            0,     80,    UI_DSPL_GRAPH_SIZE_X, UI_DSPL_GRAPH_SIZE_Y},
+    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BTN_ZOOM_LEFT,    0,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xAD  1",      GUI_ID_SCR0_BTN_ZOOM_MODE,  100,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR0_BTN_ZOOM_RGHT,  200,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xAE",         GUI_ID_SCR0_BTN_SHFT_LEFT,  500,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "0",            GUI_ID_SCR0_BTN_SHFT_MODE,  600,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xAF",         GUI_ID_SCR0_BTN_SHFT_RGHT,  700,    430,    100,     50,      0,      0x0,    0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO ui_dspl_scr1_info[] =
 {
-    { WINDOW_CreateIndirect,    "scr1",         GUI_ID_SCR1_WINDOW,         800,      0,    800,    480,      0,      0x0,    0 },
-    { TEXT_CreateIndirect,      "–≈√»—“–¿“Œ–",  GUI_ID_SCR1_TEXT_HEADER,      0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR1_GRAPH,            0,     80,    800,    400 },
-    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR1_BUTTON_ZOOMOUT,  70,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR1_BUTTON_ZOOMIN,  130,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "I<",           GUI_ID_SCR1_BUTTON_FRST,    250,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "<<",           GUI_ID_SCR1_BUTTON_RWND,    330,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    ">>",           GUI_ID_SCR1_BUTTON_FWRD,    410,    410,     60,     60,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    ">I",           GUI_ID_SCR1_BUTTON_LAST,    490,    410,     60,     60,      0,      0x0,    0 },
+    { WINDOW_CreateIndirect,    "scr1",         GUI_ID_SCR1_WIN,            800,      0,    800,    480,      0,      0x0,    0 },
+    { TEXT_CreateIndirect,      "–≈√»—“–¿“Œ–",  GUI_ID_SCR1_TXT_HEADER,       0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR1_GRAPH,            0,     80,    UI_DSPL_GRAPH_SIZE_X, UI_DSPL_GRAPH_SIZE_Y },
+    { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR1_BTN_ZOOM_LEFT,    0,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xAD 1",       GUI_ID_SCR1_BTN_ZOOM_MODE,  100,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "+",            GUI_ID_SCR1_BTN_ZOOM_RGHT,  200,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "<",            GUI_ID_SCR1_BTN_PREV,       300,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    ">",            GUI_ID_SCR1_BTN_NEXT,       400,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA2",         GUI_ID_SCR1_BTN_SHFT_LEFT,  500,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "0",            GUI_ID_SCR1_BTN_SHFT_MODE,  600,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA1",         GUI_ID_SCR1_BTN_SHFT_RGHT,  700,    430,    100,     50,      0,      0x0,    0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO ui_dspl_scr2_info[] =
 {
     { WINDOW_CreateIndirect,    "scr2",         GUI_ID_SCR2_WIN,            800,      0,    800,    480,      0,      0x0,    0 },
     { TEXT_CreateIndirect,      " ¿À»¡–Œ¬ ¿",   GUI_ID_SCR2_TXT_HEADER,       0,      0,    800,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "Õ¿◊¿“‹",       GUI_ID_SCR2_BUTTON_STRT,    600,    250,    200,     50,      0,      0x0,    0 },
-    //{ BUTTON_CreateIndirect,    "—¡–Œ—",        GUI_ID_SCR2_BUTTON_CLR,     600,    350,    200,     50,      0,      0x0,    0 },
-    //{ TEXT_CreateIndirect,      "*********",    GUI_ID_SCR2_TEXT_TEMP,      100,    200,    600,    100,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR2_GRAPH,            0,     80,    UI_DSPL_GRAPH_SIZE_X,    UI_DSPL_GRAPH_SIZE_Y},
-    { BUTTON_CreateIndirect,    "\xA2",         GUI_ID_SCR2_BTN_SHFT_LEFT,    0,    430,    100,     50,      0,      0x0,    0 },
-    { TEXT_CreateIndirect,      "",             GUI_ID_SCR2_TXT_SHFT,       100,    430,    100,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "\xA1",         GUI_ID_SCR2_BTN_SHFT_RGHT,  200,    430,    100,     50,      0,      0x0,    0 },
+    { GRAPH_CreateIndirect,     0,              GUI_ID_SCR2_GRAPH,            0,     80,    UI_DSPL_GRAPH_SIZE_X, UI_DSPL_GRAPH_SIZE_Y },
     { BUTTON_CreateIndirect,    "Œ ",           GUI_ID_SCR2_BTN_SAVE,       350,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA2",         GUI_ID_SCR2_BTN_SHFT_LEFT,  500,    430,    100,     50,      0,      0x0,    0 },
+    { TEXT_CreateIndirect,      "0",            GUI_ID_SCR2_TXT_SHFT_MODE,  600,    430,    100,     50,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    //{ BUTTON_CreateIndirect,    "0",            GUI_ID_SCR2_BTN_SHFT_MODE,  600,    430,    100,     50,      0,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "\xA1",         GUI_ID_SCR2_BTN_SHFT_RGHT,  700,    430,    100,     50,      0,      0x0,    0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO ui_dspl_scr3_info[] =
@@ -399,3 +398,52 @@ void    ui_dspl_init( void )
         ui_dspl_header_buttons_init();
 }
 
+/*
+void    btn_zoom_mode(                  const   WM_HWIN         hButton,
+                                                scr_t *         scr     )
+{
+
+}
+*/
+/*
+void    ui_dspl_btn_num_update(         const   WM_HWIN         hButton,
+                                                int             i       )
+{
+                char            str[8];
+
+        snprintf( str, sizeof(str), "%d", i );
+        BUTTON_SetText( hButton, str );
+}
+*/
+/*
+void    ui_dspl_btn_shft_mode_next(             scr_t *         scr     )
+{
+        scr_graph_t *   graph           = &( scr->graph );
+
+
+        graph->mode++;
+
+        if( graph->mode >= GRAPH_CTL_MODE_LAST )
+        {
+                graph->mode     =   GRAPH_CTL_MODE_FRST;
+        }
+
+        switch( graph->mode )
+        {
+                case GRAPH_CTL_MODE_H:
+                        BUTTON_SetText( scr->hBtnShftLeft,  "\xA2" );
+                        BUTTON_SetText( scr->hBtnShftRgth,  "\xA1" );
+                        ui_dspl_btn_num_update( scr->hBtnShftMode, graph->shftY );
+                        break;
+
+                case GRAPH_CTL_MODE_V:
+                        BUTTON_SetText( scr->hBtnShftLeft,  "\xAE" );
+                        BUTTON_SetText( scr->hBtnShftRgth,  "\xAF" );
+                        ui_dspl_btn_num_update( scr->hBtnShftMode, graph->shftX );
+                        break;
+
+                default:
+                        break;
+        }
+}
+*/

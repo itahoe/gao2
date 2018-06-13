@@ -12,36 +12,39 @@
 
 
 #define GUI_ID_SCR0_WIN                         (GUI_ID_USER + 0x000)
-#define GUI_ID_SCR0_TXT_ZOOM                    (GUI_ID_USER + 0x010)
-#define GUI_ID_SCR0_TXT_SHFT                    (GUI_ID_USER + 0x011)
 #define GUI_ID_SCR0_TXT_SENS                    (GUI_ID_USER + 0x012)
 #define GUI_ID_SCR0_BTN_HEADER                  (GUI_ID_USER + 0x020)
-#define GUI_ID_SCR0_BTN_MODE                    (GUI_ID_USER + 0x021)
-#define GUI_ID_SCR0_BTN_ZOOM_LEFT               (GUI_ID_USER + 0x022)
-#define GUI_ID_SCR0_BTN_ZOOM_RGHT               (GUI_ID_USER + 0x023)
-#define GUI_ID_SCR0_BTN_SHFT_LEFT               (GUI_ID_USER + 0x024)
-#define GUI_ID_SCR0_BTN_SHFT_RGHT               (GUI_ID_USER + 0x025)
+#define GUI_ID_SCR0_BTN_SHFT_LEFT               (GUI_ID_USER + 0x021)
+#define GUI_ID_SCR0_BTN_SHFT_RGHT               (GUI_ID_USER + 0x022)
+#define GUI_ID_SCR0_BTN_SHFT_MODE               (GUI_ID_USER + 0x023)
+#define GUI_ID_SCR0_BTN_ZOOM_LEFT               (GUI_ID_USER + 0x024)
+#define GUI_ID_SCR0_BTN_ZOOM_RGHT               (GUI_ID_USER + 0x025)
+#define GUI_ID_SCR0_BTN_ZOOM_MODE               (GUI_ID_USER + 0x026)
 #define GUI_ID_SCR0_GRAPH                       (GUI_ID_USER + 0x030)
 
-#define GUI_ID_SCR1_WINDOW                      (GUI_ID_USER + 0x100)
-#define GUI_ID_SCR1_TEXT_HEADER                 (GUI_ID_USER + 0x101)
-#define GUI_ID_SCR1_GRAPH                       (GUI_ID_USER + 0x102)
-#define GUI_ID_SCR1_BUTTON_RWND                 (GUI_ID_USER + 0x103)
-#define GUI_ID_SCR1_BUTTON_FWRD                 (GUI_ID_USER + 0x104)
-#define GUI_ID_SCR1_BUTTON_FRST                 (GUI_ID_USER + 0x105)
-#define GUI_ID_SCR1_BUTTON_LAST                 (GUI_ID_USER + 0x106)
-#define GUI_ID_SCR1_BUTTON_ZOOMOUT              (GUI_ID_USER + 0x107)
-#define GUI_ID_SCR1_BUTTON_ZOOMIN               (GUI_ID_USER + 0x108)
+#define GUI_ID_SCR1_WIN                         (GUI_ID_USER + 0x100)
+#define GUI_ID_SCR1_TXT_HEADER                  (GUI_ID_USER + 0x110)
+#define GUI_ID_SCR1_BTN_ZOOM_LEFT               (GUI_ID_USER + 0x120)
+#define GUI_ID_SCR1_BTN_ZOOM_RGHT               (GUI_ID_USER + 0x121)
+#define GUI_ID_SCR1_BTN_ZOOM_MODE               (GUI_ID_USER + 0x122)
+#define GUI_ID_SCR1_BTN_SHFT_LEFT               (GUI_ID_USER + 0x123)
+#define GUI_ID_SCR1_BTN_SHFT_RGHT               (GUI_ID_USER + 0x124)
+#define GUI_ID_SCR1_BTN_SHFT_MODE               (GUI_ID_USER + 0x125)
+#define GUI_ID_SCR1_BTN_PREV                    (GUI_ID_USER + 0x126)
+#define GUI_ID_SCR1_BTN_NEXT                    (GUI_ID_USER + 0x127)
+#define GUI_ID_SCR1_GRAPH                       (GUI_ID_USER + 0x130)
 
 #define GUI_ID_SCR2_WIN                         (GUI_ID_USER + 0x200)
 #define GUI_ID_SCR2_TXT_HEADER                  (GUI_ID_USER + 0x210)
-#define GUI_ID_SCR2_TXT_SHFT                    (GUI_ID_USER + 0x211)
-#define GUI_ID_SCR2_BTN_SHFT_LEFT               (GUI_ID_USER + 0x220)
-#define GUI_ID_SCR2_BTN_SHFT_RGHT               (GUI_ID_USER + 0x221)
-#define GUI_ID_SCR2_BTN_SAVE                    (GUI_ID_USER + 0x222)
+#define GUI_ID_SCR2_TXT_SHFT_MODE               (GUI_ID_USER + 0x211)
+#define GUI_ID_SCR2_BTN_ZOOM_LEFT               (GUI_ID_USER + 0x220)
+#define GUI_ID_SCR2_BTN_ZOOM_RGHT               (GUI_ID_USER + 0x221)
+#define GUI_ID_SCR2_BTN_ZOOM_MODE               (GUI_ID_USER + 0x222)
+#define GUI_ID_SCR2_BTN_SHFT_LEFT               (GUI_ID_USER + 0x223)
+#define GUI_ID_SCR2_BTN_SHFT_RGHT               (GUI_ID_USER + 0x224)
+#define GUI_ID_SCR2_BTN_SHFT_MODE               (GUI_ID_USER + 0x225)
+#define GUI_ID_SCR2_BTN_SAVE                    (GUI_ID_USER + 0x226)
 #define GUI_ID_SCR2_GRAPH                       (GUI_ID_USER + 0x230)
-
-
 
 #define GUI_ID_SCR3_WINDOW                      (GUI_ID_USER + 0x300)
 #define GUI_ID_SCR3_1_WINDOW                    (GUI_ID_USER + 0x301)
@@ -93,7 +96,9 @@
 #define GUI_ID_BUTTON_NEXT                      (GUI_ID_USER + 0xF01)
 //#define GUI_ID_BUTTON_HEADER                    (GUI_ID_USER + 0xF02)
 
+
 #define UI_DSPL_DFLT_FONT_BUTTON                GUI_FontTahoma40
+#define UI_DSPL_DFLT_FONT_HEADER                GUI_FontTahoma60
 
 
 #define UI_DSPL_SIZE_X                          800
@@ -118,7 +123,6 @@
 #define UI_DSPL_HDR_TXT_SIZE_Y                  UI_DSPL_BAR_SIZE_Y
 #define UI_DSPL_HDR_COLOR_BCKGRND               GUI_BLACK
 
-#define UI_DSPL_HEADER_FONT                     GUI_FontTahoma60
 
 #define UI_DSPL_HDR_BTN_PREV_POS_X0             0
 #define UI_DSPL_HDR_BTN_PREV_POS_Y0             UI_DSPL_BAR_POS_Y0
@@ -149,27 +153,49 @@
 #define UI_DSPL_GRAPH_DATA_SCALE                1
 
 #define UI_DSPL_SCR0_GRAPH_DATA_ZOOM_STEP       2
-#define UI_DSPL_SCR0_GRAPH_DATA_ZOOM_MAX        8
+#define UI_DSPL_SCR0_GRAPH_DATA_ZOOM_MAX        4
 
 // SCR2
 #define UI_DSPL_GRPH2_Y_SHFT_STEP               10
 
 
-typedef enum    graph_ctl_mode_e
+typedef enum    graph_shft_mode_e
 {
-        GRAPH_CTL_MODE_FRST     = 0,
-        GRAPH_CTL_MODE_H        = 0,
-        GRAPH_CTL_MODE_V,
-        GRAPH_CTL_MODE_LAST,
-} graph_ctl_mode_t;
+        GRAPH_SHFT_MODE_FRST    = 0,
+        GRAPH_SHFT_MODE_X       = 0,
+        GRAPH_SHFT_MODE_Y,
+        GRAPH_SHFT_MODE_LAST,
+} graph_shft_mode_t;
 
+
+typedef struct  scr_graph_zoom_s
+{
+        int16_t                 zoom;
+} scr_graph_zoom_t;
+
+typedef struct  scr_graph_shft_s
+{
+        int                     x;
+        int                     y;
+        int                     step;
+        graph_shft_mode_t       mode;
+} scr_graph_shft_t;
+
+typedef struct  scr_graph_data_s
+{
+        int                     shft;
+        int                     step;
+        int16_t                 zoom;
+} scr_graph_data_t;
 
 typedef struct  scr_graph_s
 {
-        size_t                  shftX;
-        int                     shftY;
-        int16_t                 zoom;
-        graph_ctl_mode_t        mode;
+        int16_t                 zoomX;
+        //int16_t                 zoomY;
+        //scr_graph_shft_t        shft;
+        graph_shft_mode_t       shft_mode;
+        scr_graph_data_t        x;
+        scr_graph_data_t        y;
 } scr_graph_t;
 
 typedef struct  scr_s
@@ -207,6 +233,9 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr1_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr0_cb(                        WM_MESSAGE *            pMsg );
 
+void    ui_dspl_scr2_update(                    float *         data,
+                                                size_t          size );
+
 void    ui_dspl_scr1_update(                    float *         data,
                                                 size_t          size );
 
@@ -215,11 +244,6 @@ void    ui_dspl_scr0_update(                    float *         data,
 
 WM_HWIN ui_dspl_scr2_init(                      WM_CALLBACK *           cb );
 WM_HWIN ui_dspl_scr1_init(                      WM_CALLBACK *           cb );
-
-/*
-void    ui_dspl_scr0_toggle(                    WM_HWIN                 hWin,
-                                                int                     idx );
-*/
 
 void    ui_dspl_scrn_slide(                     int                     dir );
 
