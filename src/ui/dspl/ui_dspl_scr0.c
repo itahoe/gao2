@@ -33,11 +33,13 @@ static
 void    graph_user_draw(                const   WM_HWIN         hWin,
                                         const   int             Stage   )
 {
+/*
         if( Stage == GRAPH_DRAW_LAST )
         {
                 GUI_SetColor( GUI_GRAY );
                 GUI_DrawLine( UI_DSPL_GRAPH_SIZE_X/2, 0, UI_DSPL_GRAPH_SIZE_X/2, UI_DSPL_WIN_SIZE_Y );
         }
+*/
 }
 
 
@@ -56,9 +58,6 @@ void    graph_redraw(                           fifo16_t *      data,
                 sample  =   fifo16_get( data );
                 GRAPH_DATA_YT_AddValue( hGraphData, sample * p->y.zoom );
         }
-
-        //fifo16_flush( &graph_data );
-        //fifo16_ofst_tile( &graph_data, p->shftX );
 }
 
 
@@ -77,13 +76,13 @@ void    graph_update(                   const   WM_HWIN         hData,
 
 static
 void    graph_init(                     const   WM_HWIN         hWin,
-                                                int             id      )
+                                        const   int             id      )
 {
-        WM_HWIN         hGraph;
-        int             x0      =   UI_DSPL_WIN_POS_X0;
-        int             y0      =   UI_DSPL_WIN_POS_Y0;
-        int             sizeX   =   UI_DSPL_GRAPH_SIZE_X;
-        int             sizeY   =   UI_DSPL_GRAPH_SIZE_Y;
+                WM_HWIN         hGraph;
+        const   int             x0      =   UI_DSPL_WIN_POS_X0;
+        const   int             y0      =   UI_DSPL_WIN_POS_Y0;
+        const   int             sizeX   =   UI_DSPL_GRAPH_SIZE_X;
+        const   int             sizeY   =   UI_DSPL_GRAPH_SIZE_Y;
 
 
         hGraph          =   GRAPH_CreateEx( x0, y0, sizeX, sizeY, hWin, UI_DSPL_WIN_STYLE, 0, id );
@@ -125,7 +124,7 @@ void    graph_init(                     const   WM_HWIN         hWin,
 
 static
 void    text_sens_update(               const   WM_HWIN         hText,
-                                                float           sample )
+                                        const   float           sample )
 {
         char            str[16];
 
@@ -138,10 +137,10 @@ void    text_sens_update(               const   WM_HWIN         hText,
 
 
 static
-void    btn_zoom_update(                        scr_t *         scr     )
+void    btn_zoom_update(                const   scr_t *         scr     )
 {
         const   WM_HWIN                 hButton = WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE );
-                scr_graph_data_t *      y       = &( scr->graph.y );
+        const   scr_graph_data_t *      y       = &( scr->graph.y );
                 char            str[8];
 
         snprintf( str, sizeof(str), "\xAD %d", y->zoom );
@@ -150,16 +149,16 @@ void    btn_zoom_update(                        scr_t *         scr     )
 
 
 static
-void    btn_shft_update(                        scr_t *         scr     )
+void    btn_shft_update(                const   scr_t *         scr     )
 {
         const   WM_HWIN                 hButton = WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_MODE );
-                //scr_graph_t *           graph   = &( scr->graph );
-                scr_graph_data_t *      x       = &( scr->graph.x );
-                scr_graph_data_t *      y       = &( scr->graph.y );
+        const   scr_graph_t *           graph   = &( scr->graph );
+        const   scr_graph_data_t *      x       = &( scr->graph.x );
+        const   scr_graph_data_t *      y       = &( scr->graph.y );
                 char                    str[8];
 
 
-        switch( scr->graph.shft_mode )
+        switch( graph->shft_mode )
         {
                 case GRAPH_SHFT_MODE_X:
                         snprintf( str, sizeof(str), "%d", x->shft );
@@ -181,9 +180,7 @@ static
 void    btn_zoom_left(                          scr_t *         scr,
                                                 fifo16_t *      data    )
 {
-        const   WM_HWIN         hButton = WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE );
-                //char            str[8];
-                //scr_graph_data_t *      x       = &( scr->graph.x );
+        const   WM_HWIN                 hButton = WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE );
                 scr_graph_data_t *      y       = &( scr->graph.y );
 
 
@@ -194,13 +191,9 @@ void    btn_zoom_left(                          scr_t *         scr,
                 y->zoom =   1;
         }
 
-        //zoom_mode_update( graph->zoom );
-
         btn_zoom_update( scr );
         btn_shft_update( scr );
-
         GRAPH_SCALE_SetFactor(  hGraphScaleV,   (float) 1 / y->zoom     );
-        //GRAPH_SCALE_SetOff(     hGraphScaleV,   y->shft                 );
         graph_redraw(           data,           scr                     );
 }
 
@@ -210,8 +203,6 @@ void    btn_zoom_rght(                          scr_t *         scr,
                                                 fifo16_t *      data    )
 {
         const   WM_HWIN         hButton = WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE );
-                //char            str[8];
-                //scr_graph_data_t *      x       = &( scr->graph.x );
                 scr_graph_data_t *      y       = &( scr->graph.y );
 
 
@@ -340,8 +331,6 @@ void    btn_shft_mode(                          scr_t *         scr,
         const   WM_HWIN         hButtonShftUp   = WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_RGHT );
         const   WM_HWIN         hGraph          = WM_GetDialogItem( hWin, GUI_ID_SCR0_GRAPH         );
                 scr_graph_t *   graph           = &( scr->graph );
-                //scr_graph_data_t *      x       = &( scr->graph.x );
-                //scr_graph_data_t *      y       = &( scr->graph.y );
 
 
         graph->shft_mode++;

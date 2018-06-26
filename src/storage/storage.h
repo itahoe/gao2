@@ -55,5 +55,7 @@ int storage_name_compose(                       char *                  str,
 
 FRESULT storage_sts_get(                        storage_t *             p );
 
+bool    storage_ready(                  const   storage_t *             p );
+
 
 #endif	//STORAGE_H

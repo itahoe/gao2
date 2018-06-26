@@ -36,6 +36,15 @@ FRESULT storage_sts_get(                        storage_t *             p )
 }
 
 
+bool    storage_ready(                  const   storage_t *             p )
+{
+        bool    resp    = false;
+
+
+        return( resp );
+}
+
+
 /**
  * @brief File Manager file open
  */
@@ -145,6 +154,8 @@ bool storage_write(                             storage_t *             p,
                 }
                 else
                 {
+                        APP_TRACE_FF( "f_write() = ", p->fresult );
+/*
                         if( p->fresult == FR_INVALID_OBJECT )
                         {
                                 storage_open( p );
@@ -156,12 +167,11 @@ bool storage_write(                             storage_t *             p,
                                         break;
                                 }
                         }
+*/
                         //APP_TRACE_FF( "f_write() = ", p->fresult );
                         ////APP_TRACE( "pbuf: %0X\n", pbuf );
                         ////APP_TRACE( "len: %d\n", len );
                         ////APP_TRACE( "wr_bytes: %d\n", wr_bytes );
-
-
                         break;
 
                 }

@@ -19,9 +19,13 @@
 #define BSP_NVIC_PRIO_SER1_DMA_TX       9
 #define BSP_NVIC_PRIO_SER1_RECV_SMBL    11
 
-#define BSP_NVIC_PRIO_SDIO              12
-#define BSP_NVIC_PRIO_SDIO_DMA_RX       13
-#define BSP_NVIC_PRIO_SDIO_DMA_TX       13
+//#define BSP_NVIC_PRIO_SDIO              12
+//#define BSP_NVIC_PRIO_SDIO_DMA_RX       13
+//#define BSP_NVIC_PRIO_SDIO_DMA_TX       13
+
+#define BSP_NVIC_PRIO_SDIO              3
+#define BSP_NVIC_PRIO_SDIO_DMA_RX       4
+#define BSP_NVIC_PRIO_SDIO_DMA_TX       4
 
 
 #endif	//BSP_H

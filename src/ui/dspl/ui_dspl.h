@@ -4,7 +4,9 @@
   * @author  Igor T. <research.tahoe@gmail.com>
   */
 
-#include <app_trace.h>
+//#include <stdint.h>
+#include "app_trace.h"
+//#include "fifo.h"
 
 
 #ifndef  UI_DSPL_H
@@ -226,6 +228,9 @@ extern  GUI_CONST_STORAGE GUI_FONT      GUI_FontTahoma75;
 extern  GUI_CONST_STORAGE GUI_FONT      GUI_FontTahoma100;
 extern  GUI_CONST_STORAGE GUI_FONT      GUI_FontTahoma255;
 extern  GUI_CONST_STORAGE GUI_FONT      GUI_FontSourceSansPro40;
+
+
+
 
 
 void    ui_dspl_scr3_cb(                        WM_MESSAGE *            pMsg );

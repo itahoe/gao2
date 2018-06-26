@@ -13,9 +13,9 @@
 #include "app_trace.h"
 
 
-extern  QueueHandle_t           que_strg_hndl;
-
-static  storage_t               strg_01         =   { .fext   =  "ch01.log", };
+extern  QueueHandle_t   que_strg_hndl;
+static  storage_t       strg_01         =   { .fext   =  "ch01.log", };
+static  bool            storage_enable  = true;
 
 
 void    task_storage(                   const   void *          argument )
@@ -23,6 +23,7 @@ void    task_storage(                   const   void *          argument )
                 app_pipe_t      pipe;
                 bool            ready                   =   false;
                 bool            err;
+
                 //bool            write_uart2_active      =   false;
                 //bool            write_uart1_active      =   false;
         //const   TickType_t      fopen_err_delay_msec    =   100;
@@ -33,6 +34,8 @@ void    task_storage(                   const   void *          argument )
         while( true )
         {
                 xQueueReceive( que_strg_hndl, &pipe, portMAX_DELAY );
+
+
 /*
                 if( ready == false )
                 {
@@ -72,9 +75,18 @@ void    task_storage(                   const   void *          argument )
                 switch( pipe.tag )
                 {
                         case APP_PIPE_TAG_SENS_01_DATA:
-                                //if( storage_enabled( &strg_01 ) )
+                                if( storage_ready( &strg_01 ) )
                                 {
-                                        //storage_write( &strg_01, pipe.data, pipe.cnt );
+                                        storage_write( &strg_01, pipe.data, pipe.cnt );
+                                }
+                                else if( storage_enable )
+                                {
+                                        err     = storage_open( &strg_01 );
+
+                                        if( err )
+                                        {
+                                        }
+
                                 }
                                 break;
 

@@ -95,7 +95,7 @@ size_t  modbus_rtu_rqst(                        modbus_rtu_t *  p )
 
         *(data + 0)     =   (uint8_t) (p->dev_addr);
         *(data + 1)     =   rqst->func;
-        //reg_addr        =   modbus_addr_translate( rqst->reg->addr );
+        reg_addr        =   modbus_addr_translate( rqst->reg->addr );
         reg_addr        =   rqst->reg->addr;
         *(data + 2)     =   reg_addr >> 8;
         *(data + 3)     =   reg_addr & 0xFF;
