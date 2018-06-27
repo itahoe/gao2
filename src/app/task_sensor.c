@@ -233,7 +233,7 @@ void    task_sensor(                    const   void *          argument )
                                                 c.u[2]          =   rtu.resp.data[4];
                                                 c.u[3]          =   rtu.resp.data[3];
 
-                                                //APP_TRACE( "%02X%02X%02X%02X %02X%02X%02X%02X\n", rtu.resp.data[3], rtu.resp.data[4], rtu.resp.data[5], rtu.resp.data[6], c.u[0], c.u[1], c.u[2], c.u[3] );
+                                                //APP_TRACE( "%02X%02X%02X%02X\n", c.u[3], c.u[2], c.u[1], c.u[0] );
 
                                                 data_sens       =   c.i;
                                         }
