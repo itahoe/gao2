@@ -281,15 +281,16 @@ void    USART6_IRQHandler( void )
         valid           =   bsp_ser1_isr();
         pipe.cnt        =   bsp_ser1_dma_recv_get_ndtr();
 
-        //if( valid )
+        if( valid )
         {
                 pipe.tag        =   APP_PIPE_TAG_SER1_IDLE;
                 xQueueSendFromISR( que_sens_hndl, &pipe, NULL );
         }
-        //else
+        else
         {
                 //pipe.tag        =   APP_PIPE_TAG_SER1_ERR;
                 //xQueueSendFromISR( que_sens_hndl, &pipe, NULL );
+                //APP_TRACE( "valid == false\n" );
         }
 
 }

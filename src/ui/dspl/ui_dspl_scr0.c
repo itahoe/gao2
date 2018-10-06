@@ -108,7 +108,11 @@ void    graph_init(                     const   WM_HWIN         hWin,
         hGraphScaleV    =   GRAPH_SCALE_Create( 60, GUI_TA_RIGHT, GRAPH_SCALE_CF_VERTICAL, 100 );
         GRAPH_SCALE_SetFont(            hGraphScaleV,   &GUI_FontTahoma20   );
         GRAPH_SCALE_SetTextColor(       hGraphScaleV,   GUI_DARKGREEN       );
-        GRAPH_SCALE_SetNumDecs(         hGraphScaleV,   1                   );
+        //GRAPH_SCALE_SetNumDecs(         hGraphScaleV,   1                   );
+        GRAPH_SCALE_SetNumDecs(         hGraphScaleV,   0                   );
+
+        GRAPH_SCALE_SetFactor(          hGraphScaleV,   10);
+
         GRAPH_AttachScale(              hGraph,         hGraphScaleV        );
 
         // Create and add horizontal scale
@@ -401,31 +405,48 @@ void    btn_header(                             scr_t *         scr,
 }
 
 
-void    ui_dspl_scr0_update(                    float *         data,
+void    ui_dspl_scr0_update(                    uint32_t *      data,
                                                 size_t          size )
 {
-        const   WM_HWIN hButton = WM_GetDialogItem( hWin,       GUI_ID_SCR0_BTN_HEADER  );
-        const   WM_HWIN hGraph  = WM_GetDialogItem( hWin,       GUI_ID_SCR0_GRAPH       );
-        const   WM_HWIN hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR0_TXT_SENS    );
-                float           sample;
+        const   WM_HWIN         hButton = WM_GetDialogItem( hWin,       GUI_ID_SCR0_BTN_HEADER  );
+        const   WM_HWIN         hGraph  = WM_GetDialogItem( hWin,       GUI_ID_SCR0_GRAPH       );
+        const   WM_HWIN         hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR0_TXT_SENS    );
+                //float           sample;
+                uint32_t        sample;
+                float           deg     = 0;
                 char            str[16];
 
-
+/*
         while( size-- )
         {
                 sample  =   *data++;
-
+                sample  /=  10000;
                 if( sample > 9999 )
                 {
-                        sample  =   9999;
+                        //sample  =   9999;
                 }
 
-                snprintf( str, sizeof(str), "%4.2f PPM", sample );
+                //snprintf( str, sizeof(str), "%4.2f PPM", sample );
+                //snprintf( str, sizeof(str), "%6.2f PPM", sample );
+                snprintf( str, sizeof(str), "%3.2f%%   %2.1f°C", sample, deg );
                 BUTTON_SetText( hButton, str );
 
                 graph_update( hGraphData, &graph_data, sample );
                 text_sens_update( hText, sample );
         }
+*/
+
+                //sample  =   *data++ / 10000;
+                sample  =   (uint32_t) *data++;
+                deg     =   *data++;
+                //snprintf( str, sizeof(str), "%3.2f%%", sample/10 );
+                //snprintf( str, sizeof(str), "%3.2f%%   %2.1f°C", sample, deg );
+                //snprintf( str, sizeof(str), "%8X PPM", sample );
+                snprintf( str, sizeof(str), "%8d PPM", sample );
+                BUTTON_SetText( hButton, str );
+
+                graph_update( hGraphData, &graph_data, sample/1000 );
+                text_sens_update( hText, sample );
 }
 
 

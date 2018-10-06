@@ -244,7 +244,7 @@ void    ui_dspl_scr2_update(                    float *         data,
 void    ui_dspl_scr1_update(                    float *         data,
                                                 size_t          size );
 
-void    ui_dspl_scr0_update(                    float *         data,
+void    ui_dspl_scr0_update(                    uint32_t *      data,
                                                 size_t          size );
 
 WM_HWIN ui_dspl_scr2_init(                      WM_CALLBACK *           cb );

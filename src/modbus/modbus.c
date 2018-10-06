@@ -98,8 +98,13 @@ size_t  modbus_rtu_rqst(                        modbus_rtu_t *  p )
         reg_addr        =   modbus_addr_translate( rqst->reg->addr );
         *(data + 2)     =   reg_addr >> 8;
         *(data + 3)     =   reg_addr & 0xFF;
-        *(data + 4)     =   rqst->reg->size >> 8;
-        *(data + 5)     =   rqst->reg->size & 0xFF;
+
+        //*(data + 4)     =   rqst->reg->size >> 8;
+        //*(data + 5)     =   rqst->reg->size & 0xFF;
+
+        *(data + 4)     =   0;
+        *(data + 5)     =   4;
+
         crc             =   modbus_crc( data, (len = 6) );
         *(data + 6)     =   crc >> 8;
         *(data + 7)     =   crc & 0xFF;

@@ -29,14 +29,14 @@ void bsp_ser1_io_init( void )
                                                 .Mode           = LL_GPIO_MODE_ALTERNATE,
                                                 .Speed          = LL_GPIO_SPEED_FREQ_LOW,
                                                 .OutputType     = LL_GPIO_OUTPUT_PUSHPULL,
-                                                .Pull           = LL_GPIO_PULL_UP,
+                                                .Pull           = LL_GPIO_PULL_NO,
                                                 .Alternate      = LL_GPIO_AF_8 };
 
         LL_GPIO_InitTypeDef     pin_dir = {     .Pin            = LL_GPIO_PIN_3,
                                                 .Mode           = LL_GPIO_MODE_OUTPUT,
                                                 .Speed          = LL_GPIO_SPEED_FREQ_LOW,
                                                 .OutputType     = LL_GPIO_OUTPUT_PUSHPULL,
-                                                .Pull           = LL_GPIO_PULL_NO,
+                                                .Pull           = LL_GPIO_PULL_DOWN,
                                                 .Alternate      = LL_GPIO_AF_0 };
 
 
@@ -73,12 +73,6 @@ void    bsp_ser1_dma_init( void )
 */
 
         LL_AHB1_GRP1_EnableClock( LL_AHB1_GRP1_PERIPH_DMA2 );
-
-        NVIC_SetPriority(       DMA2_Stream6_IRQn, BSP_NVIC_PRIO_SER1_DMA_TX );
-        NVIC_EnableIRQ(         DMA2_Stream6_IRQn                            );
-
-        NVIC_SetPriority(       DMA2_Stream2_IRQn, BSP_NVIC_PRIO_SER1_DMA_RX );
-        NVIC_EnableIRQ(         DMA2_Stream2_IRQn                            );
 }
 
 
@@ -87,7 +81,7 @@ void    bsp_ser1_uart_init(             const   size_t          baudrate    )
 {
         LL_USART_InitTypeDef    cfg     = {     .BaudRate            = baudrate,
                                                 .DataWidth           = LL_USART_DATAWIDTH_8B,
-                                                .StopBits            = LL_USART_STOPBITS_2,
+                                                .StopBits            = LL_USART_STOPBITS_1,
                                                 .Parity              = LL_USART_PARITY_NONE,
                                                 .TransferDirection   = LL_USART_DIRECTION_TX_RX,
                                                 .HardwareFlowControl = LL_USART_HWCONTROL_NONE,
@@ -100,12 +94,6 @@ void    bsp_ser1_uart_init(             const   size_t          baudrate    )
         LL_RCC_SetUSARTClockSource(     LL_RCC_USART6_CLKSOURCE_PCLK2   );
         LL_USART_Init(                  usart,  &cfg                    );
         LL_USART_Enable(                usart                           );
-
-        NVIC_SetPriority(               USART6_IRQn, BSP_NVIC_PRIO_SER1_RECV_SMBL );
-        NVIC_EnableIRQ(                 USART6_IRQn                     );
-
-        LL_USART_EnableIT_IDLE(         usart                           );
-        LL_USART_EnableIT_ERROR(        usart                           );
 }
 
 
@@ -114,6 +102,18 @@ void    bsp_ser1_init(                  const   size_t          baud )
         bsp_ser1_uart_init( baud );
         bsp_ser1_io_init();
         bsp_ser1_dma_init();
+
+        LL_USART_EnableIT_IDLE(         usart                           );
+        LL_USART_EnableIT_ERROR(        usart                           );
+
+        NVIC_SetPriority(               USART6_IRQn, BSP_NVIC_PRIO_SER1_RECV_SMBL );
+        NVIC_EnableIRQ(                 USART6_IRQn                     );
+
+        NVIC_SetPriority(               DMA2_Stream6_IRQn, BSP_NVIC_PRIO_SER1_DMA_TX );
+        NVIC_EnableIRQ(                 DMA2_Stream6_IRQn                            );
+
+        NVIC_SetPriority(               DMA2_Stream2_IRQn, BSP_NVIC_PRIO_SER1_DMA_RX );
+        NVIC_EnableIRQ(                 DMA2_Stream2_IRQn                            );
 }
 
 
@@ -181,6 +181,8 @@ void    bsp_ser1_recv(                          uint8_t *           data,
                                                 .FIFOMode               = LL_DMA_FIFOMODE_DISABLE,
                                                 .Channel                = LL_DMA_CHANNEL_5 };
 
+
+        bsp_ser1_xfer_dir_set( false );
 
         LL_DMA_DeInit(                  dma_rx, stream                  );
         LL_DMA_Init(                    dma_rx, stream, &cfg            );

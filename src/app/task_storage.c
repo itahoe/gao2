@@ -36,10 +36,10 @@ void    task_storage(                   const   void *          argument )
                 xQueueReceive( que_strg_hndl, &pipe, portMAX_DELAY );
 
 
-/*
+
                 if( ready == false )
                 {
-                        ready   = storage_open( &log_ch01 );
+                        ready   = storage_open( &strg_01 );
 
                         if( ready )
                         {
@@ -52,10 +52,10 @@ void    task_storage(                   const   void *          argument )
                 }
                 else
                 {
-                        err     =   storage_write( &log_ch01, (uint8_t *) pipe.data, pipe.cnt * 2 );
+                        err     =   storage_write( &strg_01, (uint8_t *) pipe.data, pipe.cnt * 2 );
                         ready   =   err ? false : true;
                 }
-*/
+
 
 /*
                 write_uart1_active      =   storage_open( &log_ser1 );

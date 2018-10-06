@@ -29,7 +29,8 @@ static  uint8_t         data_modbus_resp[ MODBUS_RTU_FRAME_SIZE_MAX_OCT ];
 #pragma pack(4)
 
 //static  int16_t         data_sens;
-static  uint32_t        data_sens;
+//static  uint32_t        data_sens;
+static  uint32_t        data_sens[2];
 //static  size_t          offset;
 
 typedef struct  modbus_dev_map_s
@@ -129,8 +130,10 @@ extern  QueueHandle_t           que_strg_hndl;
 
 typedef union
 {
-    uint32_t            i;
-    uint8_t             u[ 4 ];
+        uint32_t        u32;
+        float           f;
+        uint8_t         u16[ 2 ];
+        uint8_t         u8[  4 ];
 } conc_t;
 
 
@@ -181,7 +184,8 @@ p->tile = (p->head >= (p->data + p->blck_size) ? p->data : p->head );
 void    task_sensor(                    const   void *          argument )
 {
         //TickType_t              polling_cycle_tcks      = CONF_SER_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
-        TickType_t              polling_cycle_tcks      = 500 / portTICK_PERIOD_MS;
+        //TickType_t              polling_cycle_tcks      = 500 / portTICK_PERIOD_MS;
+        TickType_t              polling_cycle_tcks      = 1000 / portTICK_PERIOD_MS;
         bool                    received;
         bool                    not_empty;
         app_pipe_t              pipe;
@@ -228,18 +232,36 @@ void    task_sensor(                    const   void *          argument )
                                                 //c.u[0]          =   rtu.resp.data[4];
                                                 //c.u[1]          =   rtu.resp.data[3];
 
-                                                c.u[0]          =   rtu.resp.data[6];
-                                                c.u[1]          =   rtu.resp.data[5];
-                                                c.u[2]          =   rtu.resp.data[4];
-                                                c.u[3]          =   rtu.resp.data[3];
+                                                //c.u[0]          =   rtu.resp.data[6];
+                                                //c.u[1]          =   rtu.resp.data[5];
+                                                //c.u[2]          =   rtu.resp.data[4];
+                                                //c.u[3]          =   rtu.resp.data[3];
+
+                                                //c.u8[0]         =   rtu.resp.data[ 4];
+                                                //c.u8[1]         =   rtu.resp.data[ 3];
+                                                //c.u8[2]         =   rtu.resp.data[ 6];
+                                                //c.u8[3]         =   rtu.resp.data[ 5];
+
+                                                c.u8[ 0]        =   rtu.resp.data[ 4];
+                                                c.u8[ 1]        =   rtu.resp.data[ 3];
+                                                c.u8[ 2]        =   rtu.resp.data[ 6];
+                                                c.u8[ 3]        =   rtu.resp.data[ 5];
 
                                                 //APP_TRACE( "%02X%02X%02X%02X\n", c.u[3], c.u[2], c.u[1], c.u[0] );
 
-                                                data_sens       =   c.i;
+                                                data_sens[0]    =   c.u32;
+                                                //data_sens[0]    =   c.f;
+
+                                                c.u8[0]         =   rtu.resp.data[ 8];
+                                                c.u8[1]         =   rtu.resp.data[ 7];
+                                                c.u8[2]         =   rtu.resp.data[10];
+                                                c.u8[3]         =   rtu.resp.data[ 9];
+                                                data_sens[1]    =   c.u32;
+                                                //data_sens[1]    =   c.f;
                                         }
 
                                         pipe.tag        =   APP_PIPE_TAG_SENS_01_DATA;
-                                        pipe.cnt        =   1;
+                                        pipe.cnt        =   2;
                                         pipe.data       =   &data_sens;
                                         xQueueSend( que_ui_hndl,  &pipe, NULL );
                                         xQueueSend( que_strg_hndl,  &pipe, NULL );
