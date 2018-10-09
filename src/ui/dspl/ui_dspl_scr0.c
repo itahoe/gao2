@@ -141,6 +141,45 @@ void    text_sens_update(               const   WM_HWIN         hText,
 
 
 static
+void    btn_head(                               scr_t *         scr,
+                                        const   WM_HWIN         hWin    )
+{
+        if( ++(scr->idx) >= scr->idx_max )
+        {
+                scr->idx        =   0;
+        }
+
+        switch( scr->idx )
+        {
+                case 0:
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_GRAPH           )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_LEFT   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_RGHT   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_LEFT   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_MODE   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_RGHT   )  );
+                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_TXT_SENS        )  );
+                        break;
+
+                case 1:
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_GRAPH           )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_LEFT   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_RGHT   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_LEFT   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_MODE   )  );
+                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_RGHT   )  );
+                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_TXT_SENS        )  );
+                        break;
+
+                default:
+                        break;
+        }
+}
+
+
+static
 void    btn_zoom_update(                const   scr_t *         scr     )
 {
         const   WM_HWIN                 hButton = WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE );
@@ -364,54 +403,15 @@ void    btn_shft_mode(                          scr_t *         scr,
 }
 
 
-static
-void    btn_header(                             scr_t *         scr,
-                                        const   WM_HWIN         hWin    )
-{
-        if( ++(scr->idx) >= scr->idx_max )
-        {
-                scr->idx        =   0;
-        }
-
-        switch( scr->idx )
-        {
-                case 0:
-                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_TXT_SENS        )  );
-                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_GRAPH           )  );
-                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_LEFT   )  );
-                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE   )  );
-                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_RGHT   )  );
-                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_LEFT   )  );
-                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_MODE   )  );
-                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_RGHT   )  );
-                        break;
-
-                case 1:
-                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_GRAPH           )  );
-                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_LEFT   )  );
-                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE   )  );
-                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_RGHT   )  );
-                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_LEFT   )  );
-                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_MODE   )  );
-                        WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_RGHT   )  );
-                        WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_TXT_SENS        )  );
-                        break;
-
-                default:
-                        break;
-        }
-}
-
-
 void    ui_dspl_scr0_update(                    uint32_t *      data,
                                                 size_t          size )
 {
-        const   WM_HWIN         hButton = WM_GetDialogItem( hWin,       GUI_ID_SCR0_BTN_HEADER  );
+        const   WM_HWIN         hButton = WM_GetDialogItem( hWin,       GUI_ID_SCR0_BTN_HEAD    );
         const   WM_HWIN         hGraph  = WM_GetDialogItem( hWin,       GUI_ID_SCR0_GRAPH       );
         const   WM_HWIN         hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR0_TXT_SENS    );
                 //float           sample;
                 uint32_t        sample;
-                float           deg     = 0;
+                //float           deg     = 0;
                 char            str[16];
 
 /*
@@ -436,11 +436,22 @@ void    ui_dspl_scr0_update(                    uint32_t *      data,
 
                 //sample  =   *data++ / 10000;
                 sample  =   (uint32_t) *data++;
-                deg     =   *data++;
+                //deg     =   *data++;
                 //snprintf( str, sizeof(str), "%3.2f%%", sample/10 );
                 //snprintf( str, sizeof(str), "%3.2f%%   %2.1f°C", sample, deg );
                 //snprintf( str, sizeof(str), "%8X PPM", sample );
-                snprintf( str, sizeof(str), "%8d PPM", sample );
+
+
+                if(             scr0.idx == 0 )
+                {
+                        snprintf( str, sizeof(str), "%8d PPM", sample );
+                }
+                else if(        scr0.idx == 1 )
+                {
+                        //snprintf( str, sizeof(str), "%3d.%02d %%", sample / 10000, sample % 10000 );
+                        snprintf( str, sizeof(str), "%3d.%02d %%", sample / 10000, (sample % 10000) / 100 );
+                }
+
                 BUTTON_SetText( hButton, str );
 
                 graph_update( hGraphData, &graph_data, sample/1000 );
@@ -451,8 +462,9 @@ void    ui_dspl_scr0_update(                    uint32_t *      data,
 void    ui_dspl_btn_header( void )
 {
         //hWin    =   pMsg->hWin;
+        //WM_GetDialogItem( hWin, GUI_ID_SCR0_GRAPH );
 
-        btn_header( &scr0, hWin );
+        btn_head( &scr0, hWin );
 }
 
 
@@ -474,7 +486,7 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
                                 case WM_NOTIFICATION_CLICKED:
                                         switch( Id )
                                         {
-                                                case GUI_ID_SCR0_BTN_HEADER:    btn_header(     &scr0, hWin         );  break;
+                                                case GUI_ID_SCR0_BTN_HEAD:      btn_head(       &scr0, hWin         );  break;
                                                 case GUI_ID_SCR0_BTN_SHFT_LEFT: btn_shft_left(  &scr0, &graph_data  );  break;
                                                 case GUI_ID_SCR0_BTN_SHFT_RGHT: btn_shft_rght(  &scr0, &graph_data  );  break;
                                                 case GUI_ID_SCR0_BTN_SHFT_MODE: btn_shft_mode(  &scr0, hWin         );  break;
@@ -492,7 +504,7 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
                         hWin    =   pMsg->hWin;
                         WINDOW_SetBkColor( hWin, GUI_BLACK );
 
-                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_BTN_HEADER );
+                        hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_BTN_HEAD );
                         BUTTON_SetFont( hItem, &UI_DSPL_DFLT_FONT_HEADER );
 
                         hItem   =   WM_GetDialogItem( pMsg->hWin, GUI_ID_SCR0_BTN_ZOOM_MODE );

@@ -27,7 +27,7 @@ WM_HWIN         ui_dspl_scrn_hndl[ UI_DSPL_SCRN_IDX_MAX ];
 static GUI_WIDGET_CREATE_INFO ui_dspl_scr0_info[] =
 {
     { WINDOW_CreateIndirect,    "scr0",         GUI_ID_SCR0_WIN,              0,      0,    800,    480,      0,      0x0,    0 },
-    { BUTTON_CreateIndirect,    "",             GUI_ID_SCR0_BTN_HEADER,     150,      0,    500,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
+    { BUTTON_CreateIndirect,    "",             GUI_ID_SCR0_BTN_HEAD,       150,      0,    500,     80,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
     { TEXT_CreateIndirect,      "",             GUI_ID_SCR0_TXT_SENS,         0,     80,    800,    400,      TEXT_CF_HCENTER | TEXT_CF_VCENTER,      0x0,    0 },
     { GRAPH_CreateIndirect,     0,              GUI_ID_SCR0_GRAPH,            0,     80,    UI_DSPL_GRAPH_SIZE_X, UI_DSPL_GRAPH_SIZE_Y},
     { BUTTON_CreateIndirect,    "-",            GUI_ID_SCR0_BTN_ZOOM_LEFT,    0,    430,    100,     50,      0,      0x0,    0 },

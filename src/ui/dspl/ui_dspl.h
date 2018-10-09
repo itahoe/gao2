@@ -15,7 +15,7 @@
 
 #define GUI_ID_SCR0_WIN                         (GUI_ID_USER + 0x000)
 #define GUI_ID_SCR0_TXT_SENS                    (GUI_ID_USER + 0x012)
-#define GUI_ID_SCR0_BTN_HEADER                  (GUI_ID_USER + 0x020)
+#define GUI_ID_SCR0_BTN_HEAD                    (GUI_ID_USER + 0x020)
 #define GUI_ID_SCR0_BTN_SHFT_LEFT               (GUI_ID_USER + 0x021)
 #define GUI_ID_SCR0_BTN_SHFT_RGHT               (GUI_ID_USER + 0x022)
 #define GUI_ID_SCR0_BTN_SHFT_MODE               (GUI_ID_USER + 0x023)
