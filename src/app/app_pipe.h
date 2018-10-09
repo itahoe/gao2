@@ -20,9 +20,11 @@ typedef enum    app_pipe_tag_e
         APP_PIPE_TAG_CONFIG_SET,
         APP_PIPE_TAG_SER1_IDLE,
         APP_PIPE_TAG_SER1_ERR,
+        APP_PIPE_TAG_SER2,
+        APP_PIPE_TAG_SER2_ERR,
 
         APP_PIPE_TAG_SER1,
-        APP_PIPE_TAG_SER2,
+        //APP_PIPE_TAG_SER2,
         APP_PIPE_TAG_SER3,
         APP_PIPE_TAG_SER4,
         APP_PIPE_TAG_USB_RECV,

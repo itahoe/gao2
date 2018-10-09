@@ -10,6 +10,7 @@
 #include "app_trace.h"
 #include "app_pipe.h"
 #include "cmsis_os.h"
+#include "ui_keyb.h"
 
 
 #define TASK_STACK_SIZE_UI_WRDS                 512
@@ -146,6 +147,15 @@ void    BSP_Config( void )
 
         __HAL_RCC_CRC_CLK_ENABLE();     //Enable CRC to Unlock GUI
         __HAL_RCC_BKPSRAM_CLK_ENABLE(); //Enable Back up SRAM
+}
+
+
+void    HAL_UART_ErrorCallback(         UART_HandleTypeDef *    huart )
+{
+        if(     huart->Instance ==  UART5 )
+        {
+                ui_keyb_error();
+        }
 }
 
 

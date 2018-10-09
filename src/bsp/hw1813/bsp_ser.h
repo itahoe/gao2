@@ -20,25 +20,4 @@
 #include "stm32f7xx_ll_usart.h"
 
 
-void    bsp_ser1_init(                  const   size_t                  baud );
-
-void    bsp_ser1_recv(                          uint8_t *               data,
-                                                size_t                  size );
-
-uint32_t bsp_ser1_dma_recv_get_ndtr(            void                         );
-
-bool    bsp_ser1_xmit(                          uint8_t *               data,
-                                                size_t                  size );
-
-void    bsp_ser1_recv(                          uint8_t *               data,
-                                                size_t                  size );
-
-bool    bsp_ser1_isr( void );
-
-void    bsp_ser1_dma_rx_isr( void );
-
-void    bsp_ser1_dma_tx_isr( void );
-
-
-
 #endif	//BSP_SER_H

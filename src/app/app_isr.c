@@ -10,8 +10,8 @@
 //#include "app_isr.h"
 #include "app_pipe.h"
 #include "app.h"
-#include "bsp_ser.h"
-//#include "bsp.h"
+//#include "bsp_ser.h"
+#include "bsp.h"
 
 
 extern  LTDC_HandleTypeDef      hltdc;
@@ -37,8 +37,11 @@ void    LTDC_IRQHandler( void );
 void    TIM3_IRQHandler( void );
 void    USART6_IRQHandler( void );
 void    DMA2_Stream6_IRQHandler( void );
-//void    DMA2_Stream1_IRQHandler( void );
 void    DMA2_Stream2_IRQHandler( void );
+
+void    UART5_IRQHandler( void );
+void    DMA1_Stream0_IRQHandler( void );
+void    DMA1_Stream7_IRQHandler( void );
 
 void    hard_fault_handler(                     uint32_t *      arg     );
 
@@ -306,4 +309,48 @@ void    DMA2_Stream6_IRQHandler( void )
 void    DMA2_Stream2_IRQHandler( void )
 {
         bsp_ser1_dma_rx_isr();
+}
+
+
+/******************************************************************************/
+/* SER2 Interrupt Handler's                                                   */
+/******************************************************************************/
+void    DMA1_Stream0_IRQHandler( void )
+{
+        bsp_ser2_dma_rx_isr();
+}
+
+
+void    DMA1_Stream7_IRQHandler( void )
+{
+        bsp_ser2_dma_tx_isr();
+}
+
+
+void    UART5_IRQHandler( void )
+{
+/*
+        app_pipe_t      pipe    =   {   .tag            =   APP_PIPE_TAG_SER1_IDLE,
+                                        .data           =   (void *) 0,
+                                        .cnt            =   0 };
+
+        bool    valid;
+*/
+        bsp_ser2_uart_isr();
+
+        //valid           =   bsp_ser2_uart_isr();
+        //pipe.cnt        =   bsp_ser2_dma_recv_get_ndtr();
+/*
+        if( valid )
+        {
+                pipe.tag        =   APP_PIPE_TAG_SER2;
+                xQueueSendFromISR( que_sens_hndl, &pipe, NULL );
+        }
+        else
+        {
+                //pipe.tag        =   APP_PIPE_TAG_SER1_ERR;
+                //xQueueSendFromISR( que_sens_hndl, &pipe, NULL );
+                //APP_TRACE( "valid == false\n" );
+        }
+*/
 }

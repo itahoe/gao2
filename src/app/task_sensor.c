@@ -12,8 +12,8 @@
 #include "app_trace.h"
 #include "cmsis_os.h"
 #include "app_fifo.h"
-//#include "bsp.h"
-#include "bsp_ser.h"
+#include "bsp.h"
+//#include "bsp_ser.h"
 #include "modbus.h"
 
 

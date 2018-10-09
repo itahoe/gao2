@@ -384,11 +384,9 @@ void    btn_header(                             scr_t *         scr,
                         WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_LEFT   )  );
                         WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_MODE   )  );
                         WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_SHFT_RGHT   )  );
-                        //WM_ShowWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_MODE        )  );
                         break;
 
                 case 1:
-                        //WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_MODE        )  );
                         WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_GRAPH           )  );
                         WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_LEFT   )  );
                         WM_HideWindow(  WM_GetDialogItem( hWin, GUI_ID_SCR0_BTN_ZOOM_MODE   )  );
@@ -447,6 +445,14 @@ void    ui_dspl_scr0_update(                    uint32_t *      data,
 
                 graph_update( hGraphData, &graph_data, sample/1000 );
                 text_sens_update( hText, sample );
+}
+
+
+void    ui_dspl_btn_header( void )
+{
+        //hWin    =   pMsg->hWin;
+
+        btn_header( &scr0, hWin );
 }
 
 

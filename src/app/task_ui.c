@@ -8,12 +8,14 @@
 #include <stdbool.h>
 #include "cmsis_os.h"
 #include "ui_dspl.h"
+#include "ui_keyb.h"
+#include "config.h"
 #include "app_pipe.h"
 #include "app_trace.h"
 #include "app.h"
 
 
-#define CONF_SER_POLLING_CYCLE_mSEC     10
+//#define CONF_SER_POLLING_CYCLE_mSEC     10
 
 extern  void    k_TouchUpdate( void );
 
@@ -61,9 +63,12 @@ void    task_ui_tmr_touch_init(         const   TickType_t      period_msec )
 void    task_ui(                        const   void *          argument )
 {
         bool                    received;
-        TickType_t              polling_cycle_tcks      =   CONF_SER_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
+        //TickType_t              polling_cycle_tcks      =   CONF_SER_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
+        TickType_t              polling_cycle_tcks      =   CFG_SER2_POLLING_CYCLE_mSEC / portTICK_PERIOD_MS;
         app_pipe_t              pipe;
         //int                     resp;
+        size_t                  ser2_recv_cnt;
+        uint8_t                 key;
 
         //taskENTER_CRITICAL();
         //taskEXIT_CRITICAL();
@@ -80,6 +85,15 @@ void    task_ui(                        const   void *          argument )
         task_ui_tmr_touch_init( 40 );
 
         ui_dspl_init();
+
+	//taskENTER_CRITICAL();
+        ui_keyb_init();
+	//taskEXIT_CRITICAL();
+
+	//taskENTER_CRITICAL();
+        ui_keyb_start();
+	//taskEXIT_CRITICAL();
+
 
         while( true )
         {
@@ -109,8 +123,42 @@ void    task_ui(                        const   void *          argument )
                                         }
                                         break;
 
+                                case APP_PIPE_TAG_SER2:
+                                        break;
+
                                 default:
                                         break;
+                        }
+                }
+                else
+                {
+                        ser2_recv_cnt   =   ui_keyb_poll();
+
+                        if( ser2_recv_cnt > 0 )
+                        {
+                                //APP_TRACE( "<task_ui> ser2_recv_cnt: %d\n", ser2_recv_cnt );
+                                key     =   ui_keyb_get();
+                                //APP_TRACE( "cnt=%d %02X\n", ser2_recv_cnt, key );
+                                //APP_TRACE( "%02X \n", key );
+
+                                switch( key )
+                                {
+
+                                        case 0x08:
+                                                ui_dspl_scrn_slide( 0 );
+                                                break;
+
+                                        case 0x10:
+                                                ui_dspl_scrn_slide( 1 );
+                                                break;
+
+                                        case 0x04:
+                                                ui_dspl_btn_header();
+                                                break;
+
+                                        default:
+                                                break;
+                                }
                         }
                 }
 

@@ -247,12 +247,13 @@ void    ui_dspl_scr1_update(                    float *         data,
 void    ui_dspl_scr0_update(                    uint32_t *      data,
                                                 size_t          size );
 
-WM_HWIN ui_dspl_scr2_init(                      WM_CALLBACK *           cb );
-WM_HWIN ui_dspl_scr1_init(                      WM_CALLBACK *           cb );
+WM_HWIN ui_dspl_scr2_init(                      WM_CALLBACK *   cb );
+WM_HWIN ui_dspl_scr1_init(                      WM_CALLBACK *   cb );
 
-void    ui_dspl_scrn_slide(                     int                     dir );
+void    ui_dspl_scrn_slide(                     int             dir );
 
 void    ui_dspl_init( void );
 
+void    ui_dspl_btn_header( void );
 
 #endif	//UI_DSPL_H
