@@ -18,6 +18,7 @@ static  GRAPH_SCALE_Handle      hGraphScaleV;   // Vertical Scale Handle
 static  int16_t                 graph_data_buf[ UI_DSPL_GRAPH_SIZE_X ];
 
 static  scr_t                   scr2        = { .graph.x.shft   = UI_DSPL_GRAPH_DATA_DIFF_X,
+                                                .graph.y.step   = UI_DSPL_GRAPH_DATA_SHFT_Y_STEP,
                                                 .graph.y.zoom   = 1,
                                                 .idx_max        = 2, };
 
@@ -171,32 +172,6 @@ void    btn_shft_rght(                          scr_t *         scr,
 }
 
 
-void    ui_dspl_scr2_update(                    float *         data,
-                                                size_t          size )
-{
-        const   WM_HWIN hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR2_TXT_HEADER  );
-        const   WM_HWIN hGraph  = WM_GetDialogItem( hWin,       GUI_ID_SCR2_GRAPH       );
-                float           sample;
-                char            str[16];
-
-
-        while( size-- )
-        {
-                sample  =   *data++;
-
-                if( sample > 9999 )
-                {
-                        sample  =   9999;
-                }
-
-                snprintf( str, sizeof(str), "%4.2f PPM", sample );
-                TEXT_SetText( hText, str );
-
-                graph_update( hGraphData, &graph_data, sample );
-        }
-}
-
-
 void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg )
 {
         WM_HWIN         hItem;
@@ -245,5 +220,28 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg )
                         WM_DefaultProc(pMsg);
                         break;
 
+        }
+}
+
+
+void    ui_dspl_scr2_update(                    uint32_t *      data,
+                                                size_t          size )
+{
+        const   WM_HWIN hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR2_TXT_HEADER  );
+        const   WM_HWIN hGraph  = WM_GetDialogItem( hWin,       GUI_ID_SCR2_GRAPH       );
+                uint32_t        sample;
+                char            str[16];
+                int32_t         offset  = ui_dspl_offset_get();
+
+
+        while( size-- )
+        {
+                sample  =   (uint32_t) *data++ + offset;
+
+                snprintf( str, sizeof(str), "%8d PPM", sample );
+                //snprintf( str, sizeof(str), "%3d.%02d %%", sample / 10000, (sample % 10000) / 100 );
+                TEXT_SetText( hText, str );
+
+                graph_update( hGraphData, &graph_data, sample / 1000 );
         }
 }

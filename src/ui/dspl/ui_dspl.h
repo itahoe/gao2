@@ -238,7 +238,7 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr1_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr0_cb(                        WM_MESSAGE *            pMsg );
 
-void    ui_dspl_scr2_update(                    float *         data,
+void    ui_dspl_scr2_update(                    uint32_t *      data,
                                                 size_t          size );
 
 void    ui_dspl_scr1_update(                    float *         data,
@@ -252,8 +252,17 @@ WM_HWIN ui_dspl_scr1_init(                      WM_CALLBACK *   cb );
 
 void    ui_dspl_scrn_slide(                     int             dir );
 
+int     ui_dspl_scrn_idx_get( void );
+
 void    ui_dspl_init( void );
 
 void    ui_dspl_btn_header( void );
+
+int32_t ui_dspl_offset_get( void );
+
+void    ui_dspl_offset_inc( void );
+
+void    ui_dspl_offset_dec( void );
+
 
 #endif	//UI_DSPL_H

@@ -69,6 +69,7 @@ void    task_ui(                        const   void *          argument )
         //int                     resp;
         size_t                  ser2_recv_cnt;
         uint8_t                 key;
+        int                     scrn_idx;
 
         //taskENTER_CRITICAL();
         //taskEXIT_CRITICAL();
@@ -115,7 +116,7 @@ void    task_ui(                        const   void *          argument )
                                         if( pipe.cnt < 1024 )
                                         {
                                                 ui_dspl_scr0_update( (uint32_t *) pipe.data, pipe.cnt );
-                                                ui_dspl_scr2_update( (float *) pipe.data, pipe.cnt );
+                                                ui_dspl_scr2_update( (uint32_t *) pipe.data, pipe.cnt );
                                         }
                                         else
                                         {
@@ -141,6 +142,8 @@ void    task_ui(                        const   void *          argument )
                                 //APP_TRACE( "cnt=%d %02X\n", ser2_recv_cnt, key );
                                 //APP_TRACE( "%02X \n", key );
 
+                                scrn_idx        =   ui_dspl_scrn_idx_get();
+
                                 switch( key )
                                 {
 
@@ -154,6 +157,24 @@ void    task_ui(                        const   void *          argument )
 
                                         case 0x04:
                                                 ui_dspl_btn_header();
+                                                break;
+
+                                        case 0x02:
+                                                switch( scrn_idx )
+                                                {
+                                                        case 0: ui_dspl_offset_inc();
+                                                        default:
+                                                                break;
+                                                }
+                                                break;
+
+                                        case 0x40:
+                                                switch( scrn_idx )
+                                                {
+                                                        case 0: ui_dspl_offset_dec();
+                                                        default:
+                                                                break;
+                                                }
                                                 break;
 
                                         default:

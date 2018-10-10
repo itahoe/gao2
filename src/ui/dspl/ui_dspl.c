@@ -211,6 +211,12 @@ void    ui_dspl_scrn_slide(                     int             dir )
 }
 
 
+int     ui_dspl_scrn_idx_get( void )
+{
+        return( curr_scrn_idx );
+}
+
+
 static
 void    _cbBackgroundWin(                       WM_MESSAGE *            pMsg )
 {

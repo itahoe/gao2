@@ -64,7 +64,7 @@ void    graph_redraw(                           fifo16_t *      data,
 static
 void    graph_update(                   const   WM_HWIN         hData,
                                                 fifo16_t *      data,
-                                        const   float           sample )
+                                        const   uint32_t        sample )
 {
         int16_t         i;
 
@@ -403,62 +403,6 @@ void    btn_shft_mode(                          scr_t *         scr,
 }
 
 
-void    ui_dspl_scr0_update(                    uint32_t *      data,
-                                                size_t          size )
-{
-        const   WM_HWIN         hButton = WM_GetDialogItem( hWin,       GUI_ID_SCR0_BTN_HEAD    );
-        const   WM_HWIN         hGraph  = WM_GetDialogItem( hWin,       GUI_ID_SCR0_GRAPH       );
-        const   WM_HWIN         hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR0_TXT_SENS    );
-                //float           sample;
-                uint32_t        sample;
-                //float           deg     = 0;
-                char            str[16];
-
-/*
-        while( size-- )
-        {
-                sample  =   *data++;
-                sample  /=  10000;
-                if( sample > 9999 )
-                {
-                        //sample  =   9999;
-                }
-
-                //snprintf( str, sizeof(str), "%4.2f PPM", sample );
-                //snprintf( str, sizeof(str), "%6.2f PPM", sample );
-                snprintf( str, sizeof(str), "%3.2f%%   %2.1f°C", sample, deg );
-                BUTTON_SetText( hButton, str );
-
-                graph_update( hGraphData, &graph_data, sample );
-                text_sens_update( hText, sample );
-        }
-*/
-
-                //sample  =   *data++ / 10000;
-                sample  =   (uint32_t) *data++;
-                //deg     =   *data++;
-                //snprintf( str, sizeof(str), "%3.2f%%", sample/10 );
-                //snprintf( str, sizeof(str), "%3.2f%%   %2.1f°C", sample, deg );
-                //snprintf( str, sizeof(str), "%8X PPM", sample );
-
-
-                if(             scr0.idx == 0 )
-                {
-                        snprintf( str, sizeof(str), "%8d PPM", sample );
-                }
-                else if(        scr0.idx == 1 )
-                {
-                        //snprintf( str, sizeof(str), "%3d.%02d %%", sample / 10000, sample % 10000 );
-                        snprintf( str, sizeof(str), "%3d.%02d %%", sample / 10000, (sample % 10000) / 100 );
-                }
-
-                BUTTON_SetText( hButton, str );
-
-                graph_update( hGraphData, &graph_data, sample/1000 );
-                text_sens_update( hText, sample );
-}
-
-
 void    ui_dspl_btn_header( void )
 {
         //hWin    =   pMsg->hWin;
@@ -531,4 +475,35 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
                         WM_DefaultProc( pMsg );
                         break;
         }
+}
+void    ui_dspl_scr0_update(                    uint32_t *      data,
+                                                size_t          size )
+{
+        const   WM_HWIN         hButton = WM_GetDialogItem( hWin,       GUI_ID_SCR0_BTN_HEAD    );
+        const   WM_HWIN         hGraph  = WM_GetDialogItem( hWin,       GUI_ID_SCR0_GRAPH       );
+        const   WM_HWIN         hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR0_TXT_SENS    );
+                //float           sample;
+                uint32_t        sample;
+                //float           deg     = 0;
+                char            str[16];
+                int32_t         offset  = ui_dspl_offset_get();
+
+
+                sample  =   (uint32_t) *data++ + offset;
+
+                if(             scr0.idx == 0 )
+                {
+                        snprintf( str, sizeof(str), "%8d PPM", sample );
+                }
+                else if(        scr0.idx == 1 )
+                {
+                        //snprintf( str, sizeof(str), "%3d.%02d %%", sample / 10000, sample % 10000 );
+                        snprintf( str, sizeof(str), "%3d.%02d %%", sample / 10000, (sample % 10000) / 100 );
+                }
+
+                BUTTON_SetText( hButton, str );
+
+                //graph_update( hGraphData, &graph_data, sample/1000 + offset );
+                graph_update( hGraphData, &graph_data, sample / 1000 );
+                text_sens_update( hText, sample );
 }
