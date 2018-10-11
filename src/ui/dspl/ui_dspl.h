@@ -4,7 +4,7 @@
   * @author  Igor T. <research.tahoe@gmail.com>
   */
 
-//#include <stdint.h>
+#include <stdbool.h>
 #include "app_trace.h"
 //#include "fifo.h"
 
@@ -250,6 +250,8 @@ void    ui_dspl_scr0_update(                    uint32_t *      data,
 WM_HWIN ui_dspl_scr2_init(                      WM_CALLBACK *   cb );
 WM_HWIN ui_dspl_scr1_init(                      WM_CALLBACK *   cb );
 
+void    ui_dspl_scr2_text_head(                 bool            b );
+
 void    ui_dspl_scrn_slide(                     int             dir );
 
 int     ui_dspl_scrn_idx_get( void );
@@ -264,7 +266,7 @@ void    ui_dspl_offset_inc( void );
 
 void    ui_dspl_offset_dec( void );
 
-void    ui_dspl_offset_adj_enbl_toggle( void );
+void    ui_dspl_offset_mode_toggle( void );
 
 
 #endif	//UI_DSPL_H

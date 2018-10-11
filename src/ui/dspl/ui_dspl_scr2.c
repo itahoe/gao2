@@ -172,6 +172,15 @@ void    btn_shft_rght(                          scr_t *         scr,
 }
 
 
+
+void    ui_dspl_scr2_text_head(                 bool            b )
+{
+        const   WM_HWIN hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR2_TXT_HEADER  );
+
+        TEXT_SetTextColor( hText, b ? GUI_RED : GUI_WHITE );
+}
+
+
 void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg )
 {
         WM_HWIN         hItem;

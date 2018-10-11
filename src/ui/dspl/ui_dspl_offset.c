@@ -38,6 +38,7 @@ void    ui_dspl_offset_inc( void )
         }
 }
 
+
 void    ui_dspl_offset_dec( void )
 {
         if( ui_dspl_offset_adj_enabled )
@@ -46,15 +47,17 @@ void    ui_dspl_offset_dec( void )
         }
 }
 
-void    ui_dspl_offset_adj_enbl_toggle( void )
-{
 
+void    ui_dspl_offset_mode_toggle( void )
+{
         if( ui_dspl_offset_adj_enabled )
         {
                 ui_dspl_offset_adj_enabled      =   false;
+                ui_dspl_scr2_text_head( false );
         }
         else
         {
                 ui_dspl_offset_adj_enabled      =   true;
+                ui_dspl_scr2_text_head( true );
         }
 }

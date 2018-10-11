@@ -147,7 +147,7 @@ void    task_ui(                        const   void *          argument )
                         if( ser2_recv_cnt > 0 )
                         {
                                 //APP_TRACE( "<task_ui> ser2_recv_cnt: %d\n", ser2_recv_cnt );
-                                key     =   ui_keyb_get();
+                                key             =   ui_keyb_get();
                                 //APP_TRACE( "cnt=%d %02X\n", ser2_recv_cnt, key );
                                 //APP_TRACE( "%02X \n", key );
 
@@ -170,23 +170,25 @@ void    task_ui(                        const   void *          argument )
                                         case UI_KEY_CODE_TS101:// 0x02:
                                                 switch( scrn_idx )
                                                 {
-                                                        case 2: ui_dspl_offset_inc();
-                                                        default:
-                                                                break;
+                                                        case 2: ui_dspl_offset_inc();           break;
+                                                        default:                                break;
                                                 }
                                                 break;
 
                                         case UI_KEY_CODE_TS106: //0x40:
                                                 switch( scrn_idx )
                                                 {
-                                                        case 0: ui_dspl_offset_dec();
-                                                        default:
-                                                                break;
+                                                        case 2: ui_dspl_offset_dec();           break;
+                                                        default:                                break;
                                                 }
                                                 break;
 
                                         case UI_KEY_CODE_TS107: //0x80:
-                                                ui_dspl_offset_adj_enbl_toggle();
+                                                switch( scrn_idx )
+                                                {
+                                                        case 2: ui_dspl_offset_mode_toggle();   break;
+                                                        default:                                break;
+                                                }
                                                 break;
 
                                         case UI_KEY_CODE_TS100:
