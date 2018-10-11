@@ -264,5 +264,7 @@ void    ui_dspl_offset_inc( void );
 
 void    ui_dspl_offset_dec( void );
 
+void    ui_dspl_offset_adj_enbl_toggle( void );
+
 
 #endif	//UI_DSPL_H

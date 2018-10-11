@@ -229,25 +229,10 @@ void    task_sensor(                    const   void *          argument )
 
                                         if( err == 0 )
                                         {
-                                                //c.u[0]          =   rtu.resp.data[4];
-                                                //c.u[1]          =   rtu.resp.data[3];
-
-                                                //c.u[0]          =   rtu.resp.data[6];
-                                                //c.u[1]          =   rtu.resp.data[5];
-                                                //c.u[2]          =   rtu.resp.data[4];
-                                                //c.u[3]          =   rtu.resp.data[3];
-
-                                                //c.u8[0]         =   rtu.resp.data[ 4];
-                                                //c.u8[1]         =   rtu.resp.data[ 3];
-                                                //c.u8[2]         =   rtu.resp.data[ 6];
-                                                //c.u8[3]         =   rtu.resp.data[ 5];
-
                                                 c.u8[ 0]        =   rtu.resp.data[ 4];
                                                 c.u8[ 1]        =   rtu.resp.data[ 3];
                                                 c.u8[ 2]        =   rtu.resp.data[ 6];
                                                 c.u8[ 3]        =   rtu.resp.data[ 5];
-
-                                                //APP_TRACE( "%02X%02X%02X%02X\n", c.u[3], c.u[2], c.u[1], c.u[0] );
 
                                                 data_sens[0]    =   c.u32;
                                                 //data_sens[0]    =   c.f;
@@ -262,6 +247,7 @@ void    task_sensor(                    const   void *          argument )
 
                                         pipe.tag        =   APP_PIPE_TAG_SENS_01_DATA;
                                         pipe.cnt        =   2;
+                                        //pipe.cnt        =   1;
                                         pipe.data       =   &data_sens;
                                         xQueueSend( que_ui_hndl,  &pipe, NULL );
                                         xQueueSend( que_strg_hndl,  &pipe, NULL );

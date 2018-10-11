@@ -11,11 +11,20 @@
 #include "ui_keyb.h"
 #include "config.h"
 #include "app_pipe.h"
+#include "app_mean.h"
 #include "app_trace.h"
 #include "app.h"
 
 
-//#define CONF_SER_POLLING_CYCLE_mSEC     10
+#define UI_KEY_CODE_TS100               0x01
+#define UI_KEY_CODE_TS101               0x02
+#define UI_KEY_CODE_TS102               0x04
+#define UI_KEY_CODE_TS103               0x08
+#define UI_KEY_CODE_TS104               0x10
+#define UI_KEY_CODE_TS105               0x20
+#define UI_KEY_CODE_TS106               0x40
+#define UI_KEY_CODE_TS107               0x80
+
 
 extern  void    k_TouchUpdate( void );
 
@@ -26,23 +35,23 @@ static  StaticTimer_t   tmr_touch_alloc;
 
 
 static
-void    task_ui_tmr_touch_callback(             TimerHandle_t           tmr )
+void    task_ui_tmr_callback(                   TimerHandle_t           tmr )
 {
         k_TouchUpdate();
 }
 
 
 static
-void    task_ui_tmr_touch_init(         const   TickType_t      period_msec )
+void    task_ui_tmr_init(               const   TickType_t      period_msec )
 {
         const   TickType_t      period_tcks     =   pdMS_TO_TICKS( period_msec );
 
 
-        tmr_touch_hndl  =     xTimerCreateStatic(       "TMR TOUCH",            //Just a text name, not used by the RTOS kernel.
+        tmr_touch_hndl  =     xTimerCreateStatic(       "TMR UI",               //Just a text name, not used by the RTOS kernel.
                                                         period_tcks,            //The timer period in ticks, must be greater than 0.
                                                         pdTRUE,                 //The timers will auto-reload themselves when they expire.
                                                         ( void * ) 0,           //The ID is used to store a count of the number of times the timer has expired, which is initialised to 0.
-                                                        task_ui_tmr_touch_callback,  //Each timer calls the same callback when it expires.
+                                                        task_ui_tmr_callback,   //Each timer calls the same callback when it expires.
                                                         &tmr_touch_alloc );     //Pass in the address of a StaticTimer_t variable, which will hold the data associated with the timer being created.
 
         if( tmr_touch_hndl == NULL )
@@ -70,9 +79,10 @@ void    task_ui(                        const   void *          argument )
         size_t                  ser2_recv_cnt;
         uint8_t                 key;
         int                     scrn_idx;
+        app_mean_t              sample_filter;
+        uint32_t                sample_0;
+        uint32_t                sample_1;
 
-        //taskENTER_CRITICAL();
-        //taskEXIT_CRITICAL();
 
         GUI_Init();
         //APP_TRACE( "GUI_Init() %d\n", resp );
@@ -83,17 +93,10 @@ void    task_ui(                        const   void *          argument )
         //WM_SetCreateFlags( WM_CF_MEMDEV );
         //GUI_SetBkColor( GUI_GRAY );
 
-        task_ui_tmr_touch_init( 40 );
-
+        task_ui_tmr_init( 500 );
         ui_dspl_init();
-
-	//taskENTER_CRITICAL();
         ui_keyb_init();
-	//taskEXIT_CRITICAL();
-
-	//taskENTER_CRITICAL();
         ui_keyb_start();
-	//taskEXIT_CRITICAL();
 
 
         while( true )
@@ -115,8 +118,14 @@ void    task_ui(                        const   void *          argument )
                                         //if( pipe.size < CONF_SER4_RECV_BLCK_SIZE_OCT )
                                         if( pipe.cnt < 1024 )
                                         {
-                                                ui_dspl_scr0_update( (uint32_t *) pipe.data, pipe.cnt );
-                                                ui_dspl_scr2_update( (uint32_t *) pipe.data, pipe.cnt );
+                                                //ui_dspl_scr0_update( (uint32_t *) pipe.data, pipe.cnt );
+                                                //ui_dspl_scr2_update( (uint32_t *) pipe.data, pipe.cnt );
+
+                                                sample_0        =   *( (uint32_t *) pipe.data );
+                                                sample_1        =   app_mean( &sample_filter, (uint32_t) sample_0 );
+
+                                                ui_dspl_scr0_update( &sample_1, 1 );
+                                                ui_dspl_scr2_update( &sample_0, 1 );
                                         }
                                         else
                                         {
@@ -146,29 +155,28 @@ void    task_ui(                        const   void *          argument )
 
                                 switch( key )
                                 {
-
-                                        case 0x08:
+                                        case UI_KEY_CODE_TS103: //0x08:
                                                 ui_dspl_scrn_slide( 0 );
                                                 break;
 
-                                        case 0x10:
+                                        case UI_KEY_CODE_TS104: //0x10:
                                                 ui_dspl_scrn_slide( 1 );
                                                 break;
 
-                                        case 0x04:
+                                        case UI_KEY_CODE_TS102: //0x04:
                                                 ui_dspl_btn_header();
                                                 break;
 
-                                        case 0x02:
+                                        case UI_KEY_CODE_TS101:// 0x02:
                                                 switch( scrn_idx )
                                                 {
-                                                        case 0: ui_dspl_offset_inc();
+                                                        case 2: ui_dspl_offset_inc();
                                                         default:
                                                                 break;
                                                 }
                                                 break;
 
-                                        case 0x40:
+                                        case UI_KEY_CODE_TS106: //0x40:
                                                 switch( scrn_idx )
                                                 {
                                                         case 0: ui_dspl_offset_dec();
@@ -177,6 +185,12 @@ void    task_ui(                        const   void *          argument )
                                                 }
                                                 break;
 
+                                        case UI_KEY_CODE_TS107: //0x80:
+                                                ui_dspl_offset_adj_enbl_toggle();
+                                                break;
+
+                                        case UI_KEY_CODE_TS100:
+                                        case UI_KEY_CODE_TS105:
                                         default:
                                                 break;
                                 }

@@ -6,6 +6,7 @@
 
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include "DIALOG.h"
@@ -20,6 +21,7 @@ const   int32_t         ui_dspl_offset_max;
 const   int32_t         ui_dspl_offset_step     = 1000;
 static  int32_t         ui_dspl_offset;
 static  int32_t         ui_dspl_offset_temp;
+static  bool            ui_dspl_offset_adj_enabled;
 
 
 int32_t ui_dspl_offset_get( void )
@@ -30,7 +32,7 @@ int32_t ui_dspl_offset_get( void )
 
 void    ui_dspl_offset_inc( void )
 {
-        //if( (ui_dspl_offset + ui_dspl_offset_step) < ui_dspl_offset_max )
+        if( ui_dspl_offset_adj_enabled )
         {
                 ui_dspl_offset  +=  ui_dspl_offset_step;
         }
@@ -38,8 +40,21 @@ void    ui_dspl_offset_inc( void )
 
 void    ui_dspl_offset_dec( void )
 {
-        //if( (ui_dspl_offset - ui_dspl_offset_step) > ui_dspl_offset_min )
+        if( ui_dspl_offset_adj_enabled )
         {
                 ui_dspl_offset  -=  ui_dspl_offset_step;
+        }
+}
+
+void    ui_dspl_offset_adj_enbl_toggle( void )
+{
+
+        if( ui_dspl_offset_adj_enabled )
+        {
+                ui_dspl_offset_adj_enabled      =   false;
+        }
+        else
+        {
+                ui_dspl_offset_adj_enabled      =   true;
         }
 }

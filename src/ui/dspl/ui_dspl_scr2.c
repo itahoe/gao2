@@ -234,14 +234,10 @@ void    ui_dspl_scr2_update(                    uint32_t *      data,
                 int32_t         offset  = ui_dspl_offset_get();
 
 
-        while( size-- )
-        {
-                sample  =   (uint32_t) *data++ + offset;
+        sample  =   (uint32_t) *data++ + offset;
 
-                snprintf( str, sizeof(str), "%8d PPM", sample );
-                //snprintf( str, sizeof(str), "%3d.%02d %%", sample / 10000, (sample % 10000) / 100 );
-                TEXT_SetText( hText, str );
+        snprintf( str, sizeof(str), "%8d PPM", sample );
+        TEXT_SetText( hText, str );
 
-                graph_update( hGraphData, &graph_data, sample / 1000 );
-        }
+        graph_update( hGraphData, &graph_data, sample / 1000 );
 }
