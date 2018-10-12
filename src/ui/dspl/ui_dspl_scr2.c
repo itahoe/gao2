@@ -22,10 +22,14 @@ static  scr_t                   scr2        = { .graph.x.shft   = UI_DSPL_GRAPH_
                                                 .graph.y.zoom   = 1,
                                                 .idx_max        = 2, };
 
-static  fifo16_t                graph_data  = { .data           =   graph_data_buf,
+static  fifo16_t                graph_data  = { .data           = graph_data_buf,
                                                 .size           =   sizeof(graph_data_buf)/sizeof(graph_data_buf[0]),
                                                 .tile           =   0,
                                                 .head           =   0, };
+
+
+static  int                     ui_dspl_scr2_mode_idx;
+static  int     const           ui_dspl_scr2_mode_idx_max       = 3;
 
 
 static
@@ -172,12 +176,59 @@ void    btn_shft_rght(                          scr_t *         scr,
 }
 
 
+void ui_dspl_scr2_mode_next( void )
+{
+        ui_dspl_scr2_mode_idx++;
 
-void    ui_dspl_scr2_text_head(                 bool            b )
+        if( ui_dspl_scr2_mode_idx < ui_dspl_scr2_mode_idx_max )
+        {
+        }
+        else
+        {
+                ui_dspl_scr2_mode_idx   =   0;
+        }
+
+        ui_dspl_scr2_text_head( ui_dspl_scr2_mode_idx );
+
+/*
+        switch( ui_dspl_scr2_mode_idx )
+        {
+                case 2: ui_dspl_scr2_text_head( true );         break;
+                case 1: ui_dspl_scr2_text_head( true );         break;
+                case 0:
+                default:
+                        ui_dspl_scr2_text_head( false );
+                        break;
+        }
+*/
+}
+
+int     ui_dspl_scr2_mode_get( void )
+{
+        return( ui_dspl_scr2_mode_idx );
+}
+
+
+void    ui_dspl_scr2_text_head(                 int             idx )
 {
         const   WM_HWIN hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR2_TXT_HEADER  );
 
-        TEXT_SetTextColor( hText, b ? GUI_RED : GUI_WHITE );
+        switch( idx )
+        {
+                case 2:
+                        TEXT_SetTextColor( hText, GUI_RED );
+                        break;
+                case 1:
+                        TEXT_SetTextColor( hText, GUI_GREEN );
+                        break;
+
+                case 0:
+                default:
+                        TEXT_SetTextColor( hText, GUI_WHITE );
+                        break;
+        }
+
+
 }
 
 
@@ -233,17 +284,18 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg )
 }
 
 
-void    ui_dspl_scr2_update(                    uint32_t *      data,
+void    ui_dspl_scr2_update(                    int32_t *       data,
                                                 size_t          size )
 {
         const   WM_HWIN hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR2_TXT_HEADER  );
         const   WM_HWIN hGraph  = WM_GetDialogItem( hWin,       GUI_ID_SCR2_GRAPH       );
-                uint32_t        sample;
+                int32_t         sample;
                 char            str[16];
-                int32_t         offset  = ui_dspl_offset_get();
+                //int32_t         offset  = ui_dspl_offset_get();
 
 
-        sample  =   (uint32_t) *data++ + offset;
+        //sample  =   (int32_t) *data++ + offset;
+        sample  =   (int32_t) *data++;
 
         snprintf( str, sizeof(str), "%8d PPM", sample );
         TEXT_SetText( hText, str );

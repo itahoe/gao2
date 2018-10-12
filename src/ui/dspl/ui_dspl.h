@@ -238,19 +238,22 @@ void    ui_dspl_scr2_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr1_cb(                        WM_MESSAGE *            pMsg );
 void    ui_dspl_scr0_cb(                        WM_MESSAGE *            pMsg );
 
-void    ui_dspl_scr2_update(                    uint32_t *      data,
+void    ui_dspl_scr2_update(                    int32_t *       data,
                                                 size_t          size );
 
 void    ui_dspl_scr1_update(                    float *         data,
                                                 size_t          size );
-
+/*
 void    ui_dspl_scr0_update(                    uint32_t *      data,
+                                                size_t          size );
+*/
+void    ui_dspl_scr0_update(                    int32_t *       data,
                                                 size_t          size );
 
 WM_HWIN ui_dspl_scr2_init(                      WM_CALLBACK *   cb );
 WM_HWIN ui_dspl_scr1_init(                      WM_CALLBACK *   cb );
 
-void    ui_dspl_scr2_text_head(                 bool            b );
+void    ui_dspl_scr2_text_head(                 int             idx );
 
 void    ui_dspl_scrn_slide(                     int             dir );
 
@@ -260,6 +263,11 @@ void    ui_dspl_init( void );
 
 void    ui_dspl_btn_header( void );
 
+void    ui_dspl_scr2_mode_next( void );
+
+int     ui_dspl_scr2_mode_get( void );
+
+/*
 int32_t ui_dspl_offset_get( void );
 
 void    ui_dspl_offset_inc( void );
@@ -267,6 +275,6 @@ void    ui_dspl_offset_inc( void );
 void    ui_dspl_offset_dec( void );
 
 void    ui_dspl_offset_mode_toggle( void );
-
+*/
 
 #endif	//UI_DSPL_H

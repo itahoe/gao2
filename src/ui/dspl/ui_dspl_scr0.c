@@ -477,7 +477,7 @@ void    ui_dspl_scr0_cb(                        WM_MESSAGE *    pMsg )
         }
 }
 
-
+/*
 void    ui_dspl_scr0_update(                    uint32_t *      data,
                                                 size_t          size )
 {
@@ -490,6 +490,36 @@ void    ui_dspl_scr0_update(                    uint32_t *      data,
 
 
         sample  =   (uint32_t) *data++ + offset;
+
+        if(             scr0.idx == 0 )
+        {
+                snprintf( str, sizeof(str), "%8d PPM", sample );
+        }
+        else if(        scr0.idx == 1 )
+        {
+                snprintf( str, sizeof(str), "%3d.%02d %%", sample / 10000, (sample % 10000) / 100 );
+        }
+
+        BUTTON_SetText( hButton, str );
+        //text_sens_update( hText, sample );
+        graph_update( hGraphData, &graph_data, sample / 1000 );
+}
+*/
+
+
+void    ui_dspl_scr0_update(                    int32_t *       data,
+                                                size_t          size )
+{
+        const   WM_HWIN         hButton = WM_GetDialogItem( hWin,       GUI_ID_SCR0_BTN_HEAD    );
+        const   WM_HWIN         hGraph  = WM_GetDialogItem( hWin,       GUI_ID_SCR0_GRAPH       );
+        const   WM_HWIN         hText   = WM_GetDialogItem( hWin,       GUI_ID_SCR0_TXT_SENS    );
+                int32_t         sample;
+                char            str[16];
+                //int32_t         offset  = ui_dspl_offset_get();
+
+
+        //sample  =   (int32_t) *data++ + offset;
+        sample  =   (int32_t) *data++;
 
         if(             scr0.idx == 0 )
         {

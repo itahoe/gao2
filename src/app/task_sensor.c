@@ -107,21 +107,6 @@ static  const   modbus_dev_t    dev     =
         .reg.sensor_threshold_alarm_exponent            = { 41014, 1 },
 };
 
-/*
-static
-uint32_t bsp_ser4_dma_recv_ndtr_get( void )
-{
-        return( 0 );
-}
-*/
-/*
-static  app_fifo16_t    ser4   =    {   .dma_get        =   bsp_ser4_dma_recv_ndtr_get,
-                                        .blck_size      =   CONF_SER4_RECV_BLCK_SIZE_OCT,
-                                        .ndtr           =   CONF_SER4_RECV_BLCK_SIZE_OCT,
-                                        .data           =   ser4_recv_data,
-                                        .tile           =   ser4_recv_data,
-                                        .head           =   ser4_recv_data, };
-*/
 
 extern  QueueHandle_t           que_sens_hndl;
 extern  QueueHandle_t           que_ui_hndl;
@@ -132,54 +117,11 @@ typedef union
 {
         uint32_t        u32;
         float           f;
-        uint8_t         u16[ 2 ];
+        uint16_t        u16[ 2 ];
+        int16_t         i16[ 2 ];
         uint8_t         u8[  4 ];
 } conc_t;
 
-
-//#define MATH_PI         ((double) 3.1415926535897932384626433832795)
-
-/*
-static
-bool    create_sin(                             app_fifo16_t *  p )
-{
-
-        const   size_t          smpl_rate_hz    = 500;
-        const   size_t          sgnl_freq_hz    = 1;
-        const   size_t          period          = smpl_rate_hz / sgnl_freq_hz;
-        static  int16_t         phase           = 0;
-                int16_t         data;
-
-
-        p->size         =  0;
-
-p->tile = (p->head >= (p->data + p->blck_size) ? p->data : p->head );
-
-        for( int i = 0; i < 8; i++ )
-        {
-                if( phase >= period )
-                {
-                        phase   =   0;
-                }
-
-                //data    =   (int16_t) ( sin( 2 * AUDIO_BEEP_MATH_PI * i / lookup_size ) * pow( 2, 12 ) - 1 );
-                //data    =   (int16_t) ( sin( 2 * MATH_PI * phase / period ) * pow( 2, 8 ) - 1 );
-                data    =   (int16_t) ( sin( 2 * MATH_PI * phase / period ) * 198 - 1 ) + 200;
-                phase++;
-
-                if( p->head >= (p->data + p->blck_size) )
-                {
-                        p->head         =   p->data;
-                }
-
-                *( p->head++ )    =   data;
-
-                p->size++;
-        }
-
-        return( true );
-}
-*/
 
 void    task_sensor(                    const   void *          argument )
 {
@@ -187,12 +129,14 @@ void    task_sensor(                    const   void *          argument )
         //TickType_t              polling_cycle_tcks      = 500 / portTICK_PERIOD_MS;
         TickType_t              polling_cycle_tcks      = 1000 / portTICK_PERIOD_MS;
         bool                    received;
-        bool                    not_empty;
+        //bool                    not_empty;
         app_pipe_t              pipe;
         size_t                  len;
         modbus_rtu_t            rtu;
         int                     err;
         conc_t                  c;
+        //float                   sens_uA;
+        //float                   ppm;
 
 
         (void) argument;
@@ -251,6 +195,16 @@ void    task_sensor(                    const   void *          argument )
                                         pipe.data       =   &data_sens;
                                         xQueueSend( que_ui_hndl,  &pipe, NULL );
                                         xQueueSend( que_strg_hndl,  &pipe, NULL );
+
+                                        //APP_TRACE( "%X\n", data_sens[1] );
+                                        //APP_TRACE( "%04X %04X\n", c.i16[0], c.i16[1] );
+                                        //APP_TRACE( "%5d %5d\n", c.i16[0], c.i16[1] );
+                                        //APP_TRACE( "%5d %5d\n", c.i16[0], c.i16[0] );
+
+                                        //sens_uA =   task_sens_raw_to_uA( c.i16[0] );
+                                        //ppm     =   task_sens_uA_to_ppm( sens_uA, &sens_cal );
+                                        //APP_TRACE( "%3.6f uA, %f ppm\n", sens_uA, ppm );
+
 
 /*
                                         pipe.tag        =   APP_PIPE_TAG_SENSOR;

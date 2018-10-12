@@ -34,6 +34,103 @@ static  TimerHandle_t   tmr_touch_hndl;
 static  StaticTimer_t   tmr_touch_alloc;
 
 
+typedef struct  sens_cal_s
+{
+        float           x0;
+        float           y0;
+        float           x1;
+        float           y1;
+        float           x;
+        float           y;
+        float           tg;
+} sens_cal_t;
+
+
+sens_cal_t      sens_cal    = { .x0     = 25000,
+                                .y0     = 10,
+                                .x1     = 209000,
+                                .y1     = 200,
+                                .x      = 209000 - 25000,
+                                .y      = 200 - 10,
+                                .tg     = (209000 - 25000) / (200 - 10),
+};
+
+/*
+sens_cal_t      sens_cal    = { .x0     = 25000,
+                                .y0     = 0.01f,
+                                .x1     = 209000,
+                                .y1     = 0.2f,
+                                .x      = 209000 - 25000,
+                                .y      = 0.2f - 0.01f,
+                                .tg     = (209000 - 25000) / (0.2f - 0.01f),
+};
+*/
+
+static
+float   task_sens_raw_to_uA(            const   int16_t         raw )
+{
+        const   float           vref_uV                 = 3000000;
+        const   float           r_feedback_ohm          = 5600;
+        const   float           adc_range               = 65536;
+                float           sens_uA;
+
+
+        sens_uA =   raw * ( vref_uV / (adc_range * r_feedback_ohm) );
+        //sens_uA =   (raw *  vref_uV) / (adc_range * r_feedback_ohm);
+
+        return( sens_uA );
+}
+
+
+static
+float   task_sens_raw_to_mA(            const   int16_t         raw )
+{
+        const   float           vref_mV                 = 3000;
+        const   float           r_feedback_ohm          = 5600;
+        const   float           adc_range               = 65536;
+                float           sens_mA;
+
+
+        sens_mA =   raw * ( vref_mV / (adc_range * r_feedback_ohm) );
+
+        return( sens_mA + 5000 );
+}
+
+
+static
+float   task_sens_uA_to_ppm(            const   float                   uA,
+                                        const   sens_cal_t *            p )
+{
+        float           ppm;
+
+        ppm     =   uA / p->tg;
+        //ppm     =   uA * p->tg;
+
+        return( ppm - 5000 );
+}
+
+static
+void    task_sens_cal_1(                const   float                   sens_uA,
+                                                sens_cal_t *            p )
+{
+        p->y1   =   sens_uA;
+        p->x    =   p->x1 - p->x0;
+        p->y    =   p->y1 - p->y0;
+        p->tg   =   p->y / p->x;
+}
+
+
+static
+void    task_sens_cal_0(                const   float                   sens_uA,
+                                                sens_cal_t *            p )
+{
+        p->y0   =   sens_uA;
+        p->x    =   p->x1 - p->x0;
+        p->y    =   p->y1 - p->y0;
+        p->tg   =   p->y / p->x;
+}
+
+
 static
 void    task_ui_tmr_callback(                   TimerHandle_t           tmr )
 {
@@ -79,9 +176,16 @@ void    task_ui(                        const   void *          argument )
         size_t                  ser2_recv_cnt;
         uint8_t                 key;
         int                     scrn_idx;
-        app_mean_t              sample_filter;
-        uint32_t                sample_0;
-        uint32_t                sample_1;
+        //app_mean_t              sample_filter;
+        //app_mean_f32_t          mean_f32;
+        app_mean_i16_t          mean_i16;
+        //uint32_t                sample_0;
+        //uint32_t                sample_1;
+        float                   sens_uA;
+        float                   sens_ppm;
+        int16_t                 sens_i16_raw0;
+        int16_t                 sens_i16_raw1;
+        int32_t                 ppm;
 
 
         GUI_Init();
@@ -118,14 +222,18 @@ void    task_ui(                        const   void *          argument )
                                         //if( pipe.size < CONF_SER4_RECV_BLCK_SIZE_OCT )
                                         if( pipe.cnt < 1024 )
                                         {
-                                                //ui_dspl_scr0_update( (uint32_t *) pipe.data, pipe.cnt );
-                                                //ui_dspl_scr2_update( (uint32_t *) pipe.data, pipe.cnt );
+                                                sens_i16_raw0   =   *( (int16_t *) pipe.data + 2 );
+                                                sens_i16_raw1   =   app_mean_i16( &mean_i16, sens_i16_raw0 );
 
-                                                sample_0        =   *( (uint32_t *) pipe.data );
-                                                sample_1        =   app_mean( &sample_filter, (uint32_t) sample_0 );
+                                                sens_uA         =   task_sens_raw_to_uA( sens_i16_raw1 );
+                                                //sens_uA         =   task_sens_raw_to_mA( sens_i16_raw1 );
+                                                sens_ppm        =   task_sens_uA_to_ppm( sens_uA, &sens_cal );
+                                                ppm             =   (int32_t) sens_ppm;
 
-                                                ui_dspl_scr0_update( &sample_1, 1 );
-                                                ui_dspl_scr2_update( &sample_0, 1 );
+                                                APP_TRACE( "%3.6f uA, %f ppm, tg:%f, x:%f y:%f\n", sens_uA, sens_ppm, sens_cal.tg, sens_cal.x, sens_cal.y );
+
+                                                ui_dspl_scr0_update( &ppm, 1 );
+                                                ui_dspl_scr2_update( &ppm, 1 );
                                         }
                                         else
                                         {
@@ -170,7 +278,7 @@ void    task_ui(                        const   void *          argument )
                                         case UI_KEY_CODE_TS101:// 0x02:
                                                 switch( scrn_idx )
                                                 {
-                                                        case 2: ui_dspl_offset_inc();           break;
+                                                        //case 2: ui_dspl_offset_inc();           break;
                                                         default:                                break;
                                                 }
                                                 break;
@@ -178,7 +286,7 @@ void    task_ui(                        const   void *          argument )
                                         case UI_KEY_CODE_TS106: //0x40:
                                                 switch( scrn_idx )
                                                 {
-                                                        case 2: ui_dspl_offset_dec();           break;
+                                                        //case 2: ui_dspl_offset_dec();           break;
                                                         default:                                break;
                                                 }
                                                 break;
@@ -186,12 +294,31 @@ void    task_ui(                        const   void *          argument )
                                         case UI_KEY_CODE_TS107: //0x80:
                                                 switch( scrn_idx )
                                                 {
-                                                        case 2: ui_dspl_offset_mode_toggle();   break;
+                                                        //case 2: ui_dspl_offset_mode_toggle();   break;
+                                                        case 2: ui_dspl_scr2_mode_next();       break;
                                                         default:                                break;
                                                 }
                                                 break;
 
                                         case UI_KEY_CODE_TS100:
+
+                                                switch( ui_dspl_scr2_mode_get() )
+                                                {
+                                                        case 2:
+                                                                task_sens_cal_1( sens_uA, &sens_cal );
+                                                                break;
+
+                                                        case 1:
+                                                                task_sens_cal_0( sens_uA, &sens_cal );
+                                                                break;
+
+                                                        case 0:
+                                                        default:
+                                                                break;
+                                                }
+
+                                                break;
+
                                         case UI_KEY_CODE_TS105:
                                         default:
                                                 break;
